@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Scrivia | Clinical Dashboard</title>
+<meta name="robots" content="noindex"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23005EB8'/><path d='M4 16h4l3-9 5 20 3-14 2 5h7' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+*{font-family:'Inter',sans-serif;box-sizing:border-box}
+body{margin:0;background:#F0F4F9;color:#0F172A}
+.mono{font-family:'JetBrains Mono',monospace}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+
+#sidebar{width:220px;min-height:100vh;background:#0A1F3C;display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:40}
+.sb-link{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#94A3B8;cursor:pointer;transition:all .15s;margin:1px 8px;white-space:nowrap}
+.sb-link:hover{background:rgba(255,255,255,.07);color:#E2E8F0}
+.sb-link.active{background:rgba(0,94,184,.25);color:#60A5FA;font-weight:600}
+.sb-link .badge{margin-left:auto;background:#DC2626;color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:1px 6px;min-width:18px;text-align:center}
+
+#main{margin-left:220px;min-height:100vh;display:flex;flex-direction:column}
+#topbar{background:#fff;border-bottom:1px solid #E2E8F0;height:56px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:30}
+#content{flex:1;padding:24px}
+
+.card{background:#fff;border-radius:14px;border:1px solid #E2E8F0;overflow:hidden}
+.card-header{padding:14px 18px;border-bottom:1px solid #F1F5F9;display:flex;align-items:center;justify-content:space-between}
+
+.esi{font-size:11px;font-weight:700;border-radius:5px;padding:2px 8px;display:inline-block}
+.esi-1{background:#DC2626;color:#fff}
+.esi-2{background:#EA580C;color:#fff}
+.esi-3{background:#D97706;color:#fff}
+.esi-4{background:#16A34A;color:#fff}
+.esi-5{background:#64748B;color:#fff}
+
+.sev-critical{background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;font-size:10px;font-weight:700;border-radius:999px;padding:2px 8px}
+.sev-high{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;font-size:10px;font-weight:700;border-radius:999px;padding:2px 8px}
+.sev-medium{background:#FEF9C3;color:#713F12;border:1px solid #FEF08A;font-size:10px;font-weight:700;border-radius:999px;padding:2px 8px}
+
+.st-waiting{background:#F1F5F9;color:#475569;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+.st-nurse{background:#EFF6FF;color:#1D4ED8;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+.st-provider{background:#F0FDF4;color:#166534;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+.st-review{background:#FEF9C3;color:#713F12;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+.st-signed{background:#F0FDF4;color:#166534;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+.st-progress{background:#EFF6FF;color:#1D4ED8;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+.st-discharged{background:#F1F5F9;color:#94A3B8;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+
+@keyframes pd{0%,100%{opacity:1}50%{opacity:.3}}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#10B981;display:inline-block;animation:pd 1.8s infinite}
+.live-dot.red{background:#DC2626}
+
+.btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btn-primary{background:#005EB8;color:#fff}
+.btn-primary:hover{background:#004A94}
+.btn-success{background:#059669;color:#fff}
+.btn-success:hover{background:#047857}
+.btn-ghost{background:#F1F5F9;color:#475569;border:1px solid #E2E8F0}
+.btn-ghost:hover{background:#E2E8F0}
+.btn-danger{background:#FEE2E2;color:#DC2626;border:1px solid #FECACA}
+.btn-danger:hover{background:#FECACA}
+.btn-warning{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}
+.btn-warning:hover{background:#FDE68A}
+.btn-sm{padding:4px 10px;font-size:11px;border-radius:6px}
+.btn-xs{padding:3px 8px;font-size:10px;border-radius:5px}
+
+.filter-tab{padding:5px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #E2E8F0;color:#64748B;background:#fff;transition:all .15s}
+.filter-tab.active{background:#005EB8;color:#fff;border-color:#005EB8}
+
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #F1F5F9;white-space:nowrap}
+.tbl td{padding:12px 14px;font-size:13px;border-bottom:1px solid #F8FAFC;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover{background:#FAFBFF}
+
+@keyframes ar{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.5)}60%{box-shadow:0 0 0 8px rgba(220,38,38,0)}}
+.alert-ring{animation:ar 2s infinite;border-radius:50%;width:10px;height:10px;background:#DC2626;display:inline-block}
+
+.stat-card{background:#fff;border-radius:14px;border:1px solid #E2E8F0;padding:18px 20px}
+.stat-num{font-size:28px;font-weight:800;line-height:1}
+
+/* Modal overlay */
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+#modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:18px;max-width:720px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+
+/* Slide panel */
+#slide-panel{position:fixed;right:0;top:0;bottom:0;width:420px;background:#fff;border-left:1px solid #E2E8F0;z-index:90;transform:translateX(100%);transition:transform .25s ease;box-shadow:-8px 0 40px rgba(0,0,0,.12);overflow-y:auto}
+#slide-panel.open{transform:translateX(0)}
+
+/* Toast */
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:200;display:flex;flex-direction:column;gap:8px}
+.toast{background:#1E293B;color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.3);animation:toastIn .3s ease;max-width:320px}
+.toast.success{border-left:3px solid #10B981}
+.toast.info{border-left:3px solid #3B82F6}
+.toast.warning{border-left:3px solid #F59E0B}
+.toast.error{border-left:3px solid #DC2626}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.view{display:none}
+.view.active{display:block}
+
+/* Recording indicator */
+@keyframes recPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.rec-dot{width:10px;height:10px;border-radius:50%;background:#DC2626;display:inline-block;animation:recPulse 1.2s infinite}
+
+/* Transcript box */
+#live-transcript{min-height:120px;max-height:300px;overflow-y:auto;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;font-size:13px;line-height:1.7;color:#334155}
+
+/* SOAP note sections */
+.soap-section{border-radius:10px;overflow:hidden;border:1px solid #E2E8F0;margin-bottom:12px}
+.soap-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:8px 14px}
+.soap-body{padding:12px 14px;font-size:13px;line-height:1.7;min-height:60px}
+.soap-body[contenteditable=true]{outline:none;cursor:text}
+.soap-body[contenteditable=true]:focus{background:#FFFBEB}
+.soap-s .soap-label{background:#EFF6FF;color:#1D4ED8;border-bottom:1px solid #BFDBFE}
+.soap-o .soap-label{background:#F0FDF4;color:#166534;border-bottom:1px solid #BBF7D0}
+.soap-a .soap-label{background:#FFFBEB;color:#92400E;border-bottom:1px solid #FDE68A}
+.soap-p .soap-label{background:#F5F3FF;color:#5B21B6;border-bottom:1px solid #DDD6FE}
+
+/* Vital box */
+.vital-box{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;padding:10px 14px;text-align:center}
+.vital-box.warn{background:#FFFBEB;border-color:#FDE68A}
+.vital-box.danger{background:#FEF2F2;border-color:#FECACA}
+
+/* Timeline */
+.tl-item{position:relative;padding-left:28px;padding-bottom:16px}
+.tl-item::before{content:'';position:absolute;left:7px;top:20px;bottom:0;width:2px;background:#E2E8F0}
+.tl-item:last-child::before{display:none}
+.tl-item::after{content:'';position:absolute;left:0;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid #005EB8;background:#fff}
+
+/* Confidence bar */
+.conf-bar{height:6px;border-radius:3px;background:#E2E8F0;overflow:hidden}
+.conf-fill{height:100%;border-radius:3px;transition:width .6s ease}
+
+/* Scribe session card */
+.scribe-card{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:10px;cursor:default}
+.scribe-card:hover{background:#F1F5F9}
+
+/* Verify marker */
+.verify-tag{background:#FEF3C7;color:#92400E;font-size:10px;font-weight:700;border-radius:4px;padding:1px 5px;font-family:monospace}
+
+/* Search input */
+.search-input{border:1px solid #E2E8F0;border-radius:8px;padding:8px 12px;font-size:13px;outline:none;transition:border .15s;background:#fff}
+.search-input:focus{border-color:#005EB8;box-shadow:0 0 0 3px rgba(0,94,184,.08)}
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ══════════════════════════════════════ -->
+<div id="sidebar">
+  <div class="px-5 py-5 border-b border-white/8">
+    <a href="index.html" class="flex items-center gap-2.5 no-underline mb-1">
+      <div class="w-8 h-8 bg-[#005EB8] rounded-lg flex items-center justify-center flex-shrink-0">
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none"><path d="M2 9h2l2-6 3 14 2-10 1 4h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="text-white font-bold text-base">Scrivia</span>
+    </a>
+    <div class="text-slate-500 text-xs mt-1">Clinical Dashboard</div>
+  </div>
+
+  <div class="px-3 py-4 flex-1 overflow-y-auto">
+    <div class="text-slate-600 text-[10px] font-semibold uppercase tracking-widest px-3 mb-2">Navigation</div>
+    <div class="sb-link active" onclick="switchView('dashboard',this)" id="nav-dashboard">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="sb-link" onclick="switchView('queue',this)" id="nav-queue">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0zm6.75 0l-1.5 1.5-1.5-1.5"/></svg>
+      Triage Queue
+      <span class="badge" id="queue-badge">10</span>
+    </div>
+    <div class="sb-link" onclick="switchView('patients',this)" id="nav-patients">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+      Patients
+    </div>
+    <div class="sb-link" onclick="switchView('scribe',this)" id="nav-scribe">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg>
+      AI Scribe
+      <span class="badge" id="scribe-badge">1</span>
+    </div>
+    <div class="sb-link" onclick="switchView('alerts',this)" id="nav-alerts">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+      Alerts
+      <span class="badge" id="alerts-badge">3</span>
+    </div>
+
+    <div class="text-slate-600 text-[10px] font-semibold uppercase tracking-widest px-3 mb-2 mt-5">Quick Actions</div>
+    <div class="sb-link" onclick="openNewScribe()">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+      New Scribe Session
+    </div>
+    <div class="sb-link" onclick="openCheckinModal()">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+      Patient Check-In
+    </div>
+  </div>
+
+  <div class="px-4 py-4 border-t border-white/8">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 bg-[#005EB8] rounded-full flex items-center justify-center text-white text-xs font-bold">SC</div>
+      <div>
+        <div class="text-white text-xs font-semibold">Dr. S. Chen</div>
+        <div class="text-slate-500 text-[10px]">Emergency Medicine</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN ══════════════════════════════════════════ -->
+<div id="main">
+  <!-- Topbar -->
+  <div id="topbar">
+    <div class="flex items-center gap-2 min-w-0">
+      <div class="live-dot"></div>
+      <span id="view-title" class="font-semibold text-slate-800 text-sm">Dashboard</span>
+    </div>
+    <div class="flex-1 max-w-xs">
+      <input type="text" class="search-input w-full text-xs" placeholder="Search patients, MRN, conditions..." oninput="globalSearch(this.value)"/>
+    </div>
+    <div class="flex items-center gap-3 ml-auto">
+      <div class="mono text-xs text-slate-400" id="clock"></div>
+      <button onclick="switchView('alerts',document.getElementById('nav-alerts'))" class="relative p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#64748B" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+        <span id="notif-badge" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">3</span>
+      </button>
+      <a href="index.html" class="btn btn-ghost btn-sm no-underline text-slate-600">← Back to Site</a>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div id="content">
+
+    <!-- ══ DASHBOARD VIEW ══ -->
+    <div class="view active" id="view-dashboard">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h1 class="text-xl font-bold text-slate-900">Good morning, Dr. Chen</h1>
+          <div class="text-sm text-slate-500 mt-0.5" id="dash-date"></div>
+        </div>
+        <button onclick="openCheckinModal()" class="btn btn-primary gap-2">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+          Patient Check-In
+        </button>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="stat-cards">
+        <div class="stat-card">
+          <div class="text-xs text-slate-500 font-medium mb-2">In Queue</div>
+          <div class="stat-num text-slate-900" id="stat-queue">10</div>
+          <div class="text-xs text-red-500 mt-1.5 font-medium">3 critical (ESI 1–2)</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-xs text-slate-500 font-medium mb-2">Scribe Sessions</div>
+          <div class="stat-num text-[#005EB8]" id="stat-scribe">4</div>
+          <div class="text-xs text-slate-400 mt-1.5">1 in progress</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-xs text-slate-500 font-medium mb-2">Active Alerts</div>
+          <div class="stat-num text-[#D97706]" id="stat-alerts">3</div>
+          <div class="text-xs text-red-500 mt-1.5 font-medium" id="stat-alerts-sub">1 critical</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-xs text-slate-500 font-medium mb-2">Total Patients</div>
+          <div class="stat-num text-[#059669]">12</div>
+          <div class="text-xs text-slate-400 mt-1.5">2 discharged today</div>
+        </div>
+      </div>
+
+      <!-- Content grid -->
+      <div class="grid lg:grid-cols-3 gap-5">
+        <!-- Queue -->
+        <div class="lg:col-span-2 card">
+          <div class="card-header">
+            <div class="font-semibold text-slate-900 text-sm flex items-center gap-2">
+              <div class="alert-ring"></div> Triage Queue
+            </div>
+            <button onclick="switchView('queue',document.getElementById('nav-queue'))" class="btn btn-ghost btn-sm">View All →</button>
+          </div>
+          <div id="dash-queue-body"></div>
+        </div>
+
+        <!-- Alerts + Scribe -->
+        <div class="space-y-5">
+          <!-- Alerts -->
+          <div class="card">
+            <div class="card-header">
+              <div class="font-semibold text-slate-900 text-sm">Clinical Alerts</div>
+              <button onclick="switchView('alerts',document.getElementById('nav-alerts'))" class="btn btn-ghost btn-sm">View All →</button>
+            </div>
+            <div id="dash-alerts-body" class="p-3 space-y-2"></div>
+          </div>
+          <!-- Scribe -->
+          <div class="card">
+            <div class="card-header">
+              <div class="font-semibold text-slate-900 text-sm">AI Scribe Sessions</div>
+              <button onclick="switchView('scribe',document.getElementById('nav-scribe'))" class="btn btn-ghost btn-sm">View All →</button>
+            </div>
+            <div id="dash-scribe-body" class="p-3 space-y-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ QUEUE VIEW ══ -->
+    <div class="view" id="view-queue">
+      <div class="flex items-center justify-between mb-5">
+        <h1 class="text-xl font-bold text-slate-900">Triage Queue</h1>
+        <div class="flex items-center gap-3">
+          <div class="text-sm text-slate-500"><span id="queue-count">10</span> patients</div>
+          <button onclick="openCheckinModal()" class="btn btn-primary btn-sm gap-1">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            Add Patient
+          </button>
+        </div>
+      </div>
+      <div class="card mb-4">
+        <div class="p-4 flex flex-wrap gap-3 items-center border-b border-slate-100">
+          <div class="flex gap-2 flex-wrap" id="esi-filters">
+            <button class="filter-tab active" onclick="filterQueue('all',this)">All</button>
+            <button class="filter-tab" onclick="filterQueue('1',this)"><span class="inline-block w-2 h-2 rounded-sm bg-red-600 mr-1"></span>ESI 1</button>
+            <button class="filter-tab" onclick="filterQueue('2',this)"><span class="inline-block w-2 h-2 rounded-sm bg-orange-600 mr-1"></span>ESI 2</button>
+            <button class="filter-tab" onclick="filterQueue('3',this)"><span class="inline-block w-2 h-2 rounded-sm bg-yellow-500 mr-1"></span>ESI 3</button>
+            <button class="filter-tab" onclick="filterQueue('4',this)"><span class="inline-block w-2 h-2 rounded-sm bg-green-600 mr-1"></span>ESI 4</button>
+            <button class="filter-tab" onclick="filterQueue('5',this)"><span class="inline-block w-2 h-2 rounded-sm bg-slate-400 mr-1"></span>ESI 5</button>
+          </div>
+          <div class="ml-auto flex gap-2">
+            <label class="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
+              <input type="checkbox" id="hide-discharged" onchange="renderQueue()" class="rounded"/> Hide discharged
+            </label>
+            <input type="text" class="search-input text-xs" placeholder="Search patients..." id="queue-search" oninput="renderQueue()"/>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Priority</th><th>Patient</th><th>MRN</th><th>Chief Complaint</th><th>Wait</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="queue-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PATIENTS VIEW ══ -->
+    <div class="view" id="view-patients">
+      <div class="flex items-center justify-between mb-5">
+        <h1 class="text-xl font-bold text-slate-900">Patients</h1>
+        <input type="text" class="search-input text-sm" placeholder="Search by name, MRN, or condition..." id="patient-search" oninput="renderPatients()" style="width:280px"/>
+      </div>
+      <div class="card">
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead>
+              <tr><th>Patient</th><th>MRN</th><th>DOB / Age</th><th>Conditions</th><th>Last Visit</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="patient-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCRIBE VIEW ══ -->
+    <div class="view" id="view-scribe">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h1 class="text-xl font-bold text-slate-900">AI Scribe</h1>
+          <p class="text-sm text-slate-500 mt-0.5">Record patient encounters and auto-generate clinical documentation.</p>
+        </div>
+        <button onclick="openNewScribe()" class="btn btn-primary gap-2">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg>
+          New Recording
+        </button>
+      </div>
+
+      <!-- Active recording panel (hidden by default) -->
+      <div id="active-scribe-panel" class="card mb-5 hidden">
+        <div class="card-header bg-red-50 border-b border-red-100">
+          <div class="flex items-center gap-2 text-red-700 font-semibold text-sm">
+            <div class="rec-dot"></div>
+            Now recording for <span id="scribe-patient-label">Patient</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="mono text-xs text-slate-500" id="scribe-timer">00:00</div>
+            <button onclick="stopScribeRecording()" class="btn btn-danger btn-sm gap-1">
+              <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+              Stop
+            </button>
+          </div>
+        </div>
+        <div class="p-4">
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Live Transcript</div>
+          <div id="live-transcript">
+            <span class="text-slate-400 italic text-sm">Listening... speak clearly near your microphone.</span>
+          </div>
+          <div class="flex gap-3 mt-4">
+            <button onclick="generateNoteFromRecording()" class="btn btn-primary gap-2">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+              Generate SOAP Note
+            </button>
+            <button onclick="clearTranscript()" class="btn btn-ghost btn-sm">Clear Transcript</button>
+          </div>
+          <p class="text-xs text-slate-400 mt-2">Tip: Works best in Chrome or Edge. Alternatively, type directly below.</p>
+          <textarea id="manual-transcript" class="mt-3 w-full search-input text-sm" rows="3" placeholder="Or type/paste notes manually here..."></textarea>
+        </div>
+      </div>
+
+      <!-- Session list -->
+      <div class="card">
+        <div class="card-header">
+          <div class="font-semibold text-slate-900 text-sm">Recent Sessions</div>
+          <div class="text-xs text-slate-400"><span id="scribe-sessions-count">4</span> sessions today</div>
+        </div>
+        <div class="p-4" id="scribe-sessions-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ ALERTS VIEW ══ -->
+    <div class="view" id="view-alerts">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h1 class="text-xl font-bold text-slate-900">Clinical Alerts</h1>
+          <div class="text-sm text-slate-500 mt-0.5"><span id="alerts-active-count">3</span> active alerts</div>
+        </div>
+        <button onclick="dismissAllAlerts()" class="btn btn-ghost btn-sm">Dismiss All</button>
+      </div>
+      <div id="alerts-full-list" class="space-y-4"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══ MODAL OVERLAY ═══════════════════════════════ -->
+<div id="modal-overlay">
+  <div class="modal-box" id="modal-box"></div>
+</div>
+
+<!-- ═══ SLIDE PANEL ═════════════════════════════════ -->
+<div id="slide-panel">
+  <div id="slide-content"></div>
+</div>
+
+<!-- ═══ TOAST CONTAINER ═════════════════════════════ -->
+<div id="toast-container"></div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+let queueData = [
+  {id:'Q-001',name:'Marcus Johnson',mrn:'MRN-7842',esi:1,complaint:'Crushing chest pain, diaphoresis',wait:8,status:'nurse',age:62,gender:'M'},
+  {id:'Q-002',name:'Riya Patel',mrn:'MRN-3391',esi:2,complaint:'Severe dyspnea, SpO2 88%',wait:14,status:'waiting',age:74,gender:'F'},
+  {id:'Q-003',name:'Angela Williams',mrn:'MRN-5523',esi:2,complaint:'Altered mental status, fever 103.8°F',wait:19,status:'provider',age:81,gender:'F'},
+  {id:'Q-004',name:'Derek Huang',mrn:'MRN-9012',esi:3,complaint:'Abdominal pain 8/10, nausea',wait:27,status:'waiting',age:45,gender:'M'},
+  {id:'Q-005',name:'Sofia Martinez',mrn:'MRN-4467',esi:3,complaint:'Migraine, photophobia, vomiting',wait:31,status:'nurse',age:29,gender:'F'},
+  {id:'Q-006',name:'Tyler Garcia',mrn:'MRN-2281',esi:4,complaint:'Laceration, right forearm',wait:42,status:'waiting',age:23,gender:'M'},
+  {id:'Q-007',name:'Priya Nair',mrn:'MRN-6643',esi:3,complaint:'Fever 102°F, productive cough, 4 days',wait:38,status:'waiting',age:35,gender:'F'},
+  {id:'Q-008',name:'Robert Kim',mrn:'MRN-8801',esi:4,complaint:'Ankle sprain after fall',wait:55,status:'waiting',age:19,gender:'M'},
+  {id:'Q-009',name:'Elena Reyes',mrn:'MRN-1134',esi:5,complaint:'Prescription refill, controlled substance',wait:68,status:'waiting',age:52,gender:'F'},
+  {id:'Q-010',name:'James Okafor',mrn:'MRN-7755',esi:3,complaint:'Urinary symptoms, dysuria x3 days',wait:44,status:'discharged',age:67,gender:'M'},
+];
+
+let alertsData = [
+  {id:'A-1',type:'Sepsis Protocol',patient:'Angela Williams',mrn:'MRN-5523',msg:'SIRS criteria met: Temp 103.8°F, HR 118, RR 24, WBC 18.2. Recommend initiating Sepsis Bundle immediately.',severity:'critical',time:'8 min ago',dismissed:false},
+  {id:'A-2',type:'Drug Interaction',patient:'Marcus Johnson',mrn:'MRN-7842',msg:'Potential interaction between Metoprolol and Diltiazem. May cause severe bradycardia. Review cardiac medications.',severity:'high',time:'15 min ago',dismissed:false},
+  {id:'A-3',type:'Fall Risk',patient:'Riya Patel',mrn:'MRN-3391',msg:'Morse Fall Scale: 75 (High Risk). Patient on oxygen and diuretics. Implement fall prevention protocol.',severity:'medium',time:'21 min ago',dismissed:false},
+];
+
+let scribeSessionsData = [
+  {id:'SS-1',patient:'Marcus Johnson',mrn:'MRN-7842',provider:'Dr. S. Chen',status:'progress',started:'10:32 AM',duration:'12 min',transcript:'Patient presents with crushing chest pain rated 9 out of 10, radiating to left arm and jaw, onset 45 minutes ago. Associated with diaphoresis and nausea. No prior history of MI. BP 158 over 96, HR 102, SpO2 97 percent. EKG ordered.'},
+  {id:'SS-2',patient:'Elena Reyes',mrn:'MRN-1134',provider:'Dr. S. Chen',status:'review',started:'9:15 AM',duration:'8 min',transcript:'Patient here for prescription refill. Taking lisinopril 10mg daily for hypertension. BP 138 over 82, HR 74. Patient reports compliance with medication.'},
+  {id:'SS-3',patient:'Tyler Garcia',mrn:'MRN-2281',provider:'Dr. M. Osei',status:'review',started:'8:47 AM',duration:'5 min',transcript:'Patient presents with laceration to right forearm, approximately 4cm, sustained while cooking. Wound clean, no tendon involvement. Tetanus up to date.'},
+  {id:'SS-4',patient:'Priya Nair',mrn:'MRN-6643',provider:'Dr. S. Chen',status:'signed',started:'7:30 AM',duration:'11 min',transcript:'Patient with productive cough for 4 days, low grade fever, fatigue. Chest X-ray shows right lower lobe infiltrate consistent with pneumonia. Starting azithromycin 500mg day 1 then 250mg days 2-5.'},
+];
+
+let patientsData = [
+  {name:'Marcus Johnson',mrn:'MRN-7842',dob:'1962-03-15',age:62,gender:'M',conditions:['Hypertension','CAD','Diabetes T2'],allergies:['Penicillin','Sulfa'],lastVisit:'2026-04-14',status:'nurse',vitals:{bp:'158/96',hr:'102',spo2:'97%',temp:'98.6°F',rr:'18'},
+    timeline:[{date:'2026-04-14',event:'ED Visit:Chest pain, EKG ordered'},{date:'2026-02-10',event:'Cardiology Follow-up:Stress test normal'},{date:'2025-12-03',event:'PCP Visit:A1C 7.2, medication adjusted'},{date:'2025-09-18',event:'ED Visit:Hypertensive urgency, BP 195/110'}]},
+  {name:'Riya Patel',mrn:'MRN-3391',dob:'1952-07-22',age:74,gender:'F',conditions:['CHF','COPD','AFib'],allergies:['Aspirin'],lastVisit:'2026-04-14',status:'waiting',vitals:{bp:'142/88',hr:'96',spo2:'88%',temp:'99.1°F',rr:'24'},
+    timeline:[{date:'2026-04-14',event:'ED Visit:Severe dyspnea, SpO2 88%'},{date:'2026-03-01',event:'Cardiology:Echo: EF 35%'},{date:'2026-01-15',event:'Pulmonology:COPD exacerbation, prednisone course'}]},
+  {name:'Angela Williams',mrn:'MRN-5523',dob:'1945-11-08',age:81,gender:'F',conditions:['Dementia','HTN','UTI (recurrent)'],allergies:['Codeine','Latex'],lastVisit:'2026-04-14',status:'provider',vitals:{bp:'118/72',hr:'118',spo2:'95%',temp:'103.8°F',rr:'24'},
+    timeline:[{date:'2026-04-14',event:'ED Visit:AMS, fever, Sepsis alert triggered'},{date:'2026-02-20',event:'UTI treatment:Cipro 7-day course'},{date:'2025-11-30',event:'Neurology:Dementia staged moderate'}]},
+  {name:'Derek Huang',mrn:'MRN-9012',dob:'1981-05-30',age:45,gender:'M',conditions:['GERD','Anxiety'],allergies:['NKDA'],lastVisit:'2026-01-10',status:'waiting',vitals:{bp:'128/82',hr:'88',spo2:'99%',temp:'98.9°F',rr:'16'},
+    timeline:[{date:'2026-04-14',event:'ED Visit:Abdominal pain 8/10'},{date:'2026-01-10',event:'PCP:GERD management, omeprazole started'}]},
+  {name:'Sofia Martinez',mrn:'MRN-4467',dob:'1997-02-14',age:29,gender:'F',conditions:['Migraine (chronic)'],allergies:['Codeine'],lastVisit:'2026-03-22',status:'nurse',vitals:{bp:'112/68',hr:'82',spo2:'99%',temp:'98.2°F',rr:'14'},
+    timeline:[{date:'2026-04-14',event:'ED Visit:Severe migraine, vomiting'},{date:'2026-03-22',event:'Neurology:Topamax dose increased'}]},
+  {name:'Tyler Garcia',mrn:'MRN-2281',dob:'2003-09-01',age:23,gender:'M',conditions:['None'],allergies:['NKDA'],lastVisit:'2026-04-14',status:'waiting',vitals:{bp:'118/72',hr:'76',spo2:'100%',temp:'98.4°F',rr:'14'},
+    timeline:[{date:'2026-04-14',event:'ED Visit:Laceration right forearm'}]},
+  {name:'Priya Nair',mrn:'MRN-6643',dob:'1991-12-03',age:35,gender:'F',conditions:['Asthma'],allergies:['Aspirin'],lastVisit:'2026-04-14',status:'waiting',vitals:{bp:'116/74',hr:'92',spo2:'97%',temp:'102.1°F',rr:'18'},
+    timeline:[{date:'2026-04-14',event:'ED Visit:Fever, productive cough, pneumonia'},{date:'2025-10-05',event:'PCP:Asthma follow-up, spirometry normal'}]},
+  {name:'Elena Reyes',mrn:'MRN-1134',dob:'1974-08-19',age:52,gender:'F',conditions:['Hypertension','Hypothyroidism'],allergies:['NKDA'],lastVisit:'2026-04-14',status:'waiting',vitals:{bp:'138/82',hr:'74',spo2:'99%',temp:'98.6°F',rr:'14'},
+    timeline:[{date:'2026-04-14',event:'Prescription refill visit'},{date:'2026-02-14',event:'PCP:TSH normal, levothyroxine continued'}]},
+  {name:'Robert Kim',mrn:'MRN-8801',dob:'2007-06-11',age:19,gender:'M',conditions:['None'],allergies:['NKDA'],lastVisit:'2025-08-20',status:'waiting',vitals:{bp:'116/70',hr:'78',spo2:'100%',temp:'98.3°F',rr:'14'},
+    timeline:[{date:'2026-04-14',event:'ED Visit:Ankle sprain'},{date:'2025-08-20',event:'Sports physical: cleared'}]},
+  {name:'James Okafor',mrn:'MRN-7755',dob:'1959-04-25',age:67,gender:'M',conditions:['BPH','Hypertension'],allergies:['Penicillin'],lastVisit:'2026-04-14',status:'discharged',vitals:{bp:'132/84',hr:'72',spo2:'99%',temp:'98.7°F',rr:'14'},
+    timeline:[{date:'2026-04-14',event:'Discharged:UTI, Bactrim prescribed'},{date:'2026-01-08',event:'Urology:BPH follow-up, tamsulosin continued'}]},
+];
+
+// ══════════════════════════════════════════
+// UI STATE
+// ══════════════════════════════════════════
+let currentView = 'dashboard';
+let queueFilter = 'all';
+
+function switchView(name, navEl) {
+  // Update views
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  // Update nav
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  // Update title
+  const titles = {dashboard:'Dashboard',queue:'Triage Queue',patients:'Patients',scribe:'AI Scribe',alerts:'Clinical Alerts'};
+  document.getElementById('view-title').textContent = titles[name] || name;
+  currentView = name;
+  // Render
+  if (name === 'dashboard') { renderDashboard(); }
+  if (name === 'queue') renderQueue();
+  if (name === 'patients') renderPatients();
+  if (name === 'scribe') renderScribeSessions();
+  if (name === 'alerts') renderAlertsFull();
+  // Close slide panel
+  closeSlidePanel();
+}
+
+// ══════════════════════════════════════════
+// CLOCK
+// ══════════════════════════════════════════
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+setInterval(updateClock, 1000); updateClock();
+
+document.getElementById('dash-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+// ══════════════════════════════════════════
+// RENDER: DASHBOARD
+// ══════════════════════════════════════════
+function renderDashboard() {
+  // Stats
+  const activeQ = queueData.filter(p => p.status !== 'discharged').length;
+  const activeA = alertsData.filter(a => !a.dismissed).length;
+  document.getElementById('stat-queue').textContent = activeQ;
+  document.getElementById('stat-alerts').textContent = activeA;
+  document.getElementById('stat-scribe').textContent = scribeSessionsData.length;
+  document.getElementById('notif-badge').textContent = activeA;
+  document.getElementById('alerts-badge').textContent = activeA;
+  document.getElementById('queue-badge').textContent = activeQ;
+
+  // Queue (top 6, non-discharged)
+  const topQ = queueData.filter(p => p.status !== 'discharged').slice(0,6);
+  document.getElementById('dash-queue-body').innerHTML = `
+    <table class="tbl">
+      <thead><tr><th>Priority</th><th>Patient</th><th>Chief Complaint</th><th>Wait</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        ${topQ.map(p => `
+          <tr>
+            <td><span class="esi esi-${p.esi}">ESI ${p.esi}</span></td>
+            <td><div class="font-medium text-slate-900">${p.name}</div><div class="text-xs text-slate-400">${p.mrn}</div></td>
+            <td class="text-slate-600 text-xs max-w-[180px] truncate">${p.complaint}</td>
+            <td><span class="font-medium ${p.wait > 30 ? 'text-red-500' : 'text-slate-700'}">${p.wait}m</span></td>
+            <td><span class="st-${p.status}">${fmtStatus(p.status)}</span></td>
+            <td><button onclick="openPatient('${p.name}')" class="btn btn-ghost btn-xs">Chart</button></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+
+  // Alerts
+  const activeAlerts = alertsData.filter(a => !a.dismissed);
+  document.getElementById('dash-alerts-body').innerHTML = activeAlerts.length ? activeAlerts.map(a => `
+    <div class="flex items-start gap-2 bg-${a.severity==='critical'?'red':a.severity==='high'?'amber':'yellow'}-50 rounded-lg p-2.5 border border-${a.severity==='critical'?'red':a.severity==='high'?'amber':'yellow'}-100">
+      ${a.severity==='critical'?'<div class="alert-ring mt-1 flex-shrink-0"></div>':'<div class="w-2.5 h-2.5 rounded-full bg-amber-400 mt-1 flex-shrink-0"></div>'}
+      <div class="flex-1 min-w-0">
+        <div class="text-xs font-bold text-slate-900">${a.type}</div>
+        <div class="text-xs text-slate-600 truncate">${a.patient}</div>
+      </div>
+      <button onclick="dismissAlert('${a.id}')" class="btn btn-ghost btn-xs flex-shrink-0">✕</button>
+    </div>`).join('') : '<div class="text-center text-slate-400 text-xs py-4">No active alerts</div>';
+
+  // Scribe
+  document.getElementById('dash-scribe-body').innerHTML = scribeSessionsData.slice(0,3).map(s => `
+    <div class="scribe-card" onclick="openScribeModal('${s.id}')">
+      <div class="flex items-center justify-between">
+        <div class="font-medium text-slate-900 text-xs">${s.patient}</div>
+        <span class="st-${s.status}">${fmtStatus(s.status)}</span>
+      </div>
+      <div class="text-xs text-slate-400 mt-0.5">${s.started} · ${s.duration}</div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════
+// RENDER: QUEUE
+// ══════════════════════════════════════════
+function renderQueue() {
+  const search = (document.getElementById('queue-search')?.value||'').toLowerCase();
+  const hideD = document.getElementById('hide-discharged')?.checked;
+  let data = queueData.filter(p => {
+    if (hideD && p.status === 'discharged') return false;
+    if (queueFilter !== 'all' && p.esi.toString() !== queueFilter) return false;
+    if (search && !p.name.toLowerCase().includes(search) && !p.mrn.toLowerCase().includes(search) && !p.complaint.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  document.getElementById('queue-count').textContent = data.length;
+  document.getElementById('queue-tbody').innerHTML = data.map(p => `
+    <tr class="${p.status==='discharged'?'opacity-50':''}">
+      <td><span class="esi esi-${p.esi}">ESI ${p.esi}</span></td>
+      <td><div class="font-medium text-slate-900">${p.name}</div><div class="text-xs text-slate-400">${p.age}${p.gender}</div></td>
+      <td class="text-xs text-slate-500 mono">${p.mrn}</td>
+      <td class="text-slate-600 text-sm max-w-[200px]">${p.complaint}</td>
+      <td><span class="${p.wait > 45 ? 'text-red-500 font-bold' : p.wait > 30 ? 'text-amber-500 font-semibold' : 'text-slate-700'} text-sm">${p.wait}m</span></td>
+      <td><span class="st-${p.status}">${fmtStatus(p.status)}</span></td>
+      <td>
+        <div class="flex gap-1.5">
+          <button onclick="openPatient('${p.name}')" class="btn btn-ghost btn-xs">Chart</button>
+          ${p.status !== 'discharged' ? `<button onclick="cycleStatus('${p.id}')" class="btn btn-primary btn-xs">Update</button>` : ''}
+          ${p.status !== 'discharged' ? `<button onclick="startScribeForPatient('${p.name}')" class="btn btn-ghost btn-xs">🎙️ Scribe</button>` : ''}
+        </div>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" class="text-center text-slate-400 py-8 text-sm">No patients match current filter</td></tr>';
+}
+
+function filterQueue(f, btn) {
+  queueFilter = f;
+  document.querySelectorAll('#esi-filters .filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderQueue();
+}
+
+function cycleStatus(id) {
+  const p = queueData.find(x => x.id === id);
+  if (!p) return;
+  const flow = ['waiting','nurse','provider','discharged'];
+  const idx = flow.indexOf(p.status);
+  p.status = flow[Math.min(idx+1, flow.length-1)];
+  renderQueue();
+  renderDashboard();
+  showToast(`${p.name} moved to ${fmtStatus(p.status)}`, 'success');
+}
+
+// ══════════════════════════════════════════
+// RENDER: PATIENTS
+// ══════════════════════════════════════════
+function renderPatients() {
+  const search = (document.getElementById('patient-search')?.value||'').toLowerCase();
+  const data = patientsData.filter(p =>
+    !search || p.name.toLowerCase().includes(search) || p.mrn.toLowerCase().includes(search) ||
+    p.conditions.join(' ').toLowerCase().includes(search)
+  );
+  document.getElementById('patient-tbody').innerHTML = data.map(p => `
+    <tr>
+      <td>
+        <div class="font-medium text-slate-900">${p.name}</div>
+        <div class="text-xs text-slate-400">${p.gender === 'M' ? 'Male' : 'Female'} · ${p.age} yrs</div>
+      </td>
+      <td class="mono text-xs text-slate-500">${p.mrn}</td>
+      <td class="text-sm text-slate-600">${p.dob}<div class="text-xs text-slate-400">Age ${p.age}</div></td>
+      <td><div class="flex flex-wrap gap-1">${p.conditions.slice(0,2).map(c=>`<span class="bg-slate-100 text-slate-600 text-xs px-1.5 py-0.5 rounded">${c}</span>`).join('')}${p.conditions.length>2?`<span class="text-xs text-slate-400">+${p.conditions.length-2}</span>`:''}</div></td>
+      <td class="text-sm text-slate-500">${p.lastVisit}</td>
+      <td><span class="st-${p.status}">${fmtStatus(p.status)}</span></td>
+      <td>
+        <div class="flex gap-1.5">
+          <button onclick="openPatient('${p.name}')" class="btn btn-primary btn-xs">Open Chart</button>
+          <button onclick="startScribeForPatient('${p.name}')" class="btn btn-ghost btn-xs">🎙️ Scribe</button>
+        </div>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" class="text-center text-slate-400 py-8 text-sm">No patients found</td></tr>';
+}
+
+// ══════════════════════════════════════════
+// RENDER: SCRIBE SESSIONS
+// ══════════════════════════════════════════
+function renderScribeSessions() {
+  document.getElementById('scribe-sessions-count').textContent = scribeSessionsData.length;
+  document.getElementById('scribe-badge').textContent = scribeSessionsData.filter(s=>s.status==='review').length;
+  document.getElementById('scribe-sessions-list').innerHTML = scribeSessionsData.map(s => `
+    <div class="scribe-card flex items-center gap-4">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="font-semibold text-slate-900 text-sm">${s.patient}</span>
+          <span class="st-${s.status}">${fmtStatus(s.status)}</span>
+        </div>
+        <div class="text-xs text-slate-500">${s.provider} · ${s.started} · ${s.duration}</div>
+        <div class="text-xs text-slate-400 mt-1 truncate">${s.transcript.substring(0,80)}...</div>
+      </div>
+      <div class="flex gap-2 flex-shrink-0">
+        ${s.status === 'review' ? `<button onclick="openScribeModal('${s.id}')" class="btn btn-warning btn-sm">Review & Sign</button>` : ''}
+        ${s.status === 'signed' ? `<button onclick="openScribeModal('${s.id}')" class="btn btn-ghost btn-sm">View Note</button>` : ''}
+        ${s.status === 'progress' ? `<button onclick="openScribeModal('${s.id}')" class="btn btn-primary btn-sm">View Live</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════
+// RENDER: ALERTS
+// ══════════════════════════════════════════
+function renderAlertsFull() {
+  const active = alertsData.filter(a => !a.dismissed);
+  document.getElementById('alerts-active-count').textContent = active.length;
+  document.getElementById('alerts-badge').textContent = active.length;
+  document.getElementById('notif-badge').textContent = active.length;
+
+  if (!active.length) {
+    document.getElementById('alerts-full-list').innerHTML = '<div class="text-center text-slate-400 py-16"><div class="text-4xl mb-3">✓</div><div class="font-medium">No active alerts</div><div class="text-sm mt-1">All clear</div></div>';
+    return;
+  }
+  document.getElementById('alerts-full-list').innerHTML = active.map(a => `
+    <div class="card">
+      <div class="p-5">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 mt-0.5">
+            ${a.severity==='critical'?'<div class="alert-ring"></div>':'<div class="w-3 h-3 rounded-full bg-amber-400"></div>'}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-3 flex-wrap mb-2">
+              <span class="font-bold text-slate-900 text-base">${a.type}</span>
+              <span class="sev-${a.severity}">${a.severity.toUpperCase()}</span>
+              <span class="text-xs text-slate-400 ml-auto">${a.time}</span>
+            </div>
+            <div class="text-sm text-slate-600 mb-1"><strong>Patient:</strong> ${a.patient} (${a.mrn})</div>
+            <p class="text-sm text-slate-700 leading-relaxed mb-4">${a.msg}</p>
+            <div class="flex flex-wrap gap-2">
+              ${a.severity==='critical'?`<button onclick="initiatePathway('${a.id}')" class="btn btn-danger btn-sm">🚨 Initiate Protocol</button>`:''}
+              <button onclick="acknowledgeAlert('${a.id}')" class="btn btn-ghost btn-sm">✓ Acknowledge</button>
+              <button onclick="openPatient('${a.patient}')" class="btn btn-ghost btn-sm">Open Chart</button>
+              <button onclick="dismissAlert('${a.id}')" class="btn btn-ghost btn-sm text-slate-400">Dismiss</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function dismissAlert(id) {
+  const a = alertsData.find(x => x.id === id);
+  if (a) { a.dismissed = true; showToast('Alert dismissed', 'info'); }
+  if (currentView === 'alerts') renderAlertsFull();
+  renderDashboard();
+}
+
+function dismissAllAlerts() {
+  alertsData.forEach(a => a.dismissed = true);
+  renderAlertsFull();
+  renderDashboard();
+  showToast('All alerts dismissed', 'info');
+}
+
+function acknowledgeAlert(id) {
+  const a = alertsData.find(x => x.id === id);
+  if (a) { showToast(`${a.type} acknowledged for ${a.patient}`, 'success'); }
+}
+
+function initiatePathway(id) {
+  const a = alertsData.find(x => x.id === id);
+  if (a) {
+    showToast(`${a.type} protocol initiated for ${a.patient}`, 'success');
+    a.dismissed = true;
+    if (currentView === 'alerts') renderAlertsFull();
+    renderDashboard();
+  }
+}
+
+// ══════════════════════════════════════════
+// PATIENT CHART SLIDE PANEL
+// ══════════════════════════════════════════
+function openPatient(name) {
+  const p = patientsData.find(x => x.name === name);
+  const q = queueData.find(x => x.name === name);
+  if (!p) return;
+
+  const vitalWarn = (v, key) => {
+    if (key==='spo2' && parseInt(v) < 95) return 'danger';
+    if (key==='hr' && (parseInt(v) > 100 || parseInt(v) < 60)) return 'warn';
+    if (key==='temp' && parseFloat(v) > 100.4) return 'warn';
+    return '';
+  };
+
+  document.getElementById('slide-content').innerHTML = `
+    <div class="p-5">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">${p.name}</h2>
+          <div class="text-sm text-slate-500">${p.gender==='M'?'Male':'Female'} · ${p.age} yrs · ${p.mrn}</div>
+          <div class="text-xs text-slate-400">DOB: ${p.dob}</div>
+        </div>
+        <button onclick="closeSlidePanel()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">✕</button>
+      </div>
+
+      ${q ? `<div class="mb-4"><span class="st-${q.status} text-xs">${fmtStatus(q.status)}</span> <span class="text-xs text-slate-500 ml-2">Queue: ${q.id}</span></div>` : ''}
+
+      <!-- Vitals -->
+      <div class="mb-5">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Current Vitals</div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="vital-box ${vitalWarn(p.vitals.bp,'bp')}">
+            <div class="text-xs text-slate-500">BP</div>
+            <div class="font-bold text-slate-900 text-sm">${p.vitals.bp}</div>
+          </div>
+          <div class="vital-box ${vitalWarn(p.vitals.hr,'hr')}">
+            <div class="text-xs text-slate-500">HR</div>
+            <div class="font-bold text-slate-900 text-sm">${p.vitals.hr}</div>
+          </div>
+          <div class="vital-box ${vitalWarn(p.vitals.spo2,'spo2')}">
+            <div class="text-xs text-slate-500">SpO2</div>
+            <div class="font-bold text-slate-900 text-sm">${p.vitals.spo2}</div>
+          </div>
+          <div class="vital-box ${vitalWarn(p.vitals.temp,'temp')}">
+            <div class="text-xs text-slate-500">Temp</div>
+            <div class="font-bold text-slate-900 text-sm">${p.vitals.temp}</div>
+          </div>
+          <div class="vital-box">
+            <div class="text-xs text-slate-500">RR</div>
+            <div class="font-bold text-slate-900 text-sm">${p.vitals.rr}</div>
+          </div>
+          <div class="vital-box">
+            <div class="text-xs text-slate-500">Esi</div>
+            <div>${q ? `<span class="esi esi-${q.esi}">ESI ${q.esi}</span>` : '<span class="text-slate-400 text-xs">—</span>'}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conditions -->
+      <div class="mb-5">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Active Conditions</div>
+        <div class="flex flex-wrap gap-1.5">
+          ${p.conditions.map(c=>`<span class="bg-blue-50 text-blue-700 text-xs font-medium px-2 py-1 rounded border border-blue-100">${c}</span>`).join('')}
+        </div>
+      </div>
+
+      <!-- Allergies -->
+      <div class="mb-5">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Allergies</div>
+        <div class="flex flex-wrap gap-1.5">
+          ${p.allergies.map(a=>`<span class="${a==='NKDA'?'bg-green-50 text-green-700 border-green-100':'bg-red-50 text-red-700 border-red-100'} text-xs font-medium px-2 py-1 rounded border">${a}</span>`).join('')}
+        </div>
+      </div>
+
+      <!-- AI Suggestions -->
+      ${q && q.esi <= 3 ? `
+      <div class="mb-5 bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-4">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">AI Differential (Support Only)</div>
+        <div class="space-y-2.5" id="ai-diff-${p.mrn}"></div>
+        <div class="mt-3 pt-3 border-t border-white/10">
+          <div class="text-xs text-slate-400 mb-1.5">Suggested Tests</div>
+          <div class="flex flex-wrap gap-1.5" id="ai-tests-${p.mrn}"></div>
+        </div>
+        <div class="mt-2 text-[10px] text-slate-500 italic">For clinical decision support only. Physician review required.</div>
+      </div>` : ''}
+
+      <!-- Timeline -->
+      <div class="mb-5">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Visit Timeline</div>
+        <div>
+          ${p.timeline.map((t,i) => `
+            <div class="tl-item">
+              <div class="text-xs text-[#005EB8] font-semibold mb-0.5">${t.date}</div>
+              <div class="text-sm text-slate-700">${t.event}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col gap-2 pt-3 border-t border-slate-100">
+        <button onclick="startScribeForPatient('${p.name}')" class="btn btn-primary w-full justify-center gap-2">
+          🎙️ Start AI Scribe Session
+        </button>
+        <button onclick="closeSlidePanel();showToast('Orders opened for ${p.name}','info')" class="btn btn-ghost w-full justify-center">View Orders</button>
+      </div>
+    </div>`;
+
+  // Render AI differential
+  if (q && q.esi <= 3) {
+    renderAIDifferential(p, q);
+  }
+
+  document.getElementById('slide-panel').classList.add('open');
+}
+
+function renderAIDifferential(p, q) {
+  const diffs = generateAIDifferential(p, q);
+  const container = document.getElementById(`ai-diff-${p.mrn}`);
+  const testContainer = document.getElementById(`ai-tests-${p.mrn}`);
+  if (!container) return;
+  container.innerHTML = diffs.diagnoses.map(d => `
+    <div>
+      <div class="flex justify-between text-xs text-white mb-1"><span>${d.name}</span><span class="font-bold text-[#60A5FA]">${d.conf}%</span></div>
+      <div class="conf-bar"><div class="conf-fill bg-[#60A5FA]" style="width:${d.conf}%"></div></div>
+    </div>`).join('');
+  if (testContainer) testContainer.innerHTML = diffs.tests.map(t => `<span class="bg-white/10 text-slate-300 text-xs px-2 py-0.5 rounded">${t}</span>`).join('');
+}
+
+function generateAIDifferential(p, q) {
+  const c = q.complaint.toLowerCase();
+  if (c.includes('chest')) return {diagnoses:[{name:'Acute Coronary Syndrome',conf:72},{name:'Unstable Angina',conf:58},{name:'GERD/Esophageal',conf:24}],tests:['Troponin I','12-Lead EKG','BMP','Chest X-Ray']};
+  if (c.includes('dyspnea')||c.includes('breath')||c.includes('spo2')) return {diagnoses:[{name:'Acute CHF Exacerbation',conf:68},{name:'COPD Exacerbation',conf:55},{name:'Pulmonary Embolism',conf:32}],tests:['BNP','D-Dimer','ABG','Chest X-Ray','Echo']};
+  if (c.includes('fever')||c.includes('mental')) return {diagnoses:[{name:'Sepsis/SIRS',conf:81},{name:'Bacterial UTI',conf:61},{name:'Aspiration Pneumonia',conf:44}],tests:['CBC','Blood Culture x2','UA/UC','CMP','Procalcitonin']};
+  if (c.includes('abdom')) return {diagnoses:[{name:'Appendicitis',conf:52},{name:'Cholelithiasis',conf:47},{name:'Peptic Ulcer',conf:33}],tests:['RUQ Ultrasound','CT Abdomen/Pelvis','LFTs','Lipase','UA']};
+  if (c.includes('migraine')||c.includes('headache')) return {diagnoses:[{name:'Migraine with aura',conf:78},{name:'Tension headache',conf:40},{name:'Intracranial HTN',conf:15}],tests:['Non-contrast CT Head','BMP']};
+  return {diagnoses:[{name:'Under evaluation',conf:50}],tests:['CBC','BMP','UA']};
+}
+
+function closeSlidePanel() {
+  document.getElementById('slide-panel').classList.remove('open');
+}
+
+// ══════════════════════════════════════════
+// SCRIBE MODAL (SOAP NOTE)
+// ══════════════════════════════════════════
+function openScribeModal(id) {
+  const s = scribeSessionsData.find(x => x.id === id);
+  if (!s) return;
+  const note = buildSOAPFromTranscript(s.transcript, s.patient);
+  openNoteModal(note, s);
+}
+
+function openNoteModal(note, session) {
+  const isReadonly = session && session.status === 'signed';
+  document.getElementById('modal-box').innerHTML = `
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Clinical Note: ${note.patient}</h2>
+          <div class="text-sm text-slate-500">${note.date} at ${note.time} · ${note.provider}</div>
+        </div>
+        <div class="flex items-center gap-2">
+          ${session && session.status === 'signed' ? '<span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full border border-green-200">SIGNED</span>' : ''}
+          <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">✕</button>
+        </div>
+      </div>
+
+      ${!isReadonly ? `<div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 flex items-start gap-2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" class="mt-0.5 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+        <div class="text-xs text-amber-800">Review all <span class="verify-tag">VERIFY</span> markers before signing. Click any section to edit. This note requires physician sign-off.</div>
+      </div>` : ''}
+
+      <!-- SOAP Sections -->
+      <div class="soap-section soap-s">
+        <div class="soap-label">S: Subjective</div>
+        <div class="soap-body ${!isReadonly?'contenteditable=\"true\"':''}" id="soap-s" ${!isReadonly?'contenteditable="true"':''}>${note.subjective}</div>
+      </div>
+      <div class="soap-section soap-o">
+        <div class="soap-label">O: Objective</div>
+        <div class="soap-body ${!isReadonly?'contenteditable=\"true\"':''}" id="soap-o" ${!isReadonly?'contenteditable="true"':''}>${note.objective}</div>
+      </div>
+      <div class="soap-section soap-a">
+        <div class="soap-label">A: Assessment</div>
+        <div class="soap-body ${!isReadonly?'contenteditable=\"true\"':''}" id="soap-a" ${!isReadonly?'contenteditable="true"':''}>${note.assessment}</div>
+      </div>
+      <div class="soap-section soap-p">
+        <div class="soap-label">P: Plan</div>
+        <div class="soap-body ${!isReadonly?'contenteditable=\"true\"':''}" id="soap-p" ${!isReadonly?'contenteditable="true"':''}>${note.plan}</div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3 mt-5 pt-4 border-t border-slate-100">
+        ${!isReadonly ? `
+          <button onclick="signNote('${session?.id||''}')" class="btn btn-success gap-2">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Sign & Save Note
+          </button>
+          <button onclick="closeModal()" class="btn btn-ghost">Save Draft</button>
+        ` : `<button onclick="closeModal()" class="btn btn-ghost">Close</button>`}
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="mt-3 text-xs text-slate-400 italic">AI-generated note. All clinical content must be verified by a licensed provider before signing. This note does not constitute a medical diagnosis.</div>
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function signNote(sessionId) {
+  const s = scribeSessionsData.find(x => x.id === sessionId);
+  if (s) s.status = 'signed';
+  closeModal();
+  renderScribeSessions();
+  renderDashboard();
+  showToast('Note signed and saved to patient record', 'success');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+
+// ══════════════════════════════════════════
+// AI SCRIBE ENGINE
+// ══════════════════════════════════════════
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let isRecording = false;
+let finalTranscript = '';
+let scribePatientName = '';
+let scribeTimerInterval = null;
+let scribeSeconds = 0;
+
+function openNewScribe() {
+  // Show patient picker modal
+  document.getElementById('modal-box').innerHTML = `
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">New Scribe Session</h2>
+          <p class="text-sm text-slate-500 mt-1">Select a patient to begin recording.</p>
+        </div>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">✕</button>
+      </div>
+      <div class="mb-4">
+        <label class="text-sm font-semibold text-slate-700 mb-2 block">Select Patient</label>
+        <select id="scribe-patient-select" class="w-full search-input text-sm">
+          <option value="">Choose patient...</option>
+          ${patientsData.map(p=>`<option value="${p.name}">${p.name} (${p.mrn})</option>`).join('')}
+          <option value="__new__">+ New / Walk-in Patient</option>
+        </select>
+      </div>
+      <div id="new-patient-name-row" class="hidden mb-4">
+        <label class="text-sm font-semibold text-slate-700 mb-2 block">Patient Name</label>
+        <input type="text" id="new-patient-name" class="w-full search-input text-sm" placeholder="First and last name"/>
+      </div>
+      <div class="bg-blue-50 rounded-lg p-3 mb-4 text-xs text-blue-700 border border-blue-100">
+        <strong>Browser note:</strong> Speech recognition works in Chrome and Edge. In Safari, use the manual text input option.
+      </div>
+      <div class="flex gap-3">
+        <button onclick="beginScribeSession()" class="btn btn-primary gap-2 flex-1">
+          <div class="rec-dot"></div> Start Recording
+        </button>
+        <button onclick="closeModal()" class="btn btn-ghost">Cancel</button>
+      </div>
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Watch for new patient select
+  setTimeout(() => {
+    const sel = document.getElementById('scribe-patient-select');
+    if (sel) sel.addEventListener('change', () => {
+      document.getElementById('new-patient-name-row').classList.toggle('hidden', sel.value !== '__new__');
+    });
+  }, 100);
+}
+
+function beginScribeSession() {
+  let name = document.getElementById('scribe-patient-select')?.value;
+  if (name === '__new__') {
+    name = document.getElementById('new-patient-name')?.value?.trim();
+    if (!name) { showToast('Please enter patient name', 'warning'); return; }
+  }
+  if (!name) { showToast('Please select a patient', 'warning'); return; }
+
+  scribePatientName = name;
+  finalTranscript = '';
+  scribeSeconds = 0;
+  closeModal();
+
+  // Switch to scribe view
+  switchView('scribe', document.getElementById('nav-scribe'));
+
+  // Show active panel
+  const panel = document.getElementById('active-scribe-panel');
+  panel.classList.remove('hidden');
+  document.getElementById('scribe-patient-label').textContent = name;
+  document.getElementById('live-transcript').innerHTML = '<span class="text-slate-400 italic text-sm">Listening... speak clearly near your microphone.</span>';
+
+  // Timer
+  scribeTimerInterval = setInterval(() => {
+    scribeSeconds++;
+    const m = String(Math.floor(scribeSeconds/60)).padStart(2,'0');
+    const s = String(scribeSeconds%60).padStart(2,'0');
+    document.getElementById('scribe-timer').textContent = `${m}:${s}`;
+  }, 1000);
+
+  // Start speech recognition
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+      let interim = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript + ' ';
+        } else {
+          interim += event.results[i][0].transcript;
+        }
+      }
+      const el = document.getElementById('live-transcript');
+      if (el) el.innerHTML =
+        `<span class="text-slate-800">${finalTranscript}</span>` +
+        `<span class="text-slate-400 italic">${interim}</span>`;
+    };
+
+    recognition.onerror = (e) => {
+      if (e.error === 'not-allowed') {
+        showToast('Microphone access denied. Use manual input below.', 'warning');
+      } else if (e.error !== 'aborted') {
+        showToast('Speech recognition error: ' + e.error, 'warning');
+      }
+    };
+
+    recognition.onend = () => {
+      if (isRecording) {
+        try { recognition.start(); } catch(e) {}
+      }
+    };
+
+    try {
+      recognition.start();
+      isRecording = true;
+      showToast(`Recording started for ${name}. Speak clearly.`, 'info');
+    } catch(e) {
+      showToast('Could not start microphone. Use manual input below.', 'warning');
+    }
+  } else {
+    showToast('Speech recognition not available in this browser. Use manual input below.', 'warning');
+  }
+}
+
+function stopScribeRecording() {
+  isRecording = false;
+  if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
+  clearInterval(scribeTimerInterval);
+  showToast('Recording stopped. Click "Generate SOAP Note" to process.', 'info');
+}
+
+function clearTranscript() {
+  finalTranscript = '';
+  const el = document.getElementById('live-transcript');
+  if (el) el.innerHTML = '<span class="text-slate-400 italic text-sm">Transcript cleared. Start recording or type below.</span>';
+  const manual = document.getElementById('manual-transcript');
+  if (manual) manual.value = '';
+}
+
+function generateNoteFromRecording() {
+  const manual = document.getElementById('manual-transcript')?.value?.trim();
+  const text = finalTranscript.trim() || manual || '';
+  if (!text) { showToast('No transcript available. Record audio or type notes.', 'warning'); return; }
+
+  const note = buildSOAPFromTranscript(text, scribePatientName);
+
+  // Add to sessions
+  const now = new Date();
+  const newSession = {
+    id: 'SS-' + (scribeSessionsData.length + 1),
+    patient: scribePatientName,
+    mrn: patientsData.find(p=>p.name===scribePatientName)?.mrn || 'MRN-NEW',
+    provider: 'Dr. S. Chen',
+    status: 'review',
+    started: now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
+    duration: Math.floor(scribeSeconds/60) + ' min',
+    transcript: text
+  };
+  scribeSessionsData.unshift(newSession);
+
+  // Hide active panel
+  stopScribeRecording();
+  document.getElementById('active-scribe-panel').classList.add('hidden');
+
+  renderScribeSessions();
+  openNoteModal(note, newSession);
+  showToast('Note generated. Give it a quick review before signing.', 'success');
+}
+
+function startScribeForPatient(name) {
+  scribePatientName = name;
+  finalTranscript = '';
+  scribeSeconds = 0;
+  closeModal();
+  closeSlidePanel();
+
+  switchView('scribe', document.getElementById('nav-scribe'));
+
+  const panel = document.getElementById('active-scribe-panel');
+  panel.classList.remove('hidden');
+  document.getElementById('scribe-patient-label').textContent = name;
+  document.getElementById('live-transcript').innerHTML = '<span class="text-slate-400 italic text-sm">Listening... speak clearly near your microphone.</span>';
+
+  scribeTimerInterval = setInterval(() => {
+    scribeSeconds++;
+    const m = String(Math.floor(scribeSeconds/60)).padStart(2,'0');
+    const s = String(scribeSeconds%60).padStart(2,'0');
+    document.getElementById('scribe-timer').textContent = `${m}:${s}`;
+  }, 1000);
+
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+    recognition.onresult = (ev) => {
+      let interim = '';
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        if (ev.results[i].isFinal) finalTranscript += ev.results[i][0].transcript + ' ';
+        else interim += ev.results[i][0].transcript;
+      }
+      const el = document.getElementById('live-transcript');
+      if (el) el.innerHTML = `<span class="text-slate-800">${finalTranscript}</span><span class="text-slate-400 italic">${interim}</span>`;
+    };
+    recognition.onerror = (e) => { if (e.error !== 'aborted') showToast('Mic: ' + e.error, 'warning'); };
+    recognition.onend = () => { if (isRecording) { try { recognition.start(); } catch(e) {} } };
+    try { recognition.start(); isRecording = true; showToast(`Recording for ${name}`, 'info'); }
+    catch(e) { showToast('Could not access microphone. Use text input.', 'warning'); }
+  } else {
+    showToast('Voice not available in this browser. Type notes manually.', 'warning');
+  }
+}
+
+// ══════════════════════════════════════════
+// SOAP NOTE BUILDER
+// ══════════════════════════════════════════
+function buildSOAPFromTranscript(text, patientName) {
+  const t = text.toLowerCase();
+  const now = new Date();
+
+  // Extract vitals
+  const bpMatch = text.match(/(\d{2,3})\s*(?:over|\/)\s*(\d{2,3})/i);
+  const hrMatch = text.match(/(?:heart rate|hr|pulse)\D{0,10}(\d{2,3})/i);
+  const tempMatch = text.match(/(?:temp(?:erature)?)\D{0,10}(\d{2,3}(?:\.\d)?)/i);
+  const o2Match = text.match(/(?:o2|oxygen|sat(?:uration)?|spo2)\D{0,10}(\d{2,3})/i);
+  const rrMatch = text.match(/(?:respiratory rate|rr|resp(?:iration)?)\D{0,10}(\d{2,3})/i);
+
+  // Chief complaint
+  const ccMatch = text.match(/(?:here for|presents? (?:with|for)|complains? of|chief complaint)[:\s]+([^.!?\n]{5,80})/i);
+
+  // Symptoms
+  const symptoms = [];
+  ['pain','fever','nausea','vomiting','shortness of breath','dyspnea','chest pain','headache','dizziness','fatigue','cough','swelling','bleeding','diarrhea','constipation'].forEach(s => {
+    if (t.includes(s)) symptoms.push(s);
+  });
+
+  // Onset
+  const onset = text.match(/(?:started|began|onset|for)\D{0,5}(\d+\s*(?:day|hour|week|month)s?)/i);
+  const severity = text.match(/(?:pain|discomfort)\D{0,10}(\d+)\s*(?:out of|\/)\s*10/i);
+
+  // Medications
+  const meds = text.match(/(?:taking|prescribed|on|takes)\s+([A-Za-z]+(?:\s+\d+\s*mg)?)/gi) || [];
+  const allergies = text.match(/(?:allerg(?:ic)? to|allergy)[:\s]+([^.!?\n]{3,50})/i);
+
+  // Physical exam findings
+  const examFindings = [];
+  if (t.match(/alert|oriented|awake/)) examFindings.push('Alert and oriented');
+  if (t.match(/no (?:acute )?distress|comfortable|nad/)) examFindings.push('No acute distress');
+  if (t.match(/lungs? clear|clear to auscult/)) examFindings.push('Lungs clear to auscultation bilaterally');
+  if (t.match(/regular (?:rate|rhythm)|normal sinus|rrr/)) examFindings.push('Regular rate and rhythm');
+  if (t.match(/soft|non.?tender|non.?distended/)) examFindings.push('Abdomen soft, non-tender, non-distended');
+  if (!examFindings.length) examFindings.push('[Physician: complete physical exam findings] <span class="verify-tag">VERIFY</span>');
+
+  // Assessment
+  const conditions = [];
+  if (t.match(/hypertension|htn/)) conditions.push('Hypertension');
+  if (t.match(/diabetes|diabetic/)) conditions.push('Diabetes mellitus');
+  if (t.match(/chest pain|angina/)) conditions.push('Chest pain, etiology to be determined');
+  if (t.match(/sepsis|septic/)) conditions.push('Sepsis / SIRS criteria met, workup in progress');
+  if (t.match(/pneumonia|consolidation/)) conditions.push('Pneumonia');
+  if (t.match(/laceration|wound/)) conditions.push('Laceration requiring repair');
+  if (t.match(/migraine/)) conditions.push('Migraine with associated symptoms');
+  if (t.match(/fracture|break|broken/)) conditions.push('Suspected fracture, imaging ordered');
+  if (symptoms.length && !conditions.length) conditions.push(`Presenting symptoms: ${symptoms.slice(0,3).join(', ')}`);
+  if (!conditions.length) conditions.push('[Physician: complete assessment] <span class="verify-tag">VERIFY</span>');
+
+  // Plan
+  const planItems = [];
+  if (t.match(/lab|blood work|cbc|bmp|cmp/)) planItems.push('Labs ordered (see order set)');
+  if (t.match(/ekg|ecg|electrocardiogram/)) planItems.push('12-lead EKG obtained/ordered');
+  if (t.match(/x.?ray|xray|ct|mri|imaging|ultrasound/)) planItems.push('Imaging ordered (see radiology orders)');
+  if (t.match(/iv|intravenous|fluids|ns |normal saline|lr /)) planItems.push('IV access established, fluid resuscitation initiated');
+  if (t.match(/antibiotic|amox|cipro|augment|azithromycin|bactrim/)) planItems.push('Antibiotic therapy initiated (see medication order)');
+  if (t.match(/pain|analgesic|tylenol|ibuprofen|morphine|toradol/)) planItems.push('Analgesia administered per order');
+  if (t.match(/follow.?up|return|come back/)) planItems.push('Follow-up instructions provided to patient');
+  if (t.match(/discharge|home|discharged/)) planItems.push('Patient discharged with written instructions');
+  if (!planItems.length) planItems.push('[Physician: complete plan of care] <span class="verify-tag">VERIFY</span>');
+
+  const cc = ccMatch ? ccMatch[1].trim() : (symptoms[0] ? `Patient reports ${symptoms[0]}` : '[Chief complaint not identified] <span class="verify-tag">VERIFY</span>');
+
+  let hpi = `Patient is a ${patientsData.find(p=>p.name===patientName)?.age||'[age]'}-year-old ${patientsData.find(p=>p.name===patientName)?.gender==='M'?'male':'female'} presenting with ${cc}. `;
+  if (onset) hpi += `Symptoms began approximately ${onset[1]} ago. `;
+  if (severity) hpi += `Pain severity rated ${severity[1]}/10. `;
+  if (symptoms.length > 1) hpi += `Associated symptoms include ${symptoms.slice(1, 4).join(', ')}. `;
+  if (!onset) hpi += '<span class="verify-tag">VERIFY</span> onset and duration. ';
+
+  return {
+    date: now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),
+    time: now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
+    patient: patientName || 'Unknown',
+    provider: 'Dr. S. Chen',
+    subjective: `<strong>Chief Complaint:</strong> ${cc}<br/><br/><strong>History of Present Illness:</strong><br/>${hpi}<br/><br/><strong>Allergies:</strong> ${allergies ? allergies[1].trim() : (patientsData.find(p=>p.name===patientName)?.allergies.join(', ')||'NKDA')}<br/><br/><strong>Current Medications:</strong> ${meds.length ? meds.slice(0,4).map(m=>m.trim()).join('; ') : '[Review medication list] <span class="verify-tag">VERIFY</span>'}`,
+    objective: `<strong>Vital Signs:</strong><br/>BP: ${bpMatch?`${bpMatch[1]}/${bpMatch[2]} mmHg`:'<span class="verify-tag">VERIFY</span>'} | HR: ${hrMatch?`${hrMatch[1]} bpm`:'<span class="verify-tag">VERIFY</span>'} | Temp: ${tempMatch?`${tempMatch[1]}°F`:'<span class="verify-tag">VERIFY</span>'} | SpO2: ${o2Match?`${o2Match[1]}%`:'<span class="verify-tag">VERIFY</span>'} | RR: ${rrMatch?`${rrMatch[1]}/min`:'<span class="verify-tag">VERIFY</span>'}<br/><br/><strong>Physical Examination:</strong><br/>${examFindings.join('. ')}.`,
+    assessment: conditions.join('<br/>'),
+    plan: planItems.map((item,i) => `${i+1}. ${item}`).join('<br/>')
+  };
+}
+
+// ══════════════════════════════════════════
+// PATIENT CHECK-IN MODAL
+// ══════════════════════════════════════════
+function openCheckinModal() {
+  document.getElementById('modal-box').innerHTML = `
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Patient Check-In</h2>
+          <p class="text-sm text-slate-500 mt-1">Enter patient information and describe symptoms for AI triage.</p>
+        </div>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">✕</button>
+      </div>
+      <form onsubmit="submitCheckin(event)" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-semibold text-slate-700 mb-1.5 block">First Name *</label>
+            <input type="text" id="ci-first" required class="search-input w-full text-sm" placeholder="Jane"/>
+          </div>
+          <div>
+            <label class="text-sm font-semibold text-slate-700 mb-1.5 block">Last Name *</label>
+            <input type="text" id="ci-last" required class="search-input w-full text-sm" placeholder="Smith"/>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-semibold text-slate-700 mb-1.5 block">Date of Birth *</label>
+            <input type="date" id="ci-dob" required class="search-input w-full text-sm"/>
+          </div>
+          <div>
+            <label class="text-sm font-semibold text-slate-700 mb-1.5 block">Sex</label>
+            <select id="ci-sex" class="search-input w-full text-sm">
+              <option value="M">Male</option><option value="F">Female</option><option value="O">Other</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-slate-700 mb-1.5 block">Chief Complaint / Symptoms *</label>
+          <textarea id="ci-complaint" required rows="3" class="search-input w-full text-sm resize-none" placeholder="Describe your symptoms in your own words..."></textarea>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-slate-700 mb-1.5 block">Pain Scale (1–10)</label>
+          <input type="range" id="ci-pain" min="1" max="10" value="5" oninput="document.getElementById('ci-pain-val').textContent=this.value" class="w-full"/>
+          <div class="flex justify-between text-xs text-slate-400 mt-1"><span>1 (Mild)</span><span id="ci-pain-val" class="font-bold text-[#005EB8]">5</span><span>10 (Severe)</span></div>
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-slate-700 mb-1.5 block">Known Allergies</label>
+          <input type="text" id="ci-allergies" class="search-input w-full text-sm" placeholder="e.g. Penicillin, Aspirin (leave blank if none known)"/>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="submit" class="flex-1 btn btn-primary justify-center">Register & Triage Patient</button>
+          <button type="button" onclick="closeModal()" class="btn btn-ghost">Cancel</button>
+        </div>
+      </form>
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function submitCheckin(e) {
+  e.preventDefault();
+  const first = document.getElementById('ci-first').value;
+  const last = document.getElementById('ci-last').value;
+  const dob = document.getElementById('ci-dob').value;
+  const sex = document.getElementById('ci-sex').value;
+  const complaint = document.getElementById('ci-complaint').value;
+  const pain = document.getElementById('ci-pain').value;
+  const allergies = document.getElementById('ci-allergies').value || 'NKDA';
+  const name = `${first} ${last}`;
+
+  // AI triage scoring (simple heuristic)
+  const c = complaint.toLowerCase();
+  let esi = 4;
+  if (c.match(/unconscious|no pulse|not breathing|code|cardiac arrest/)) esi = 1;
+  else if (c.match(/chest pain|stroke|severe dyspnea|seiz|anaphylaxis|sepsis|altered mental/)||parseInt(pain)>=9) esi = 2;
+  else if (c.match(/moderate|high fever|severe pain|vomiting blood|fracture/)||parseInt(pain)>=7) esi = 3;
+  else if (parseInt(pain) <= 3) esi = 5;
+
+  const newMrn = 'MRN-' + Math.floor(Math.random()*9000+1000);
+  const ageYr = dob ? Math.floor((new Date()-new Date(dob))/(365.25*24*3600*1000)) : 0;
+
+  const newQ = {id:`Q-${String(queueData.length+1).padStart(3,'0')}`,name,mrn:newMrn,esi,complaint,wait:1,status:'waiting',age:ageYr,gender:sex};
+  queueData.unshift(newQ);
+
+  const newP = {name,mrn:newMrn,dob,age:ageYr,gender:sex,conditions:[],allergies:[allergies],lastVisit:new Date().toISOString().split('T')[0],status:'waiting',
+    vitals:{bp:'[VERIFY]',hr:'[VERIFY]',spo2:'[VERIFY]',temp:'[VERIFY]',rr:'[VERIFY]'},timeline:[{date:new Date().toLocaleDateString(),event:`Check-In: ${complaint.substring(0,60)}`}]};
+  patientsData.unshift(newP);
+
+  closeModal();
+  renderDashboard();
+
+  const esiNames = {1:'IMMEDIATE',2:'EMERGENT',3:'URGENT',4:'LESS URGENT',5:'NON-URGENT'};
+  showToast(`${name} checked in as ESI ${esi} (${esiNames[esi]})`, esi<=2?'error':esi===3?'warning':'success');
+
+  if (esi <= 2) {
+    setTimeout(() => {
+      alertsData.unshift({id:'A-'+Date.now(),type:'High-Acuity Patient',patient:name,mrn:newMrn,msg:`New ESI ${esi} patient: ${complaint}. Immediate attention required.`,severity:esi===1?'critical':'high',time:'just now',dismissed:false});
+      renderDashboard();
+    }, 800);
+  }
+}
+
+// ══════════════════════════════════════════
+// GLOBAL SEARCH
+// ══════════════════════════════════════════
+function globalSearch(val) {
+  if (!val || val.length < 2) return;
+  const matches = patientsData.filter(p =>
+    p.name.toLowerCase().includes(val.toLowerCase()) ||
+    p.mrn.toLowerCase().includes(val.toLowerCase())
+  );
+  if (matches.length === 1) {
+    openPatient(matches[0].name);
+  }
+}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function showToast(msg, type='info') {
+  const icons = {success:'✓',info:'ℹ',warning:'⚠',error:'✕'};
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${icons[type]||'ℹ'}</span><span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(8px)'; t.style.transition='all .3s'; setTimeout(()=>t.remove(),300); }, 3500);
+}
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
+function fmtStatus(s) {
+  const m = {waiting:'Waiting',nurse:'With Nurse',provider:'With Provider',review:'Pending Review',signed:'Signed',progress:'In Progress',discharged:'Discharged'};
+  return m[s] || s;
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+renderDashboard();
+</script>
+</body>
+</html>

@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Scrivia | Less Charting. More Caring.</title>
+<meta name="description" content="Scrivia is an AI-powered clinical platform that automates documentation, triage, and patient intake — giving nurses more time to care."/>
+<meta property="og:title" content="Scrivia | Less Charting. More Caring."/>
+<meta property="og:description" content="AI that handles the clipboard so nurses work the bedside. Real-time scribing, smart triage, and automated charting for modern hospitals."/>
+<meta property="og:url" content="https://scrivia.health"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Scrivia | Less Charting. More Caring."/>
+<meta name="twitter:description" content="AI that handles the clipboard so nurses work the bedside."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23005EB8'/><path d='M4 16h4l3-9 5 20 3-14 2 5h7' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+*{font-family:'Inter',sans-serif}
+html{scroll-behavior:smooth}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#f1f5f9}
+::-webkit-scrollbar-thumb{background:#005EB8;border-radius:3px}
+code,pre,.mono{font-family:'JetBrains Mono',monospace}
+
+@keyframes f1{0%,100%{transform:translateY(0) rotate(12deg)}50%{transform:translateY(-28px) rotate(17deg)}}
+@keyframes f2{0%,100%{transform:translateY(0) rotate(-15deg)}50%{transform:translateY(22px) rotate(-9deg)}}
+@keyframes f3{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-18px) rotate(-15deg)}}
+@keyframes f4{0%,100%{transform:translateY(0) rotate(20deg)}50%{transform:translateY(14px) rotate(26deg)}}
+.sh1{animation:f1 9s ease-in-out infinite}
+.sh2{animation:f2 11s ease-in-out infinite}
+.sh3{animation:f3 7s ease-in-out infinite}
+.sh4{animation:f4 13s ease-in-out infinite}
+
+.ecg-line{stroke-dasharray:2200;stroke-dashoffset:2200;animation:ecgDraw 3.5s ease-in-out infinite}
+@keyframes ecgDraw{
+  0%{stroke-dashoffset:2200;opacity:0}8%{opacity:1}65%{stroke-dashoffset:0;opacity:1}85%{stroke-dashoffset:0;opacity:.6}100%{stroke-dashoffset:0;opacity:0}
+}
+
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.pulse-dot{animation:pd 1.8s ease-in-out infinite}
+
+@keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.4)}60%{box-shadow:0 0 0 7px rgba(220,38,38,0)}}
+.alert-ring{animation:ring 2s infinite}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+.glass{background:rgba(255,255,255,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+
+.nl{position:relative}
+.nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#005EB8;transition:width .2s}
+.nl:hover::after{width:100%}
+
+.grad{background:linear-gradient(130deg,#60A5FA 0%,#34D399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-blue{background:linear-gradient(135deg,#005EB8,#0EA5E9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.lift{transition:transform .2s,box-shadow .2s}
+.lift:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,94,184,.13)}
+
+.m-blue{border-left:4px solid #005EB8}
+.m-violet{border-left:4px solid #7C3AED}
+.m-teal{border-left:4px solid #00897B}
+.m-amber{border-left:4px solid #D97706}
+.m-red{border-left:4px solid #DC2626}
+.m-green{border-left:4px solid #059669}
+
+.pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#005EB8;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:999px;padding:4px 12px;margin-bottom:12px}
+.pill-white{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#60A5FA;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);border-radius:999px;padding:4px 12px;margin-bottom:12px}
+
+.tl-step{position:relative;padding-left:52px;padding-bottom:40px}
+.tl-step:not(:last-child)::before{content:'';position:absolute;left:19px;top:40px;bottom:0;width:2px;background:linear-gradient(to bottom,#005EB8,#e2e8f0)}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero-in{animation:slideUp .8s ease-out forwards}
+.hero-in-2{animation:slideUp .8s .15s ease-out both}
+.hero-in-3{animation:slideUp .8s .3s ease-out both}
+.hero-in-4{animation:slideUp .8s .45s ease-out both}
+
+.stat-ticker{display:flex;gap:32px;animation:tickerScroll 20s linear infinite}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Step connector */
+.step-line{position:absolute;top:24px;left:calc(50% + 60px);right:calc(-50% + 60px);height:2px;background:linear-gradient(to right,#005EB8,#0EA5E9);display:none}
+@media(min-width:768px){.step-line{display:block}}
+
+/* Feature icon bg */
+.icon-bg-blue{background:#EFF6FF;color:#005EB8}
+.icon-bg-violet{background:#F5F3FF;color:#7C3AED}
+.icon-bg-teal{background:#F0FDF4;color:#059669}
+.icon-bg-amber{background:#FFFBEB;color:#D97706}
+.icon-bg-red{background:#FEF2F2;color:#DC2626}
+.icon-bg-green{background:#ECFDF5;color:#059669}
+
+/* Pricing card highlight */
+.price-featured{border:2px solid #005EB8;position:relative}
+.price-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#005EB8;color:#fff;font-size:11px;font-weight:700;padding:3px 14px;border-radius:999px;letter-spacing:.05em}
+
+/* Modal */
+#demo-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+#demo-modal.open{display:flex}
+.modal-card{background:#fff;border-radius:20px;max-width:520px;width:100%;padding:40px;box-shadow:0 32px 80px rgba(0,0,0,.25)}
+
+/* CTA btn */
+.btn-hero{background:#005EB8;color:#fff;padding:13px 28px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-hero:hover{background:#004A94;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,94,184,.35)}
+.btn-outline{background:transparent;color:#fff;padding:13px 28px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;border:2px solid rgba(255,255,255,.35);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.6)}
+.btn-primary{background:#005EB8;color:#fff;padding:11px 24px;border-radius:9px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s}
+.btn-primary:hover{background:#004A94}
+.btn-ghost-dark{background:transparent;border:1px solid #E2E8F0;color:#475569;padding:11px 24px;border-radius:9px;font-weight:600;font-size:14px;cursor:pointer;transition:all .2s}
+.btn-ghost-dark:hover{background:#F8FAFC}
+
+/* Source citation */
+.cite{font-size:10px;color:#94A3B8;font-style:italic}
+
+/* Dashboard preview */
+.db-preview{background:#0A1F3C;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+.db-sidebar{width:180px;background:#071630;padding:16px 12px;display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.db-nav{font-size:12px;color:#64748B;padding:8px 10px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.db-nav.act{background:rgba(0,94,184,.2);color:#60A5FA}
+.db-content{flex:1;padding:18px;overflow:hidden}
+.esi-b{font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;display:inline-block}
+.esi-1b{background:#DC2626;color:#fff}
+.esi-2b{background:#EA580C;color:#fff}
+.esi-3b{background:#D97706;color:#fff}
+.esi-4b{background:#16A34A;color:#fff}
+</style>
+</head>
+<body class="bg-white text-slate-900">
+
+<!-- ═══ NAV ════════════════════════════════════════ -->
+<nav id="nav" class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2.5 no-underline">
+      <div class="w-8 h-8 bg-[#005EB8] rounded-lg flex items-center justify-center">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9h2l2-6 3 14 2-10 1 4h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="text-lg font-bold text-slate-900" id="nav-logo">Scrivia</span>
+    </a>
+    <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600" id="nav-links">
+      <a href="#problem" class="nl hover:text-slate-900 transition-colors no-underline">Problem</a>
+      <a href="#features" class="nl hover:text-slate-900 transition-colors no-underline">Features</a>
+      <a href="#how-it-works" class="nl hover:text-slate-900 transition-colors no-underline">How It Works</a>
+      <a href="#roadmap" class="nl hover:text-slate-900 transition-colors no-underline">Roadmap</a>
+      <a href="#pricing" class="nl hover:text-slate-900 transition-colors no-underline">Pricing</a>
+    </div>
+    <div class="hidden md:flex items-center gap-3">
+      <button onclick="openDemo()" class="text-sm font-semibold text-slate-600 hover:text-[#005EB8] transition-colors px-4 py-2 rounded-lg hover:bg-blue-50">Request Access</button>
+      <a href="dashboard.html" class="bg-[#005EB8] hover:bg-[#004A94] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all no-underline flex items-center gap-1.5">
+        Try Dashboard <span class="opacity-70">→</span>
+      </a>
+    </div>
+    <button id="mob-btn" onclick="toggleMobile()" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h14M3 12h14M3 18h14"/></svg>
+    </button>
+  </div>
+  <div id="mob-menu" class="hidden md:hidden bg-white border-t border-slate-100 px-6 py-4 flex flex-col gap-4">
+    <a href="#problem" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Problem</a>
+    <a href="#features" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Features</a>
+    <a href="#how-it-works" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">How It Works</a>
+    <a href="#pricing" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Pricing</a>
+    <a href="dashboard.html" class="bg-[#005EB8] text-white text-sm font-semibold px-4 py-2.5 rounded-lg text-center no-underline">Try Dashboard</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ════════════════════════════════════════ -->
+<section class="relative bg-[#0A1F3C] min-h-[92vh] flex items-center overflow-hidden pt-16">
+  <!-- Floating shapes -->
+  <div class="sh1 absolute top-20 right-[8%] w-80 h-48 rounded-[60px] bg-gradient-to-br from-[#005EB8]/20 to-[#0EA5E9]/10 border border-[#005EB8]/15 blur-[1px]"></div>
+  <div class="sh2 absolute bottom-24 right-[22%] w-56 h-32 rounded-[40px] bg-gradient-to-br from-[#7C3AED]/15 to-[#005EB8]/10 border border-[#7C3AED]/10"></div>
+  <div class="sh3 absolute top-40 left-[5%] w-40 h-40 rounded-full bg-[#34D399]/8 border border-[#34D399]/10"></div>
+  <div class="sh4 absolute bottom-32 left-[18%] w-64 h-20 rounded-[30px] bg-[#005EB8]/10 border border-[#005EB8]/10"></div>
+
+  <!-- ECG line -->
+  <div class="absolute bottom-0 left-0 right-0 opacity-20">
+    <svg width="100%" height="80" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none">
+      <path class="ecg-line" d="M0 40 L180 40 L210 40 L220 10 L230 70 L240 20 L250 40 L280 40 L310 40 L320 15 L330 65 L340 25 L350 40 L400 40 L500 40 L520 40 L530 8 L540 72 L548 20 L556 40 L600 40 L700 40 L720 40 L730 12 L740 68 L748 22 L756 40 L800 40 L900 40 L920 40 L930 8 L940 72 L948 20 L956 40 L1000 40 L1100 40 L1120 40 L1130 15 L1140 65 L1150 25 L1160 40 L1220 40 L1320 40 L1340 40 L1350 10 L1360 70 L1370 20 L1380 40 L1440 40"
+        stroke="#60A5FA" stroke-width="1.5" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-16 items-center">
+    <!-- Left: Copy -->
+    <div>
+      <div class="pill-white hero-in">AI Clinical Documentation Platform</div>
+      <h1 class="hero-in-2 text-5xl lg:text-6xl font-black text-white leading-[1.05] mt-4 mb-6">
+        Less charting.<br/>
+        <span class="grad">More caring.</span>
+      </h1>
+      <p class="hero-in-3 text-lg text-slate-300 leading-relaxed max-w-lg mb-8">
+        Scrivia handles the documentation, triage, and patient intake. Nurses spend less time at the keyboard and more time with their patients.
+      </p>
+      <div class="hero-in-4 flex flex-wrap gap-3">
+        <a href="dashboard.html" class="btn-hero">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/></svg>
+          Try the Dashboard
+        </a>
+        <button onclick="openDemo()" class="btn-outline">Request Access</button>
+      </div>
+      <!-- Stat pills -->
+      <div class="hero-in-4 flex flex-wrap gap-3 mt-8">
+        <div class="bg-white/8 border border-white/12 rounded-full px-4 py-1.5 text-sm font-semibold text-slate-300">
+          <span class="text-[#60A5FA] font-black">40%</span> of shift = documentation
+        </div>
+        <div class="bg-white/8 border border-white/12 rounded-full px-4 py-1.5 text-sm font-semibold text-slate-300">
+          <span class="text-[#34D399] font-black">$55K</span> avg scribe salary
+        </div>
+        <div class="bg-white/8 border border-white/12 rounded-full px-4 py-1.5 text-sm font-semibold text-slate-300">
+          <span class="text-[#F59E0B] font-black">86%</span> of claim denials avoidable
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Dashboard preview -->
+    <div class="hero-in-4 hidden lg:block">
+      <div class="db-preview">
+        <!-- Topbar -->
+        <div class="bg-[#0F2847] px-4 py-2.5 flex items-center gap-3 border-b border-white/8">
+          <div class="w-2 h-2 rounded-full bg-[#10B981]" style="animation:pd 1.8s infinite"></div>
+          <span class="text-slate-400 text-xs font-medium">Scrivia Clinical Dashboard</span>
+          <div class="ml-auto text-slate-500 text-xs mono">Live</div>
+        </div>
+        <div class="flex" style="height:320px">
+          <!-- Sidebar -->
+          <div class="db-sidebar">
+            <div class="text-slate-500 text-[10px] font-semibold uppercase tracking-widest px-2 mb-2">Navigation</div>
+            <div class="db-nav act">📊 Dashboard</div>
+            <div class="db-nav">🏥 Triage Queue <span class="ml-auto bg-red-600 text-white text-[9px] font-bold rounded-full px-1.5">3</span></div>
+            <div class="db-nav">👥 Patients</div>
+            <div class="db-nav">🎙️ AI Scribe</div>
+            <div class="db-nav">⚠️ Alerts</div>
+          </div>
+          <!-- Content preview -->
+          <div class="db-content">
+            <!-- Stat row -->
+            <div class="grid grid-cols-3 gap-2 mb-3">
+              <div class="bg-white/5 rounded-lg p-2.5">
+                <div class="text-[10px] text-slate-500 mb-1">In Queue</div>
+                <div class="text-xl font-black text-white">12</div>
+                <div class="text-[9px] text-red-400 mt-0.5">↑ 3 critical</div>
+              </div>
+              <div class="bg-white/5 rounded-lg p-2.5">
+                <div class="text-[10px] text-slate-500 mb-1">Scribe Active</div>
+                <div class="text-xl font-black text-[#60A5FA]">2</div>
+                <div class="text-[9px] text-slate-500 mt-0.5">recording</div>
+              </div>
+              <div class="bg-white/5 rounded-lg p-2.5">
+                <div class="text-[10px] text-slate-500 mb-1">Alerts</div>
+                <div class="text-xl font-black text-[#F59E0B]">3</div>
+                <div class="text-[9px] text-red-400 mt-0.5">1 critical</div>
+              </div>
+            </div>
+            <!-- Queue preview -->
+            <div class="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">Triage Queue</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-2 bg-white/4 rounded-lg px-2.5 py-2">
+                <span class="esi-b esi-1b">ESI 1</span>
+                <span class="text-white text-xs font-medium">M. Johnson</span>
+                <span class="text-slate-400 text-[10px] ml-auto">Chest pain · 8m</span>
+              </div>
+              <div class="flex items-center gap-2 bg-white/4 rounded-lg px-2.5 py-2">
+                <span class="esi-b esi-2b">ESI 2</span>
+                <span class="text-white text-xs font-medium">R. Patel</span>
+                <span class="text-slate-400 text-[10px] ml-auto">Dyspnea · 14m</span>
+              </div>
+              <div class="flex items-center gap-2 bg-white/4 rounded-lg px-2.5 py-2">
+                <span class="esi-b esi-3b">ESI 3</span>
+                <span class="text-white text-xs font-medium">A. Williams</span>
+                <span class="text-slate-400 text-[10px] ml-auto">Fever 103°F · 22m</span>
+              </div>
+              <div class="flex items-center gap-2 bg-white/4 rounded-lg px-2.5 py-2">
+                <span class="esi-b esi-4b">ESI 4</span>
+                <span class="text-white text-xs font-medium">T. Garcia</span>
+                <span class="text-slate-400 text-[10px] ml-auto">Laceration · 35m</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="text-center text-slate-500 text-xs mt-3">This is a live preview. <a href="dashboard.html" class="text-[#60A5FA] hover:underline">Open the full version →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS BAR ═══════════════════════════════════ -->
+<div class="bg-gradient-to-r from-[#005EB8] to-[#0EA5E9] py-4 overflow-hidden">
+  <div class="flex gap-12 items-center justify-center flex-wrap px-6">
+    <div class="text-center">
+      <div class="text-2xl font-black text-white">40%</div>
+      <div class="text-blue-100 text-xs">of nurse shifts on documentation</div>
+    </div>
+    <div class="w-px h-8 bg-white/20 hidden md:block"></div>
+    <div class="text-center">
+      <div class="text-2xl font-black text-white">$55K</div>
+      <div class="text-blue-100 text-xs">average medical scribe salary/yr</div>
+    </div>
+    <div class="w-px h-8 bg-white/20 hidden md:block"></div>
+    <div class="text-center">
+      <div class="text-2xl font-black text-white">86%</div>
+      <div class="text-blue-100 text-xs">of claim denials are avoidable</div>
+    </div>
+    <div class="w-px h-8 bg-white/20 hidden md:block"></div>
+    <div class="text-center">
+      <div class="text-2xl font-black text-white">610K</div>
+      <div class="text-blue-100 text-xs">RNs plan to leave by 2027</div>
+    </div>
+    <div class="w-px h-8 bg-white/20 hidden md:block"></div>
+    <div class="text-center">
+      <div class="text-2xl font-black text-white">31%</div>
+      <div class="text-blue-100 text-xs">of shift on EHR vs. 21% on patient care</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROBLEM ═════════════════════════════════════ -->
+<section id="problem" class="py-24 bg-[#F4F8FE]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <div class="pill">The Problem</div>
+      <h2 class="text-4xl font-black text-slate-900 mt-2 mb-4">Healthcare is drowning in paperwork</h2>
+      <p class="text-lg text-slate-500 max-w-2xl mx-auto">Nurses are the backbone of patient care. But right now, they're spending nearly half their shift at a keyboard instead of with their patients.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 mb-14">
+      <!-- Stat card 1 -->
+      <div class="bg-white rounded-2xl p-7 border border-slate-100 shadow-sm lift reveal">
+        <div class="w-12 h-12 icon-bg-red rounded-xl flex items-center justify-center mb-4">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="text-4xl font-black text-[#DC2626] mb-2">~40%</div>
+        <div class="font-semibold text-slate-900 mb-1">of every shift is documentation</div>
+        <p class="text-sm text-slate-500 mb-3">Nurses spend nearly half their shift on charting, entering vitals, and EHR updates. That's time taken directly away from patients.</p>
+        <div class="cite">Source: U.S. Surgeon General's Advisory Report · AACN</div>
+      </div>
+
+      <!-- Stat card 2 -->
+      <div class="bg-white rounded-2xl p-7 border border-slate-100 shadow-sm lift reveal">
+        <div class="w-12 h-12 icon-bg-blue rounded-xl flex items-center justify-center mb-4">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+        </div>
+        <div class="text-4xl font-black text-[#005EB8] mb-2">$55K</div>
+        <div class="font-semibold text-slate-900 mb-1">average medical scribe salary/year</div>
+        <p class="text-sm text-slate-500 mb-3">Human scribes cost $43K–$71K annually per hire. Most hospitals employ multiple scribes per department.</p>
+        <div class="cite">Source: Glassdoor 2026 · ResearchGate via murphi.ai</div>
+      </div>
+
+      <!-- Stat card 3 -->
+      <div class="bg-white rounded-2xl p-7 border border-slate-100 shadow-sm lift reveal">
+        <div class="w-12 h-12 icon-bg-amber rounded-xl flex items-center justify-center mb-4">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+        </div>
+        <div class="text-4xl font-black text-[#D97706] mb-2">86%</div>
+        <div class="font-semibold text-slate-900 mb-1">of insurance claim denials are avoidable</div>
+        <p class="text-sm text-slate-500 mb-3">Most denials come from incomplete notes and coding errors. That's exactly the kind of thing AI documentation catches before it becomes a problem.</p>
+        <div class="cite">Source: HFMA 2025 via ScribeEMR</div>
+      </div>
+    </div>
+
+    <!-- Burnout callout -->
+    <div class="bg-gradient-to-r from-red-50 to-orange-50 border border-red-100 rounded-2xl p-8 reveal">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <div class="text-sm font-semibold text-red-600 uppercase tracking-widest mb-3">Burnout Crisis</div>
+          <h3 class="text-2xl font-bold text-slate-900 mb-4">The nursing workforce is breaking</h3>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3 text-sm text-slate-700">
+              <span class="text-red-500 font-bold mt-0.5">→</span>
+              <span><strong>62%</strong> of nurses cite excessive documentation as their #1 driver of burnout <span class="cite">(FRESHRN, 2024)</span></span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700">
+              <span class="text-red-500 font-bold mt-0.5">→</span>
+              <span><strong>57%</strong> say EHR documentation time is "moderately to excessively high" across 60 hospitals <span class="cite">(ScienceDirect)</span></span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700">
+              <span class="text-red-500 font-bold mt-0.5">→</span>
+              <span>Each nurse who leaves costs a hospital <strong>$61,000</strong> to replace, with a 9.8% national vacancy rate <span class="cite">(ScienceDirect)</span></span>
+            </li>
+          </ul>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-red-100">
+          <div class="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-4">The Triage Problem</div>
+          <p class="text-slate-700 text-sm leading-relaxed mb-4">Hospital triage today is largely first-in, first-out. That means sicker patients aren't always seen first. Waitlist mortality risk rises <strong>11% for every additional month</strong> a high-risk patient waits.</p>
+          <div class="bg-red-50 rounded-lg px-4 py-3 text-xs text-red-700 font-medium border border-red-100">
+            Over 17,000 patients died waiting for surgery or diagnostic procedures in 2022-23. That's a 64% increase since 2018.
+            <div class="cite mt-1 text-red-500">Source: SecondStreet.org, 2023</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SOLUTION ════════════════════════════════════ -->
+<section id="features" class="py-24 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <div class="pill">The Solution</div>
+      <h2 class="text-4xl font-black text-slate-900 mt-2 mb-4">Scrivia automates the administrative layer</h2>
+      <p class="text-lg text-slate-500 max-w-2xl mx-auto">From the moment a patient walks in to the final billing code, Scrivia handles the paperwork. Your clinical staff can stay focused on what they actually trained for.</p>
+    </div>
+
+    <!-- Feature grid -->
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+
+      <!-- AI Scribe -->
+      <div class="bg-[#F4F8FE] rounded-2xl p-8 m-blue lift reveal">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-11 h-11 icon-bg-blue rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">AI Scribe</h3>
+            <div class="text-xs text-[#005EB8] font-semibold">Real-time charting during visits</div>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed mb-4">Scrivia listens during the patient encounter and writes a complete SOAP note in real time: chief complaint, HPI, physical exam, assessment, and plan. All of it, automatically.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Automatic vital extraction from speech</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Prior visit autofill for comparison</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Provider review and sign-off workflow</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Post-visit summary auto-generated</li>
+        </ul>
+        <div class="mt-5 bg-white rounded-lg p-3 border border-blue-100 font-mono text-xs text-slate-600">
+          <span class="text-slate-400">AI Scribe →</span> <span class="text-[#005EB8]">SOAP Note generated</span><br/>
+          <span class="text-green-600">✓ Chief complaint extracted</span><br/>
+          <span class="text-green-600">✓ Vitals: BP 130/85, HR 92, Temp 99.1°F</span><br/>
+          <span class="text-amber-600">⚠ [VERIFY] Medication dosage</span>
+        </div>
+      </div>
+
+      <!-- Smart Triage -->
+      <div class="bg-[#F4F8FE] rounded-2xl p-8 m-red lift reveal">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-11 h-11 icon-bg-red rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Smart Triage Queue</h3>
+            <div class="text-xs text-[#DC2626] font-semibold">AI-scored symptom severity prioritization</div>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed mb-4">Patients describe their symptoms at check-in and Scrivia automatically assigns an ESI score, so the most critical cases always rise to the top. No more first-come, first-served when someone's life is on the line.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#DC2626]">✓</span> ESI 1–5 automated scoring</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#DC2626]">✓</span> Real-time queue reprioritization</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#DC2626]">✓</span> Auto-filter discharged patients</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#DC2626]">✓</span> Wait time tracking per patient</li>
+        </ul>
+        <div class="mt-5 flex gap-2 flex-wrap">
+          <span class="bg-[#DC2626] text-white text-xs font-bold px-2.5 py-1 rounded">ESI 1: Immediate</span>
+          <span class="bg-[#EA580C] text-white text-xs font-bold px-2.5 py-1 rounded">ESI 2: Emergent</span>
+          <span class="bg-[#D97706] text-white text-xs font-bold px-2.5 py-1 rounded">ESI 3: Urgent</span>
+          <span class="bg-[#16A34A] text-white text-xs font-bold px-2.5 py-1 rounded">ESI 4: Less Urgent</span>
+        </div>
+      </div>
+
+      <!-- Patient Check-In -->
+      <div class="bg-[#F4F8FE] rounded-2xl p-8 m-teal lift reveal">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-11 h-11 icon-bg-teal rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Patient Self Check-In</h3>
+            <div class="text-xs text-[#00897B] font-semibold">Replaces manual front-desk intake</div>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed mb-4">Patients check in on a tablet or kiosk, describe their symptoms in plain language, and Scrivia fills in their chart, assigns a triage score, and pings the right staff. All of that happens before the patient even sits down.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#00897B]">✓</span> Natural language symptom intake</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#00897B]">✓</span> Auto-populated patient chart</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#00897B]">✓</span> Insurance and demographics capture</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#00897B]">✓</span> Staff notification on arrival</li>
+        </ul>
+      </div>
+
+      <!-- Prior Visit Autofill -->
+      <div class="bg-[#F4F8FE] rounded-2xl p-8 m-violet lift reveal">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-11 h-11 icon-bg-violet rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Prior Visit Autofill</h3>
+            <div class="text-xs text-[#7C3AED] font-semibold">Context from previous encounters</div>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed mb-4">When a returning patient checks in, Scrivia pulls up their prior visit notes, active conditions, and current medications right away. No more re-entering the same info twice or hunting through old charts.</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#7C3AED]">✓</span> Pull and compare prior notes</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#7C3AED]">✓</span> Active medication and allergy list</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#7C3AED]">✓</span> Condition timeline and history</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#7C3AED]">✓</span> Text shortcuts for common entries</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AI Diagnosis card (standout) -->
+    <div class="bg-gradient-to-r from-[#0A1F3C] to-[#0F3566] rounded-2xl p-8 reveal">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <div class="pill-white mb-4">Standout Feature</div>
+          <h3 class="text-2xl font-bold text-white mb-3">AI Diagnosis Suggestions</h3>
+          <p class="text-slate-300 text-sm leading-relaxed mb-4">Based on a patient's symptoms, vitals, and history, Scrivia ranks possible diagnoses by likelihood and suggests the right diagnostic tests to order. It gives providers a smarter starting point, not a replacement for their judgment.</p>
+          <p class="text-xs text-slate-500 italic">For clinical decision support only. All diagnoses require physician review and sign-off.</p>
+        </div>
+        <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+          <div class="text-xs text-slate-400 font-semibold uppercase tracking-widest mb-3">AI Differential: M. Johnson</div>
+          <div class="space-y-2.5">
+            <div class="flex items-center gap-3">
+              <div class="flex-1">
+                <div class="flex justify-between text-xs text-white mb-1"><span>Acute MI</span><span class="text-[#60A5FA] font-bold">78%</span></div>
+                <div class="h-1.5 bg-white/10 rounded-full"><div class="h-full bg-[#60A5FA] rounded-full" style="width:78%"></div></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="flex-1">
+                <div class="flex justify-between text-xs text-white mb-1"><span>Unstable Angina</span><span class="text-[#34D399] font-bold">54%</span></div>
+                <div class="h-1.5 bg-white/10 rounded-full"><div class="h-full bg-[#34D399] rounded-full" style="width:54%"></div></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="flex-1">
+                <div class="flex justify-between text-xs text-white mb-1"><span>GERD / Esophageal</span><span class="text-[#F59E0B] font-bold">21%</span></div>
+                <div class="h-1.5 bg-white/10 rounded-full"><div class="h-full bg-[#F59E0B] rounded-full" style="width:21%"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-white/10">
+            <div class="text-xs text-slate-400 mb-2">Recommended Tests</div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="bg-white/10 text-slate-300 text-xs px-2 py-0.5 rounded">Troponin I</span>
+              <span class="bg-white/10 text-slate-300 text-xs px-2 py-0.5 rounded">12-Lead EKG</span>
+              <span class="bg-white/10 text-slate-300 text-xs px-2 py-0.5 rounded">BMP</span>
+              <span class="bg-white/10 text-slate-300 text-xs px-2 py-0.5 rounded">Chest X-Ray</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ════════════════════════════════ -->
+<section id="how-it-works" class="py-24 bg-[#F4F8FE]">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <div class="pill">How It Works</div>
+      <h2 class="text-4xl font-black text-slate-900 mt-2 mb-4">From intake to discharge, handled.</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="text-center reveal">
+        <div class="w-16 h-16 bg-[#005EB8] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-200">
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+        </div>
+        <div class="text-sm font-bold text-[#005EB8] uppercase tracking-widest mb-2">Step 1</div>
+        <h3 class="text-lg font-bold text-slate-900 mb-3">Patient Self Check-In</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">Patient arrives and describes symptoms on a tablet. Scrivia auto-populates the chart and assigns a triage priority score. Staff is notified instantly.</p>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-16 h-16 bg-[#7C3AED] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-violet-200">
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg>
+        </div>
+        <div class="text-sm font-bold text-[#7C3AED] uppercase tracking-widest mb-2">Step 2</div>
+        <h3 class="text-lg font-bold text-slate-900 mb-3">AI Scribe During Visit</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">During the encounter, Scrivia listens and builds a complete SOAP note in real time. The provider reads it over, makes any changes, and signs off. No transcription needed, no extra steps.</p>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-16 h-16 bg-[#059669] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-green-200">
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="text-sm font-bold text-[#059669] uppercase tracking-widest mb-2">Step 3</div>
+        <h3 class="text-lg font-bold text-slate-900 mb-3">Auto Summary & Billing</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">After the visit, Scrivia writes a post-visit summary for the patient and suggests the right ICD-10 billing codes. Fewer denials, faster close-out, less paperwork sitting on someone's desk.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ROADMAP ══════════════════════════════════════ -->
+<section id="roadmap" class="py-24 bg-white">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="pill">Go-to-Market</div>
+      <h2 class="text-4xl font-black text-slate-900 mt-2">Three-phase launch plan</h2>
+    </div>
+    <div>
+      <div class="tl-step reveal">
+        <div class="absolute left-0 top-0 w-10 h-10 rounded-full bg-[#005EB8] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-blue-200">1</div>
+        <div class="font-bold text-[#005EB8] text-xs uppercase tracking-widest mb-1">Months 1–6</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">Validate</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Partner with 1-2 local hospitals or clinics for a free pilot. Start with the AI scribe feature since that's where you'll see the clearest ROI. Track time saved per nurse, error rates, and satisfaction scores.</p>
+      </div>
+      <div class="tl-step reveal">
+        <div class="absolute left-0 top-0 w-10 h-10 rounded-full bg-[#7C3AED] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-violet-200">2</div>
+        <div class="font-bold text-[#7C3AED] text-xs uppercase tracking-widest mb-1">Months 6–18</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">Launch</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Price as a SaaS subscription ($2,000-$5,000/month per facility). Go after small to mid-size hospitals and urgent care networks first since they have fewer procurement hurdles. Let the pilot data and testimonials do the selling.</p>
+      </div>
+      <div class="tl-step reveal">
+        <div class="absolute left-0 top-0 w-10 h-10 rounded-full bg-[#059669] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-green-200">3</div>
+        <div class="font-bold text-[#059669] text-xs uppercase tracking-widest mb-1">Months 18–36</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">Scale</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Expand to large hospital networks. Add full feature suite: AI triage queue, complete patient database, EHR integrations (Epic, Cerner). Pursue HIPAA certification and insurance billing partnerships.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRICING ══════════════════════════════════════ -->
+<section id="pricing" class="py-24 bg-[#F4F8FE]">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="pill">Pricing</div>
+      <h2 class="text-4xl font-black text-slate-900 mt-2 mb-3">Simple, transparent SaaS pricing</h2>
+      <p class="text-slate-500">One scribe costs $55K/year. Scrivia starts at $24K.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Starter -->
+      <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm lift reveal">
+        <div class="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-3">Starter</div>
+        <div class="text-4xl font-black text-slate-900 mb-1">$2,000<span class="text-lg font-medium text-slate-400">/mo</span></div>
+        <div class="text-xs text-slate-400 mb-6">per facility · billed annually</div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> AI Scribe (unlimited sessions)</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Smart Triage Queue</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Patient Check-In kiosk</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> HIPAA-compliant private DB</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Up to 25 providers</li>
+        </ul>
+        <button onclick="openDemo()" class="btn-ghost-dark w-full text-center">Get Started</button>
+      </div>
+      <!-- Professional (featured) -->
+      <div class="bg-white rounded-2xl p-8 border-2 border-[#005EB8] shadow-xl lift reveal relative price-featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="text-sm font-semibold text-[#005EB8] uppercase tracking-widest mb-3">Professional</div>
+        <div class="text-4xl font-black text-slate-900 mb-1">$3,500<span class="text-lg font-medium text-slate-400">/mo</span></div>
+        <div class="text-xs text-slate-400 mb-6">per facility · billed annually</div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Everything in Starter</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> AI Diagnosis Suggestions</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Prior Visit Autofill</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Post-visit billing code suggestions</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Multi-floor / multi-department</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Unlimited providers</li>
+        </ul>
+        <button onclick="openDemo()" class="btn-primary w-full text-center rounded-lg py-2.5">Get Started</button>
+      </div>
+      <!-- Enterprise -->
+      <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm lift reveal">
+        <div class="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-3">Enterprise</div>
+        <div class="text-4xl font-black text-slate-900 mb-1">Custom</div>
+        <div class="text-xs text-slate-400 mb-6">health systems &amp; networks</div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Everything in Professional</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> EHR integrations (Epic, Cerner)</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Custom AI model fine-tuning</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> BAA &amp; enterprise SLA</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Dedicated implementation team</li>
+        </ul>
+        <button onclick="openDemo()" class="btn-ghost-dark w-full text-center">Contact Sales</button>
+      </div>
+    </div>
+    <p class="text-center text-sm text-slate-400 mt-6">All plans include AES-256 encryption, TLS 1.3, MFA, audit logs, and a signed BAA. HIPAA compliant.</p>
+  </div>
+</section>
+
+<!-- ═══ COMPLIANCE ═══════════════════════════════════ -->
+<section class="py-16 bg-white border-t border-slate-100">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-10 reveal">
+      <div class="pill">Trust &amp; Compliance</div>
+      <h2 class="text-3xl font-black text-slate-900 mt-2">Built for healthcare from day one</h2>
+    </div>
+    <div class="grid md:grid-cols-4 gap-6">
+      <div class="text-center reveal">
+        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mx-auto mb-3 border border-green-100">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#059669" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        </div>
+        <div class="font-bold text-slate-900 text-sm">HIPAA 2025</div>
+        <div class="text-xs text-slate-500 mt-1">Full compliance + BAA</div>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-3 border border-blue-100">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#005EB8" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+        </div>
+        <div class="font-bold text-slate-900 text-sm">AES-256 + TLS 1.3</div>
+        <div class="text-xs text-slate-500 mt-1">Military-grade encryption</div>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-12 h-12 bg-violet-50 rounded-xl flex items-center justify-center mx-auto mb-3 border border-violet-100">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#7C3AED" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008H12v-.008z"/></svg>
+        </div>
+        <div class="font-bold text-slate-900 text-sm">SOC 2 (Roadmap)</div>
+        <div class="text-xs text-slate-500 mt-1">Audit-ready infrastructure</div>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mx-auto mb-3 border border-amber-100">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#D97706" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+        </div>
+        <div class="font-bold text-slate-900 text-sm">AI Disclosure</div>
+        <div class="text-xs text-slate-500 mt-1">TX TRAIGA compliant</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ══════════════════════════════════════════ -->
+<section class="py-24 bg-gradient-to-br from-[#0A1F3C] to-[#0F3566]">
+  <div class="max-w-3xl mx-auto px-6 text-center reveal">
+    <div class="pill-white mb-4">Get Early Access</div>
+    <h2 class="text-4xl font-black text-white mb-4">Ready to give nurses back their time?</h2>
+    <p class="text-slate-300 text-lg mb-8">Join the hospitals and clinics using Scrivia to give nurses their time back. Start with the AI scribe and you'll see the difference by the end of the first week.</p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="dashboard.html" class="btn-hero text-base px-8 py-4">
+        Try the Dashboard Free
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+      </a>
+      <button onclick="openDemo()" class="btn-outline text-base px-8 py-4">Request Pilot Program</button>
+    </div>
+    <p class="text-slate-500 text-sm mt-6">No credit card required for pilot. HIPAA BAA included.</p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══════════════════════════════════════ -->
+<footer class="bg-[#0A1F3C] border-t border-white/8 py-12">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-8 mb-10">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 bg-[#005EB8] rounded-lg flex items-center justify-center">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9h2l2-6 3 14 2-10 1 4h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="text-white font-bold text-lg">Scrivia</span>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed">"Less charting. More caring."</p>
+        <p class="text-slate-500 text-xs mt-3">AI-powered clinical documentation for modern hospitals.</p>
+      </div>
+      <div>
+        <div class="text-slate-300 font-semibold text-sm mb-4">Product</div>
+        <div class="space-y-2">
+          <a href="#features" class="block text-slate-500 text-sm hover:text-slate-300 no-underline transition-colors">AI Scribe</a>
+          <a href="#features" class="block text-slate-500 text-sm hover:text-slate-300 no-underline transition-colors">Smart Triage</a>
+          <a href="#features" class="block text-slate-500 text-sm hover:text-slate-300 no-underline transition-colors">Patient Check-In</a>
+          <a href="dashboard.html" class="block text-slate-500 text-sm hover:text-slate-300 no-underline transition-colors">Dashboard Demo</a>
+        </div>
+      </div>
+      <div>
+        <div class="text-slate-300 font-semibold text-sm mb-4">Company</div>
+        <div class="space-y-2">
+          <a href="#problem" class="block text-slate-500 text-sm hover:text-slate-300 no-underline transition-colors">The Problem</a>
+          <a href="#roadmap" class="block text-slate-500 text-sm hover:text-slate-300 no-underline transition-colors">Roadmap</a>
+          <a href="#pricing" class="block text-slate-500 text-sm hover:text-slate-300 no-underline transition-colors">Pricing</a>
+          <button onclick="openDemo()" class="block text-slate-500 text-sm hover:text-slate-300 text-left transition-colors">Request Access</button>
+        </div>
+      </div>
+      <div>
+        <div class="text-slate-300 font-semibold text-sm mb-4">Team</div>
+        <div class="space-y-1 text-xs text-slate-500">
+          <div>Caiden, Platform Lead</div>
+          <div>Connor, Clinical Research</div>
+          <div>Hanna, Presentation</div>
+          <div>Nathan, Financial Modeling</div>
+          <div>Faith, Medical Research</div>
+          <div>Jayden, Marketing</div>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/8 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="text-slate-500 text-xs">© 2026 Scrivia. HIPAA Compliant. All rights reserved.</div>
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></div>
+        <span class="text-slate-500 text-xs">All systems operational</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ DEMO MODAL ═══════════════════════════════════ -->
+<div id="demo-modal">
+  <div class="modal-card">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h3 class="text-xl font-bold text-slate-900">Request Early Access</h3>
+        <p class="text-sm text-slate-500 mt-1">We'll reach out within 24 hours to schedule your pilot.</p>
+      </div>
+      <button onclick="closeDemo()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form onsubmit="submitDemo(event)" class="space-y-4">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">First Name</label>
+          <input type="text" placeholder="Jane" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent"/>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Last Name</label>
+          <input type="text" placeholder="Smith" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent"/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Work Email</label>
+        <input type="email" placeholder="jane@hospital.org" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent"/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Hospital / Facility Name</label>
+        <input type="text" placeholder="Memorial General Hospital" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent"/>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Your Role</label>
+        <select required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent text-slate-700">
+          <option value="">Select your role...</option>
+          <option>Chief Medical Officer</option>
+          <option>Hospital Administrator</option>
+          <option>Director of Nursing</option>
+          <option>Physician</option>
+          <option>RN / APRN</option>
+          <option>IT / EHR Administrator</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">What's your biggest documentation pain point?</label>
+        <textarea rows="3" placeholder="e.g. Our nurses spend too much time on EHR charting during shifts..." class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent resize-none"></textarea>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="submit" class="flex-1 bg-[#005EB8] hover:bg-[#004A94] text-white font-semibold py-3 rounded-lg transition-colors text-sm">Submit Request</button>
+        <button type="button" onclick="closeDemo()" class="px-6 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-3 rounded-lg transition-colors text-sm">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// ── Nav scroll glass ──
+const nav = document.getElementById('nav');
+const navLogo = document.getElementById('nav-logo');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    nav.classList.add('glass','shadow-sm','border-slate-200');
+  } else {
+    nav.classList.remove('glass','shadow-sm','border-slate-200');
+  }
+});
+
+// ── Mobile menu ──
+let mobOpen = false;
+function toggleMobile() {
+  mobOpen = !mobOpen;
+  document.getElementById('mob-menu').classList.toggle('hidden', !mobOpen);
+}
+
+// ── Scroll reveal ──
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ── Demo modal ──
+function openDemo() {
+  document.getElementById('demo-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDemo() {
+  document.getElementById('demo-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('demo-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('demo-modal')) closeDemo();
+});
+function submitDemo(e) {
+  e.preventDefault();
+  const modal = document.getElementById('demo-modal');
+  modal.querySelector('.modal-card').innerHTML = `
+    <div class="text-center py-8">
+      <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-green-200">
+        <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="#059669" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h3 class="text-xl font-bold text-slate-900 mb-2">Request Received!</h3>
+      <p class="text-slate-500 text-sm mb-6">We'll be in touch within 24 hours to schedule your pilot. In the meantime, try the dashboard.</p>
+      <div class="flex justify-center gap-3">
+        <a href="dashboard.html" class="bg-[#005EB8] hover:bg-[#004A94] text-white font-semibold px-6 py-2.5 rounded-lg text-sm no-underline transition-colors">Try Dashboard →</a>
+        <button onclick="closeDemo()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors">Close</button>
+      </div>
+    </div>
+  `;
+}
+
+// ── Smooth anchor scroll ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
+    if (mobOpen) toggleMobile();
+  });
+});
+</script>
+</body>
+</html>
