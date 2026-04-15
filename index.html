@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Scrivia | Less Charting. More Caring.</title>
+<title>Scrivia | We Chart. You Heal.</title>
 <meta name="description" content="Scrivia is an AI-powered clinical platform that automates documentation, triage, and patient intake — giving nurses more time to care."/>
-<meta property="og:title" content="Scrivia | Less Charting. More Caring."/>
+<meta property="og:title" content="Scrivia | We Chart. You Heal."/>
 <meta property="og:description" content="AI that handles the clipboard so nurses work the bedside. Real-time scribing, smart triage, and automated charting for modern hospitals."/>
 <meta property="og:url" content="https://scrivia.health"/>
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Scrivia | Less Charting. More Caring."/>
+<meta name="twitter:title" content="Scrivia | We Chart. You Heal."/>
 <meta name="twitter:description" content="AI that handles the clipboard so nurses work the bedside."/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23005EB8'/><path d='M4 16h4l3-9 5 20 3-14 2 5h7' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231B5E3C'/><polygon points='16,3 21,16 16,29 11,16' fill='%232D8A5A'/><polygon points='16,3 21,16 16,21 11,16' fill='%236EC99A'/><path d='M2 16h4l2-5 3 10 2-6 1 1h16' stroke='%236EC99A' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -20,7 +20,7 @@
 html{scroll-behavior:smooth}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:#f1f5f9}
-::-webkit-scrollbar-thumb{background:#005EB8;border-radius:3px}
+::-webkit-scrollbar-thumb{background:#1B5E3C;border-radius:3px}
 code,pre,.mono{font-family:'JetBrains Mono',monospace}
 
 @keyframes f1{0%,100%{transform:translateY(0) rotate(12deg)}50%{transform:translateY(-28px) rotate(17deg)}}
@@ -49,27 +49,27 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
 .glass{background:rgba(255,255,255,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 
 .nl{position:relative}
-.nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#005EB8;transition:width .2s}
+.nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#1B5E3C;transition:width .2s}
 .nl:hover::after{width:100%}
 
-.grad{background:linear-gradient(130deg,#60A5FA 0%,#34D399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.grad-blue{background:linear-gradient(135deg,#005EB8,#0EA5E9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad{background:linear-gradient(130deg,#6EC99A 0%,#34D399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-blue{background:linear-gradient(135deg,#1B5E3C,#3DAF7A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 .lift{transition:transform .2s,box-shadow .2s}
 .lift:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,94,184,.13)}
 
-.m-blue{border-left:4px solid #005EB8}
+.m-blue{border-left:4px solid #1B5E3C}
 .m-violet{border-left:4px solid #7C3AED}
 .m-teal{border-left:4px solid #00897B}
 .m-amber{border-left:4px solid #D97706}
 .m-red{border-left:4px solid #DC2626}
 .m-green{border-left:4px solid #059669}
 
-.pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#005EB8;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:999px;padding:4px 12px;margin-bottom:12px}
-.pill-white{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#60A5FA;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);border-radius:999px;padding:4px 12px;margin-bottom:12px}
+.pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1B5E3C;background:#F0F9F4;border:1px solid #A7D7BC;border-radius:999px;padding:4px 12px;margin-bottom:12px}
+.pill-white{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6EC99A;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);border-radius:999px;padding:4px 12px;margin-bottom:12px}
 
 .tl-step{position:relative;padding-left:52px;padding-bottom:40px}
-.tl-step:not(:last-child)::before{content:'';position:absolute;left:19px;top:40px;bottom:0;width:2px;background:linear-gradient(to bottom,#005EB8,#e2e8f0)}
+.tl-step:not(:last-child)::before{content:'';position:absolute;left:19px;top:40px;bottom:0;width:2px;background:linear-gradient(to bottom,#1B5E3C,#e2e8f0)}
 
 @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .hero-in{animation:slideUp .8s ease-out forwards}
@@ -81,11 +81,11 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
 @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* Step connector */
-.step-line{position:absolute;top:24px;left:calc(50% + 60px);right:calc(-50% + 60px);height:2px;background:linear-gradient(to right,#005EB8,#0EA5E9);display:none}
+.step-line{position:absolute;top:24px;left:calc(50% + 60px);right:calc(-50% + 60px);height:2px;background:linear-gradient(to right,#1B5E3C,#3DAF7A);display:none}
 @media(min-width:768px){.step-line{display:block}}
 
 /* Feature icon bg */
-.icon-bg-blue{background:#EFF6FF;color:#005EB8}
+.icon-bg-blue{background:#F0F9F4;color:#1B5E3C}
 .icon-bg-violet{background:#F5F3FF;color:#7C3AED}
 .icon-bg-teal{background:#F0FDF4;color:#059669}
 .icon-bg-amber{background:#FFFBEB;color:#D97706}
@@ -93,8 +93,8 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
 .icon-bg-green{background:#ECFDF5;color:#059669}
 
 /* Pricing card highlight */
-.price-featured{border:2px solid #005EB8;position:relative}
-.price-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#005EB8;color:#fff;font-size:11px;font-weight:700;padding:3px 14px;border-radius:999px;letter-spacing:.05em}
+.price-featured{border:2px solid #1B5E3C;position:relative}
+.price-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#1B5E3C;color:#fff;font-size:11px;font-weight:700;padding:3px 14px;border-radius:999px;letter-spacing:.05em}
 
 /* Modal */
 #demo-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
@@ -102,12 +102,12 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
 .modal-card{background:#fff;border-radius:20px;max-width:520px;width:100%;padding:40px;box-shadow:0 32px 80px rgba(0,0,0,.25)}
 
 /* CTA btn */
-.btn-hero{background:#005EB8;color:#fff;padding:13px 28px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
-.btn-hero:hover{background:#004A94;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,94,184,.35)}
+.btn-hero{background:#1B5E3C;color:#fff;padding:13px 28px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-hero:hover{background:#155233;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,94,184,.35)}
 .btn-outline{background:transparent;color:#fff;padding:13px 28px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;border:2px solid rgba(255,255,255,.35);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
 .btn-outline:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.6)}
-.btn-primary{background:#005EB8;color:#fff;padding:11px 24px;border-radius:9px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s}
-.btn-primary:hover{background:#004A94}
+.btn-primary{background:#1B5E3C;color:#fff;padding:11px 24px;border-radius:9px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s}
+.btn-primary:hover{background:#155233}
 .btn-ghost-dark{background:transparent;border:1px solid #E2E8F0;color:#475569;padding:11px 24px;border-radius:9px;font-weight:600;font-size:14px;cursor:pointer;transition:all .2s}
 .btn-ghost-dark:hover{background:#F8FAFC}
 
@@ -115,10 +115,10 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
 .cite{font-size:10px;color:#94A3B8;font-style:italic}
 
 /* Dashboard preview */
-.db-preview{background:#0A1F3C;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
-.db-sidebar{width:180px;background:#071630;padding:16px 12px;display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.db-preview{background:#0D2B1A;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+.db-sidebar{width:180px;background:#091C0F;padding:16px 12px;display:flex;flex-direction:column;gap:4px;flex-shrink:0}
 .db-nav{font-size:12px;color:#64748B;padding:8px 10px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:8px}
-.db-nav.act{background:rgba(0,94,184,.2);color:#60A5FA}
+.db-nav.act{background:rgba(0,94,184,.2);color:#6EC99A}
 .db-content{flex:1;padding:18px;overflow:hidden}
 .esi-b{font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;display:inline-block}
 .esi-1b{background:#DC2626;color:#fff}
@@ -133,8 +133,8 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
 <nav id="nav" class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-all duration-300">
   <div class="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
     <a href="#" class="flex items-center gap-2.5 no-underline">
-      <div class="w-8 h-8 bg-[#005EB8] rounded-lg flex items-center justify-center">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9h2l2-6 3 14 2-10 1 4h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="w-8 h-8 bg-[#1B5E3C] rounded-lg flex items-center justify-center">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="9,1 13,9 9,17 5,9" fill="#2D8A5A"/><polygon points="9,1 13,9 9,12 5,9" fill="#6EC99A"/><path d="M1 9h2l1-3 2 7 1-4 1 1h9" stroke="#6EC99A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <span class="text-lg font-bold text-slate-900" id="nav-logo">Scrivia</span>
     </a>
@@ -146,8 +146,8 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
       <a href="#pricing" class="nl hover:text-slate-900 transition-colors no-underline">Pricing</a>
     </div>
     <div class="hidden md:flex items-center gap-3">
-      <button onclick="openDemo()" class="text-sm font-semibold text-slate-600 hover:text-[#005EB8] transition-colors px-4 py-2 rounded-lg hover:bg-blue-50">Request Access</button>
-      <a href="dashboard.html" class="bg-[#005EB8] hover:bg-[#004A94] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all no-underline flex items-center gap-1.5">
+      <button onclick="openDemo()" class="text-sm font-semibold text-slate-600 hover:text-[#1B5E3C] transition-colors px-4 py-2 rounded-lg hover:bg-green-50">Request Access</button>
+      <a href="dashboard.html" class="bg-[#1B5E3C] hover:bg-[#155233] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all no-underline flex items-center gap-1.5">
         Try Dashboard <span class="opacity-70">→</span>
       </a>
     </div>
@@ -160,23 +160,23 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
     <a href="#features" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Features</a>
     <a href="#how-it-works" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">How It Works</a>
     <a href="#pricing" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Pricing</a>
-    <a href="dashboard.html" class="bg-[#005EB8] text-white text-sm font-semibold px-4 py-2.5 rounded-lg text-center no-underline">Try Dashboard</a>
+    <a href="dashboard.html" class="bg-[#1B5E3C] text-white text-sm font-semibold px-4 py-2.5 rounded-lg text-center no-underline">Try Dashboard</a>
   </div>
 </nav>
 
 <!-- ═══ HERO ════════════════════════════════════════ -->
-<section class="relative bg-[#0A1F3C] min-h-[92vh] flex items-center overflow-hidden pt-16">
+<section class="relative bg-[#0D2B1A] min-h-[92vh] flex items-center overflow-hidden pt-16">
   <!-- Floating shapes -->
-  <div class="sh1 absolute top-20 right-[8%] w-80 h-48 rounded-[60px] bg-gradient-to-br from-[#005EB8]/20 to-[#0EA5E9]/10 border border-[#005EB8]/15 blur-[1px]"></div>
-  <div class="sh2 absolute bottom-24 right-[22%] w-56 h-32 rounded-[40px] bg-gradient-to-br from-[#7C3AED]/15 to-[#005EB8]/10 border border-[#7C3AED]/10"></div>
+  <div class="sh1 absolute top-20 right-[8%] w-80 h-48 rounded-[60px] bg-gradient-to-br from-[#1B5E3C]/20 to-[#3DAF7A]/10 border border-[#1B5E3C]/15 blur-[1px]"></div>
+  <div class="sh2 absolute bottom-24 right-[22%] w-56 h-32 rounded-[40px] bg-gradient-to-br from-[#7C3AED]/15 to-[#1B5E3C]/10 border border-[#7C3AED]/10"></div>
   <div class="sh3 absolute top-40 left-[5%] w-40 h-40 rounded-full bg-[#34D399]/8 border border-[#34D399]/10"></div>
-  <div class="sh4 absolute bottom-32 left-[18%] w-64 h-20 rounded-[30px] bg-[#005EB8]/10 border border-[#005EB8]/10"></div>
+  <div class="sh4 absolute bottom-32 left-[18%] w-64 h-20 rounded-[30px] bg-[#1B5E3C]/10 border border-[#1B5E3C]/10"></div>
 
   <!-- ECG line -->
   <div class="absolute bottom-0 left-0 right-0 opacity-20">
     <svg width="100%" height="80" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none">
       <path class="ecg-line" d="M0 40 L180 40 L210 40 L220 10 L230 70 L240 20 L250 40 L280 40 L310 40 L320 15 L330 65 L340 25 L350 40 L400 40 L500 40 L520 40 L530 8 L540 72 L548 20 L556 40 L600 40 L700 40 L720 40 L730 12 L740 68 L748 22 L756 40 L800 40 L900 40 L920 40 L930 8 L940 72 L948 20 L956 40 L1000 40 L1100 40 L1120 40 L1130 15 L1140 65 L1150 25 L1160 40 L1220 40 L1320 40 L1340 40 L1350 10 L1360 70 L1370 20 L1380 40 L1440 40"
-        stroke="#60A5FA" stroke-width="1.5" fill="none"/>
+        stroke="#6EC99A" stroke-width="1.5" fill="none"/>
     </svg>
   </div>
 
@@ -185,8 +185,8 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
     <div>
       <div class="pill-white hero-in">AI Clinical Documentation Platform</div>
       <h1 class="hero-in-2 text-5xl lg:text-6xl font-black text-white leading-[1.05] mt-4 mb-6">
-        Less charting.<br/>
-        <span class="grad">More caring.</span>
+        We chart.<br/>
+        <span class="grad">You heal.</span>
       </h1>
       <p class="hero-in-3 text-lg text-slate-300 leading-relaxed max-w-lg mb-8">
         Scrivia handles the documentation, triage, and patient intake. Nurses spend less time at the keyboard and more time with their patients.
@@ -201,7 +201,7 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
       <!-- Stat pills -->
       <div class="hero-in-4 flex flex-wrap gap-3 mt-8">
         <div class="bg-white/8 border border-white/12 rounded-full px-4 py-1.5 text-sm font-semibold text-slate-300">
-          <span class="text-[#60A5FA] font-black">40%</span> of shift = documentation
+          <span class="text-[#6EC99A] font-black">40%</span> of shift = documentation
         </div>
         <div class="bg-white/8 border border-white/12 rounded-full px-4 py-1.5 text-sm font-semibold text-slate-300">
           <span class="text-[#34D399] font-black">$55K</span> avg scribe salary
@@ -216,7 +216,7 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
     <div class="hero-in-4 hidden lg:block">
       <div class="db-preview">
         <!-- Topbar -->
-        <div class="bg-[#0F2847] px-4 py-2.5 flex items-center gap-3 border-b border-white/8">
+        <div class="bg-[#0C2416] px-4 py-2.5 flex items-center gap-3 border-b border-white/8">
           <div class="w-2 h-2 rounded-full bg-[#10B981]" style="animation:pd 1.8s infinite"></div>
           <span class="text-slate-400 text-xs font-medium">Scrivia Clinical Dashboard</span>
           <div class="ml-auto text-slate-500 text-xs mono">Live</div>
@@ -242,7 +242,7 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
               </div>
               <div class="bg-white/5 rounded-lg p-2.5">
                 <div class="text-[10px] text-slate-500 mb-1">Scribe Active</div>
-                <div class="text-xl font-black text-[#60A5FA]">2</div>
+                <div class="text-xl font-black text-[#6EC99A]">2</div>
                 <div class="text-[9px] text-slate-500 mt-0.5">recording</div>
               </div>
               <div class="bg-white/5 rounded-lg p-2.5">
@@ -278,13 +278,13 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
           </div>
         </div>
       </div>
-      <p class="text-center text-slate-500 text-xs mt-3">This is a live preview. <a href="dashboard.html" class="text-[#60A5FA] hover:underline">Open the full version →</a></p>
+      <p class="text-center text-slate-500 text-xs mt-3">This is a live preview. <a href="dashboard.html" class="text-[#6EC99A] hover:underline">Open the full version →</a></p>
     </div>
   </div>
 </section>
 
 <!-- ═══ STATS BAR ═══════════════════════════════════ -->
-<div class="bg-gradient-to-r from-[#005EB8] to-[#0EA5E9] py-4 overflow-hidden">
+<div class="bg-gradient-to-r from-[#1B5E3C] to-[#3DAF7A] py-4 overflow-hidden">
   <div class="flex gap-12 items-center justify-center flex-wrap px-6">
     <div class="text-center">
       <div class="text-2xl font-black text-white">40%</div>
@@ -339,7 +339,7 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
         <div class="w-12 h-12 icon-bg-blue rounded-xl flex items-center justify-center mb-4">
           <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
         </div>
-        <div class="text-4xl font-black text-[#005EB8] mb-2">$55K</div>
+        <div class="text-4xl font-black text-[#1B5E3C] mb-2">$55K</div>
         <div class="font-semibold text-slate-900 mb-1">average medical scribe salary/year</div>
         <p class="text-sm text-slate-500 mb-3">Human scribes cost $43K–$71K annually per hire. Most hospitals employ multiple scribes per department.</p>
         <div class="cite">Source: Glassdoor 2026 · ResearchGate via murphi.ai</div>
@@ -411,18 +411,18 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
           </div>
           <div>
             <h3 class="font-bold text-slate-900 text-lg">AI Scribe</h3>
-            <div class="text-xs text-[#005EB8] font-semibold">Real-time charting during visits</div>
+            <div class="text-xs text-[#1B5E3C] font-semibold">Real-time charting during visits</div>
           </div>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed mb-4">Scrivia listens during the patient encounter and writes a complete SOAP note in real time: chief complaint, HPI, physical exam, assessment, and plan. All of it, automatically.</p>
         <ul class="space-y-2">
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Automatic vital extraction from speech</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Prior visit autofill for comparison</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Provider review and sign-off workflow</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Post-visit summary auto-generated</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Automatic vital extraction from speech</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Prior visit autofill for comparison</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Provider review and sign-off workflow</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Post-visit summary auto-generated</li>
         </ul>
-        <div class="mt-5 bg-white rounded-lg p-3 border border-blue-100 font-mono text-xs text-slate-600">
-          <span class="text-slate-400">AI Scribe →</span> <span class="text-[#005EB8]">SOAP Note generated</span><br/>
+        <div class="mt-5 bg-white rounded-lg p-3 border border-green-100 font-mono text-xs text-slate-600">
+          <span class="text-slate-400">AI Scribe →</span> <span class="text-[#1B5E3C]">SOAP Note generated</span><br/>
           <span class="text-green-600">✓ Chief complaint extracted</span><br/>
           <span class="text-green-600">✓ Vitals: BP 130/85, HR 92, Temp 99.1°F</span><br/>
           <span class="text-amber-600">⚠ [VERIFY] Medication dosage</span>
@@ -497,7 +497,7 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
     </div>
 
     <!-- AI Diagnosis card (standout) -->
-    <div class="bg-gradient-to-r from-[#0A1F3C] to-[#0F3566] rounded-2xl p-8 reveal">
+    <div class="bg-gradient-to-r from-[#0D2B1A] to-[#1A4D2E] rounded-2xl p-8 reveal">
       <div class="grid md:grid-cols-2 gap-8 items-center">
         <div>
           <div class="pill-white mb-4">Standout Feature</div>
@@ -510,8 +510,8 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
           <div class="space-y-2.5">
             <div class="flex items-center gap-3">
               <div class="flex-1">
-                <div class="flex justify-between text-xs text-white mb-1"><span>Acute MI</span><span class="text-[#60A5FA] font-bold">78%</span></div>
-                <div class="h-1.5 bg-white/10 rounded-full"><div class="h-full bg-[#60A5FA] rounded-full" style="width:78%"></div></div>
+                <div class="flex justify-between text-xs text-white mb-1"><span>Acute MI</span><span class="text-[#6EC99A] font-bold">78%</span></div>
+                <div class="h-1.5 bg-white/10 rounded-full"><div class="h-full bg-[#6EC99A] rounded-full" style="width:78%"></div></div>
               </div>
             </div>
             <div class="flex items-center gap-3">
@@ -551,10 +551,10 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
     </div>
     <div class="grid md:grid-cols-3 gap-8">
       <div class="text-center reveal">
-        <div class="w-16 h-16 bg-[#005EB8] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-200">
+        <div class="w-16 h-16 bg-[#1B5E3C] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-200">
           <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
         </div>
-        <div class="text-sm font-bold text-[#005EB8] uppercase tracking-widest mb-2">Step 1</div>
+        <div class="text-sm font-bold text-[#1B5E3C] uppercase tracking-widest mb-2">Step 1</div>
         <h3 class="text-lg font-bold text-slate-900 mb-3">Patient Self Check-In</h3>
         <p class="text-slate-500 text-sm leading-relaxed">Patient arrives and describes symptoms on a tablet. Scrivia auto-populates the chart and assigns a triage priority score. Staff is notified instantly.</p>
       </div>
@@ -587,8 +587,8 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
     </div>
     <div>
       <div class="tl-step reveal">
-        <div class="absolute left-0 top-0 w-10 h-10 rounded-full bg-[#005EB8] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-blue-200">1</div>
-        <div class="font-bold text-[#005EB8] text-xs uppercase tracking-widest mb-1">Months 1–6</div>
+        <div class="absolute left-0 top-0 w-10 h-10 rounded-full bg-[#1B5E3C] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-blue-200">1</div>
+        <div class="font-bold text-[#1B5E3C] text-xs uppercase tracking-widest mb-1">Months 1–6</div>
         <h3 class="text-xl font-bold text-slate-900 mb-2">Validate</h3>
         <p class="text-slate-600 text-sm leading-relaxed">Partner with 1-2 local hospitals or clinics for a free pilot. Start with the AI scribe feature since that's where you'll see the clearest ROI. Track time saved per nurse, error rates, and satisfaction scores.</p>
       </div>
@@ -623,27 +623,27 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
         <div class="text-4xl font-black text-slate-900 mb-1">$2,000<span class="text-lg font-medium text-slate-400">/mo</span></div>
         <div class="text-xs text-slate-400 mb-6">per facility · billed annually</div>
         <ul class="space-y-3 mb-8">
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> AI Scribe (unlimited sessions)</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Smart Triage Queue</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Patient Check-In kiosk</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> HIPAA-compliant private DB</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Up to 25 providers</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> AI Scribe (unlimited sessions)</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Smart Triage Queue</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Patient Check-In kiosk</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> HIPAA-compliant private DB</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Up to 25 providers</li>
         </ul>
         <button onclick="openDemo()" class="btn-ghost-dark w-full text-center">Get Started</button>
       </div>
       <!-- Professional (featured) -->
-      <div class="bg-white rounded-2xl p-8 border-2 border-[#005EB8] shadow-xl lift reveal relative price-featured">
+      <div class="bg-white rounded-2xl p-8 border-2 border-[#1B5E3C] shadow-xl lift reveal relative price-featured">
         <div class="price-badge">Most Popular</div>
-        <div class="text-sm font-semibold text-[#005EB8] uppercase tracking-widest mb-3">Professional</div>
+        <div class="text-sm font-semibold text-[#1B5E3C] uppercase tracking-widest mb-3">Professional</div>
         <div class="text-4xl font-black text-slate-900 mb-1">$3,500<span class="text-lg font-medium text-slate-400">/mo</span></div>
         <div class="text-xs text-slate-400 mb-6">per facility · billed annually</div>
         <ul class="space-y-3 mb-8">
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Everything in Starter</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> AI Diagnosis Suggestions</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Prior Visit Autofill</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Post-visit billing code suggestions</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Multi-floor / multi-department</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Unlimited providers</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Everything in Starter</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> AI Diagnosis Suggestions</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Prior Visit Autofill</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Post-visit billing code suggestions</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Multi-floor / multi-department</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Unlimited providers</li>
         </ul>
         <button onclick="openDemo()" class="btn-primary w-full text-center rounded-lg py-2.5">Get Started</button>
       </div>
@@ -653,11 +653,11 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
         <div class="text-4xl font-black text-slate-900 mb-1">Custom</div>
         <div class="text-xs text-slate-400 mb-6">health systems &amp; networks</div>
         <ul class="space-y-3 mb-8">
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Everything in Professional</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> EHR integrations (Epic, Cerner)</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Custom AI model fine-tuning</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> BAA &amp; enterprise SLA</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#005EB8]">✓</span> Dedicated implementation team</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Everything in Professional</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> EHR integrations (Epic, Cerner)</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Custom AI model fine-tuning</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> BAA &amp; enterprise SLA</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Dedicated implementation team</li>
         </ul>
         <button onclick="openDemo()" class="btn-ghost-dark w-full text-center">Contact Sales</button>
       </div>
@@ -682,8 +682,8 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
         <div class="text-xs text-slate-500 mt-1">Full compliance + BAA</div>
       </div>
       <div class="text-center reveal">
-        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-3 border border-blue-100">
-          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#005EB8" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mx-auto mb-3 border border-green-100">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#1B5E3C" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
         </div>
         <div class="font-bold text-slate-900 text-sm">AES-256 + TLS 1.3</div>
         <div class="text-xs text-slate-500 mt-1">Military-grade encryption</div>
@@ -706,8 +706,56 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
   </div>
 </section>
 
+<!-- ═══ TEAM ═════════════════════════════════════════ -->
+<section class="py-24 bg-white">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="pill">The Team</div>
+      <h2 class="text-4xl font-black text-slate-900 mt-2">Meet the people behind Scrivia</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+      <div class="text-center reveal">
+        <div class="w-16 h-16 rounded-full bg-[#F0F9F4] border-2 border-[#A7D7BC] flex items-center justify-center mx-auto mb-3 text-2xl font-black text-[#1B5E3C]">HH</div>
+        <div class="font-bold text-slate-900">Hanna Hu</div>
+        <div class="text-[#1B5E3C] text-sm font-semibold">CEO</div>
+        <div class="text-xs text-slate-400 mt-1">B.S. Electrical Engineering<br/>Minor in Biomedical Engineering</div>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-16 h-16 rounded-full bg-[#F0F9F4] border-2 border-[#1B5E3C] flex items-center justify-center mx-auto mb-3 text-2xl font-black text-[#1B5E3C]">FC</div>
+        <div class="font-bold text-slate-900">Faith Cie</div>
+        <div class="text-[#1B5E3C] text-sm font-semibold">COO</div>
+        <div class="text-xs text-slate-400 mt-1">B.S. Biomedical Engineering</div>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-16 h-16 rounded-full bg-[#F0F9F4] border-2 border-[#A7D7BC] flex items-center justify-center mx-auto mb-3 text-2xl font-black text-[#1B5E3C]">CK</div>
+        <div class="font-bold text-slate-900">Caiden Katz</div>
+        <div class="text-[#1B5E3C] text-sm font-semibold">CTO</div>
+        <div class="text-xs text-slate-400 mt-1">B.S. Software Engineering</div>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-16 h-16 rounded-full bg-[#F0F9F4] border-2 border-[#A7D7BC] flex items-center justify-center mx-auto mb-3 text-2xl font-black text-[#1B5E3C]">NS</div>
+        <div class="font-bold text-slate-900">Nathan Sepulveda</div>
+        <div class="text-[#1B5E3C] text-sm font-semibold">CFO</div>
+        <div class="text-xs text-slate-400 mt-1">B.A. Business, Economics</div>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-16 h-16 rounded-full bg-[#F0F9F4] border-2 border-[#A7D7BC] flex items-center justify-center mx-auto mb-3 text-2xl font-black text-[#1B5E3C]">JL</div>
+        <div class="font-bold text-slate-900">Jayden Lin</div>
+        <div class="text-[#1B5E3C] text-sm font-semibold">CMO</div>
+        <div class="text-xs text-slate-400 mt-1">B.S. Business Administration</div>
+      </div>
+      <div class="text-center reveal">
+        <div class="w-16 h-16 rounded-full bg-[#F0F9F4] border-2 border-[#A7D7BC] flex items-center justify-center mx-auto mb-3 text-2xl font-black text-[#1B5E3C]">CM</div>
+        <div class="font-bold text-slate-900">Connor Milligan</div>
+        <div class="text-[#1B5E3C] text-sm font-semibold">CSO</div>
+        <div class="text-xs text-slate-400 mt-1">B.S. Psychology &amp; Business</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ CTA ══════════════════════════════════════════ -->
-<section class="py-24 bg-gradient-to-br from-[#0A1F3C] to-[#0F3566]">
+<section class="py-24 bg-gradient-to-br from-[#0D2B1A] to-[#1A4D2E]">
   <div class="max-w-3xl mx-auto px-6 text-center reveal">
     <div class="pill-white mb-4">Get Early Access</div>
     <h2 class="text-4xl font-black text-white mb-4">Ready to give nurses back their time?</h2>
@@ -724,17 +772,17 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
 </section>
 
 <!-- ═══ FOOTER ═══════════════════════════════════════ -->
-<footer class="bg-[#0A1F3C] border-t border-white/8 py-12">
+<footer class="bg-[#0D2B1A] border-t border-white/8 py-12">
   <div class="max-w-6xl mx-auto px-6">
     <div class="grid md:grid-cols-4 gap-8 mb-10">
       <div>
         <div class="flex items-center gap-2 mb-4">
-          <div class="w-8 h-8 bg-[#005EB8] rounded-lg flex items-center justify-center">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9h2l2-6 3 14 2-10 1 4h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="w-8 h-8 bg-[#1B5E3C] rounded-lg flex items-center justify-center">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="9,1 13,9 9,17 5,9" fill="#2D8A5A"/><polygon points="9,1 13,9 9,12 5,9" fill="#6EC99A"/><path d="M1 9h2l1-3 2 7 1-4 1 1h9" stroke="#6EC99A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <span class="text-white font-bold text-lg">Scrivia</span>
         </div>
-        <p class="text-slate-400 text-sm leading-relaxed">"Less charting. More caring."</p>
+        <p class="text-slate-400 text-sm leading-relaxed">"We chart. You heal."</p>
         <p class="text-slate-500 text-xs mt-3">AI-powered clinical documentation for modern hospitals.</p>
       </div>
       <div>
@@ -758,12 +806,12 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
       <div>
         <div class="text-slate-300 font-semibold text-sm mb-4">Team</div>
         <div class="space-y-1 text-xs text-slate-500">
-          <div>Caiden, Platform Lead</div>
-          <div>Connor, Clinical Research</div>
-          <div>Hanna, Presentation</div>
-          <div>Nathan, Financial Modeling</div>
-          <div>Faith, Medical Research</div>
-          <div>Jayden, Marketing</div>
+          <div>Hanna Hu, CEO</div>
+          <div>Faith Cie, COO</div>
+          <div>Caiden Katz, CTO</div>
+          <div>Nathan Sepulveda, CFO</div>
+          <div>Jayden Lin, CMO</div>
+          <div>Connor Milligan, CSO</div>
         </div>
       </div>
     </div>
@@ -793,24 +841,24 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
       <div class="grid md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-1.5">First Name</label>
-          <input type="text" placeholder="Jane" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent"/>
+          <input type="text" placeholder="Jane" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B5E3C] focus:border-transparent"/>
         </div>
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-1.5">Last Name</label>
-          <input type="text" placeholder="Smith" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent"/>
+          <input type="text" placeholder="Smith" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B5E3C] focus:border-transparent"/>
         </div>
       </div>
       <div>
         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Work Email</label>
-        <input type="email" placeholder="jane@hospital.org" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent"/>
+        <input type="email" placeholder="jane@hospital.org" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B5E3C] focus:border-transparent"/>
       </div>
       <div>
         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Hospital / Facility Name</label>
-        <input type="text" placeholder="Memorial General Hospital" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent"/>
+        <input type="text" placeholder="Memorial General Hospital" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B5E3C] focus:border-transparent"/>
       </div>
       <div>
         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Your Role</label>
-        <select required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent text-slate-700">
+        <select required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B5E3C] focus:border-transparent text-slate-700">
           <option value="">Select your role...</option>
           <option>Chief Medical Officer</option>
           <option>Hospital Administrator</option>
@@ -823,10 +871,10 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
       </div>
       <div>
         <label class="block text-sm font-semibold text-slate-700 mb-1.5">What's your biggest documentation pain point?</label>
-        <textarea rows="3" placeholder="e.g. Our nurses spend too much time on EHR charting during shifts..." class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:border-transparent resize-none"></textarea>
+        <textarea rows="3" placeholder="e.g. Our nurses spend too much time on EHR charting during shifts..." class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B5E3C] focus:border-transparent resize-none"></textarea>
       </div>
       <div class="flex gap-3 pt-2">
-        <button type="submit" class="flex-1 bg-[#005EB8] hover:bg-[#004A94] text-white font-semibold py-3 rounded-lg transition-colors text-sm">Submit Request</button>
+        <button type="submit" class="flex-1 bg-[#1B5E3C] hover:bg-[#155233] text-white font-semibold py-3 rounded-lg transition-colors text-sm">Submit Request</button>
         <button type="button" onclick="closeDemo()" class="px-6 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-3 rounded-lg transition-colors text-sm">Cancel</button>
       </div>
     </form>
@@ -881,7 +929,7 @@ function submitDemo(e) {
       <h3 class="text-xl font-bold text-slate-900 mb-2">Request Received!</h3>
       <p class="text-slate-500 text-sm mb-6">We'll be in touch within 24 hours to schedule your pilot. In the meantime, try the dashboard.</p>
       <div class="flex justify-center gap-3">
-        <a href="dashboard.html" class="bg-[#005EB8] hover:bg-[#004A94] text-white font-semibold px-6 py-2.5 rounded-lg text-sm no-underline transition-colors">Try Dashboard →</a>
+        <a href="dashboard.html" class="bg-[#1B5E3C] hover:bg-[#155233] text-white font-semibold px-6 py-2.5 rounded-lg text-sm no-underline transition-colors">Try Dashboard →</a>
         <button onclick="closeDemo()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors">Close</button>
       </div>
     </div>
