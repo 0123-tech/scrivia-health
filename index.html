@@ -609,60 +609,61 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
 </section>
 
 <!-- ═══ PRICING ══════════════════════════════════════ -->
-<section id="pricing" class="py-24 bg-[#F4F8FE]">
+<section id="pricing" class="py-24 bg-[#1B5E3C]">
   <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center mb-14 reveal">
-      <div class="pill">Pricing</div>
-      <h2 class="text-4xl font-black text-slate-900 mt-2 mb-3">Simple, transparent SaaS pricing</h2>
-      <p class="text-slate-500">One scribe costs $55K/year. Scrivia starts at $24K.</p>
+    <div class="mb-14 reveal flex items-start justify-between">
+      <div>
+        <h2 class="text-4xl font-black text-white mt-2 mb-2">Revenue Model</h2>
+        <p class="text-[#7EC8A0] italic text-lg">Three-tier SaaS pricing</p>
+      </div>
+      <div class="text-white font-bold text-xl opacity-60 self-center">Scrivia</div>
     </div>
     <div class="grid md:grid-cols-3 gap-6">
-      <!-- Starter -->
-      <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm lift reveal">
-        <div class="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-3">Starter</div>
-        <div class="text-4xl font-black text-slate-900 mb-1">$2,000<span class="text-lg font-medium text-slate-400">/mo</span></div>
-        <div class="text-xs text-slate-400 mb-6">per facility · billed annually</div>
+      <!-- Clinic (Starter) -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm lift reveal">
+        <div class="inline-block text-xs font-semibold text-[#1B5E3C] bg-[#E8F5EC] border border-[#A7D7BC] rounded-full px-3 py-1 mb-4">Starter</div>
+        <h3 class="text-2xl font-black text-slate-900 mb-1">Clinic</h3>
+        <div class="text-4xl font-black text-[#1B5E3C] mb-1">$2,000<span class="text-lg font-medium text-slate-400">/mo</span></div>
+        <p class="text-sm text-slate-400 italic mb-6">Small clinics &amp; urgent care</p>
         <ul class="space-y-3 mb-8">
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> AI Scribe (unlimited sessions)</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Smart Triage Queue</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Patient Check-In kiosk</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> HIPAA-compliant private DB</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Up to 25 providers</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> AI scribe &amp; charting</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Patient intake AI</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Up to 5 providers</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Private database</li>
         </ul>
-        <button onclick="openDemo()" class="btn-ghost-dark w-full text-center">Get Started</button>
+        <button onclick="openDemo()" class="w-full text-center py-2.5 rounded-lg border border-[#1B5E3C] text-[#1B5E3C] font-semibold text-sm hover:bg-[#E8F5EC] transition-colors">Get Started</button>
       </div>
-      <!-- Professional (featured) -->
+      <!-- Hospital (Most Popular) -->
       <div class="bg-white rounded-2xl p-8 border-2 border-[#1B5E3C] shadow-xl lift reveal relative price-featured">
-        <div class="price-badge">Most Popular</div>
-        <div class="text-sm font-semibold text-[#1B5E3C] uppercase tracking-widest mb-3">Professional</div>
-        <div class="text-4xl font-black text-slate-900 mb-1">$3,500<span class="text-lg font-medium text-slate-400">/mo</span></div>
-        <div class="text-xs text-slate-400 mb-6">per facility · billed annually</div>
+        <div class="price-badge">Most popular</div>
+        <div class="inline-block text-xs font-semibold text-[#1B5E3C] bg-[#E8F5EC] border border-[#A7D7BC] rounded-full px-3 py-1 mb-4">Most popular</div>
+        <h3 class="text-2xl font-black text-slate-900 mb-1">Hospital</h3>
+        <div class="text-4xl font-black text-[#1B5E3C] mb-1">$5,000<span class="text-lg font-medium text-slate-400">/mo</span></div>
+        <p class="text-sm text-slate-400 italic mb-6">Mid-size hospitals</p>
         <ul class="space-y-3 mb-8">
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Everything in Starter</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> AI Diagnosis Suggestions</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Prior Visit Autofill</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Post-visit billing code suggestions</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Multi-floor / multi-department</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Unlimited providers</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Everything in Clinic</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> AI triage queue</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Unlimited providers</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Priority support</li>
         </ul>
         <button onclick="openDemo()" class="btn-primary w-full text-center rounded-lg py-2.5">Get Started</button>
       </div>
-      <!-- Enterprise -->
-      <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm lift reveal">
-        <div class="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-3">Enterprise</div>
-        <div class="text-4xl font-black text-slate-900 mb-1">Custom</div>
-        <div class="text-xs text-slate-400 mb-6">health systems &amp; networks</div>
+      <!-- Health System (Enterprise) -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm lift reveal">
+        <div class="inline-block text-xs font-semibold text-[#1B5E3C] bg-[#E8F5EC] border border-[#A7D7BC] rounded-full px-3 py-1 mb-4">Enterprise</div>
+        <h3 class="text-2xl font-black text-slate-900 mb-1">Health System</h3>
+        <div class="text-4xl font-black text-[#1B5E3C] mb-1">Custom</div>
+        <p class="text-sm text-slate-400 italic mb-6">Large networks &amp; systems</p>
         <ul class="space-y-3 mb-8">
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Everything in Professional</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> EHR integrations (Epic, Cerner)</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Custom AI model fine-tuning</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> BAA &amp; enterprise SLA</li>
-          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C]">✓</span> Dedicated implementation team</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Everything in Hospital</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Epic/Cerner integration</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Multi-site deployment</li>
+          <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-[#1B5E3C] font-bold">+</span> Dedicated account mgr</li>
         </ul>
-        <button onclick="openDemo()" class="btn-ghost-dark w-full text-center">Contact Sales</button>
+        <button onclick="openDemo()" class="w-full text-center py-2.5 rounded-lg border border-[#1B5E3C] text-[#1B5E3C] font-semibold text-sm hover:bg-[#E8F5EC] transition-colors">Contact Sales</button>
       </div>
     </div>
-    <p class="text-center text-sm text-slate-400 mt-6">All plans include AES-256 encryption, TLS 1.3, MFA, audit logs, and a signed BAA. HIPAA compliant.</p>
+    <p class="text-center text-sm text-[#7EC8A0] italic mt-10">we chart. you heal.</p>
   </div>
 </section>
 
