@@ -332,7 +332,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
           </div>
           <div class="ml-auto flex gap-2">
             <label class="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
-              <input type="checkbox" id="hide-discharged" onchange="renderQueue()" class="rounded"/> Hide discharged
+              <input type="checkbox" id="hide-discharged" checked onchange="renderQueue()" class="rounded"/> Hide discharged
             </label>
             <input type="text" class="search-input text-xs" placeholder="Search patients..." id="queue-search" oninput="renderQueue()"/>
           </div>
@@ -406,10 +406,31 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
               <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
               Generate SOAP Note
             </button>
-            <button onclick="clearTranscript()" class="btn btn-ghost btn-sm">Clear Transcript</button>
+            <button onclick="clearTranscript()" class="btn btn-ghost btn-sm">Clear</button>
+            <button onclick="toggleShortcuts()" class="btn btn-ghost btn-sm">⌨ Shortcuts</button>
           </div>
-          <p class="text-xs text-slate-400 mt-2">Tip: Works best in Chrome or Edge. Alternatively, type directly below.</p>
-          <textarea id="manual-transcript" class="mt-3 w-full search-input text-sm" rows="3" placeholder="Or type/paste notes manually here..."></textarea>
+
+          <!-- Shortcuts reference card -->
+          <div id="shortcuts-card" class="hidden mt-3 bg-[#F1FAF3] border border-[#C8E6C9] rounded-lg p-3">
+            <div class="text-xs font-semibold text-[#1B5E3C] mb-2">Text Shortcuts — type in the field below and they auto-expand</div>
+            <div class="grid grid-cols-3 gap-1 text-xs text-slate-600">
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.sob</code> shortness of breath</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.htn</code> hypertension</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.cp</code> chest pain</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.nv</code> nausea/vomiting</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.ams</code> altered mental status</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.dm2</code> type 2 diabetes</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.nad</code> no acute distress</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.nkda</code> no known drug allergies</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.wnl</code> within normal limits</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.rrr</code> regular rate and rhythm</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.lcab</code> lungs clear to auscultation bilaterally</span>
+              <span><code class="bg-white border border-slate-200 px-1 rounded">.dc</code> discharged home</span>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-400 mt-2">Tip: Chrome/Edge for voice. Type below for manual input with shortcut expansion.</p>
+          <textarea id="manual-transcript" class="mt-3 w-full search-input text-sm" rows="3" placeholder="Or type/paste notes here... (shortcuts like .sob expand on spacebar)"></textarea>
         </div>
       </div>
 
@@ -482,11 +503,11 @@ let scribeSessionsData = [
 ];
 
 let patientsData = [
-  {name:'Marcus Johnson',mrn:'MRN-7842',dob:'1962-03-15',age:62,gender:'M',conditions:['Hypertension','CAD','Diabetes T2'],allergies:['Penicillin','Sulfa'],lastVisit:'2026-04-14',status:'nurse',vitals:{bp:'158/96',hr:'102',spo2:'97%',temp:'98.6°F',rr:'18'},
+  {name:'Marcus Johnson',mrn:'MRN-7842',dob:'1962-03-15',age:62,gender:'M',conditions:['Hypertension','CAD','Diabetes T2'],allergies:['Penicillin','Sulfa'],lastVisit:'2026-04-14',status:'nurse',vitals:{bp:'158/96',hr:'102',spo2:'97%',temp:'98.6°F',rr:'18'},prevVitals:{bp:'138/84',hr:'78',spo2:'99%',temp:'98.4°F',rr:'16'},
     timeline:[{date:'2026-04-14',event:'ED Visit:Chest pain, EKG ordered'},{date:'2026-02-10',event:'Cardiology Follow-up:Stress test normal'},{date:'2025-12-03',event:'PCP Visit:A1C 7.2, medication adjusted'},{date:'2025-09-18',event:'ED Visit:Hypertensive urgency, BP 195/110'}]},
-  {name:'Riya Patel',mrn:'MRN-3391',dob:'1952-07-22',age:74,gender:'F',conditions:['CHF','COPD','AFib'],allergies:['Aspirin'],lastVisit:'2026-04-14',status:'waiting',vitals:{bp:'142/88',hr:'96',spo2:'88%',temp:'99.1°F',rr:'24'},
+  {name:'Riya Patel',mrn:'MRN-3391',dob:'1952-07-22',age:74,gender:'F',conditions:['CHF','COPD','AFib'],allergies:['Aspirin'],lastVisit:'2026-04-14',status:'waiting',vitals:{bp:'142/88',hr:'96',spo2:'88%',temp:'99.1°F',rr:'24'},prevVitals:{bp:'130/82',hr:'84',spo2:'94%',temp:'98.8°F',rr:'18'},
     timeline:[{date:'2026-04-14',event:'ED Visit:Severe dyspnea, SpO2 88%'},{date:'2026-03-01',event:'Cardiology:Echo: EF 35%'},{date:'2026-01-15',event:'Pulmonology:COPD exacerbation, prednisone course'}]},
-  {name:'Angela Williams',mrn:'MRN-5523',dob:'1945-11-08',age:81,gender:'F',conditions:['Dementia','HTN','UTI (recurrent)'],allergies:['Codeine','Latex'],lastVisit:'2026-04-14',status:'provider',vitals:{bp:'118/72',hr:'118',spo2:'95%',temp:'103.8°F',rr:'24'},
+  {name:'Angela Williams',mrn:'MRN-5523',dob:'1945-11-08',age:81,gender:'F',conditions:['Dementia','HTN','UTI (recurrent)'],allergies:['Codeine','Latex'],lastVisit:'2026-04-14',status:'provider',vitals:{bp:'118/72',hr:'118',spo2:'95%',temp:'103.8°F',rr:'24'},prevVitals:{bp:'122/76',hr:'82',spo2:'97%',temp:'98.6°F',rr:'16'},
     timeline:[{date:'2026-04-14',event:'ED Visit:AMS, fever, Sepsis alert triggered'},{date:'2026-02-20',event:'UTI treatment:Cipro 7-day course'},{date:'2025-11-30',event:'Neurology:Dementia staged moderate'}]},
   {name:'Derek Huang',mrn:'MRN-9012',dob:'1981-05-30',age:45,gender:'M',conditions:['GERD','Anxiety'],allergies:['NKDA'],lastVisit:'2026-01-10',status:'waiting',vitals:{bp:'128/82',hr:'88',spo2:'99%',temp:'98.9°F',rr:'16'},
     timeline:[{date:'2026-04-14',event:'ED Visit:Abdominal pain 8/10'},{date:'2026-01-10',event:'PCP:GERD management, omeprazole started'}]},
@@ -784,6 +805,17 @@ function openPatient(name) {
     return '';
   };
 
+  const vitalDelta = (cur, prev, key) => {
+    if (!prev) return '';
+    const c = parseFloat(cur), pv = parseFloat(prev);
+    if (isNaN(c) || isNaN(pv)) return '';
+    const diff = c - pv;
+    if (Math.abs(diff) < 1) return '';
+    const up = diff > 0;
+    const bad = (key==='hr'&&up)||(key==='temp'&&up)||(key==='spo2'&&!up)||(key==='rr'&&up);
+    return `<span class="text-[10px] font-semibold ml-1 ${bad?'text-red-500':'text-green-600'}">${up?'↑':'↓'}${Math.abs(Math.round(diff))}</span>`;
+  };
+
   document.getElementById('slide-content').innerHTML = `
     <div class="p-5">
       <!-- Header -->
@@ -800,30 +832,38 @@ function openPatient(name) {
 
       <!-- Vitals -->
       <div class="mb-5">
-        <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Current Vitals</div>
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Current Vitals</div>
+          ${p.prevVitals ? '<div class="text-[10px] text-slate-400 italic">Arrows show change vs. last visit</div>' : ''}
+        </div>
         <div class="grid grid-cols-3 gap-2">
           <div class="vital-box ${vitalWarn(p.vitals.bp,'bp')}">
             <div class="text-xs text-slate-500">BP</div>
-            <div class="font-bold text-slate-900 text-sm">${p.vitals.bp}</div>
+            <div class="font-bold text-slate-900 text-sm flex items-center justify-center">${p.vitals.bp}${p.prevVitals?vitalDelta(p.vitals.bp.split('/')[0],p.prevVitals.bp.split('/')[0],'bp'):''}</div>
+            ${p.prevVitals ? `<div class="text-[10px] text-slate-400 mt-0.5">prev: ${p.prevVitals.bp}</div>` : ''}
           </div>
           <div class="vital-box ${vitalWarn(p.vitals.hr,'hr')}">
             <div class="text-xs text-slate-500">HR</div>
-            <div class="font-bold text-slate-900 text-sm">${p.vitals.hr}</div>
+            <div class="font-bold text-slate-900 text-sm flex items-center justify-center">${p.vitals.hr}${p.prevVitals?vitalDelta(p.vitals.hr,p.prevVitals.hr,'hr'):''}</div>
+            ${p.prevVitals ? `<div class="text-[10px] text-slate-400 mt-0.5">prev: ${p.prevVitals.hr}</div>` : ''}
           </div>
           <div class="vital-box ${vitalWarn(p.vitals.spo2,'spo2')}">
             <div class="text-xs text-slate-500">SpO2</div>
-            <div class="font-bold text-slate-900 text-sm">${p.vitals.spo2}</div>
+            <div class="font-bold text-slate-900 text-sm flex items-center justify-center">${p.vitals.spo2}${p.prevVitals?vitalDelta(p.vitals.spo2,p.prevVitals.spo2,'spo2'):''}</div>
+            ${p.prevVitals ? `<div class="text-[10px] text-slate-400 mt-0.5">prev: ${p.prevVitals.spo2}</div>` : ''}
           </div>
           <div class="vital-box ${vitalWarn(p.vitals.temp,'temp')}">
             <div class="text-xs text-slate-500">Temp</div>
-            <div class="font-bold text-slate-900 text-sm">${p.vitals.temp}</div>
+            <div class="font-bold text-slate-900 text-sm flex items-center justify-center">${p.vitals.temp}${p.prevVitals?vitalDelta(p.vitals.temp,p.prevVitals.temp,'temp'):''}</div>
+            ${p.prevVitals ? `<div class="text-[10px] text-slate-400 mt-0.5">prev: ${p.prevVitals.temp}</div>` : ''}
           </div>
           <div class="vital-box">
             <div class="text-xs text-slate-500">RR</div>
-            <div class="font-bold text-slate-900 text-sm">${p.vitals.rr}</div>
+            <div class="font-bold text-slate-900 text-sm flex items-center justify-center">${p.vitals.rr}${p.prevVitals?vitalDelta(p.vitals.rr,p.prevVitals.rr,'rr'):''}</div>
+            ${p.prevVitals ? `<div class="text-[10px] text-slate-400 mt-0.5">prev: ${p.prevVitals.rr}</div>` : ''}
           </div>
           <div class="vital-box">
-            <div class="text-xs text-slate-500">Esi</div>
+            <div class="text-xs text-slate-500">ESI</div>
             <div>${q ? `<span class="esi esi-${q.esi}">ESI ${q.esi}</span>` : '<span class="text-slate-400 text-xs">—</span>'}</div>
           </div>
         </div>
@@ -896,17 +936,35 @@ function renderAIDifferential(p, q) {
       <div class="flex justify-between text-xs text-white mb-1"><span>${d.name}</span><span class="font-bold text-[#6EC99A]">${d.conf}%</span></div>
       <div class="conf-bar"><div class="conf-fill bg-[#6EC99A]" style="width:${d.conf}%"></div></div>
     </div>`).join('');
-  if (testContainer) testContainer.innerHTML = diffs.tests.map(t => `<span class="bg-white/10 text-slate-300 text-xs px-2 py-0.5 rounded">${t}</span>`).join('');
+  if (testContainer) testContainer.innerHTML = diffs.tests.map(t => `<span class="bg-white/10 text-slate-300 text-xs px-2 py-0.5 rounded flex items-center gap-1">${t.name}<span class="text-[#6EC99A] font-bold">${t.conf}%</span></span>`).join('');
 }
 
 function generateAIDifferential(p, q) {
   const c = q.complaint.toLowerCase();
-  if (c.includes('chest')) return {diagnoses:[{name:'Acute Coronary Syndrome',conf:72},{name:'Unstable Angina',conf:58},{name:'GERD/Esophageal',conf:24}],tests:['Troponin I','12-Lead EKG','BMP','Chest X-Ray']};
-  if (c.includes('dyspnea')||c.includes('breath')||c.includes('spo2')) return {diagnoses:[{name:'Acute CHF Exacerbation',conf:68},{name:'COPD Exacerbation',conf:55},{name:'Pulmonary Embolism',conf:32}],tests:['BNP','D-Dimer','ABG','Chest X-Ray','Echo']};
-  if (c.includes('fever')||c.includes('mental')) return {diagnoses:[{name:'Sepsis/SIRS',conf:81},{name:'Bacterial UTI',conf:61},{name:'Aspiration Pneumonia',conf:44}],tests:['CBC','Blood Culture x2','UA/UC','CMP','Procalcitonin']};
-  if (c.includes('abdom')) return {diagnoses:[{name:'Appendicitis',conf:52},{name:'Cholelithiasis',conf:47},{name:'Peptic Ulcer',conf:33}],tests:['RUQ Ultrasound','CT Abdomen/Pelvis','LFTs','Lipase','UA']};
-  if (c.includes('migraine')||c.includes('headache')) return {diagnoses:[{name:'Migraine with aura',conf:78},{name:'Tension headache',conf:40},{name:'Intracranial HTN',conf:15}],tests:['Non-contrast CT Head','BMP']};
-  return {diagnoses:[{name:'Under evaluation',conf:50}],tests:['CBC','BMP','UA']};
+  if (c.includes('chest')) return {
+    diagnoses:[{name:'Acute Coronary Syndrome',conf:72},{name:'Unstable Angina',conf:58},{name:'GERD/Esophageal',conf:24}],
+    tests:[{name:'Troponin I',conf:94},{name:'12-Lead EKG',conf:92},{name:'BMP',conf:85},{name:'Chest X-Ray',conf:80}]
+  };
+  if (c.includes('dyspnea')||c.includes('breath')||c.includes('spo2')) return {
+    diagnoses:[{name:'Acute CHF Exacerbation',conf:68},{name:'COPD Exacerbation',conf:55},{name:'Pulmonary Embolism',conf:32}],
+    tests:[{name:'BNP',conf:91},{name:'D-Dimer',conf:87},{name:'ABG',conf:83},{name:'Chest X-Ray',conf:88},{name:'Echo',conf:76}]
+  };
+  if (c.includes('fever')||c.includes('mental')) return {
+    diagnoses:[{name:'Sepsis/SIRS',conf:81},{name:'Bacterial UTI',conf:61},{name:'Aspiration Pneumonia',conf:44}],
+    tests:[{name:'CBC',conf:96},{name:'Blood Culture x2',conf:93},{name:'UA/UC',conf:90},{name:'CMP',conf:85},{name:'Procalcitonin',conf:88}]
+  };
+  if (c.includes('abdom')) return {
+    diagnoses:[{name:'Appendicitis',conf:52},{name:'Cholelithiasis',conf:47},{name:'Peptic Ulcer',conf:33}],
+    tests:[{name:'RUQ Ultrasound',conf:89},{name:'CT Abdomen/Pelvis',conf:92},{name:'LFTs',conf:85},{name:'Lipase',conf:82},{name:'UA',conf:78}]
+  };
+  if (c.includes('migraine')||c.includes('headache')) return {
+    diagnoses:[{name:'Migraine with aura',conf:78},{name:'Tension headache',conf:40},{name:'Intracranial HTN',conf:15}],
+    tests:[{name:'Non-contrast CT Head',conf:74},{name:'BMP',conf:65}]
+  };
+  return {
+    diagnoses:[{name:'Under evaluation',conf:50}],
+    tests:[{name:'CBC',conf:90},{name:'BMP',conf:88},{name:'UA',conf:85}]
+  };
 }
 
 function closeSlidePanel() {
@@ -986,6 +1044,32 @@ function signNote(sessionId) {
   renderScribeSessions();
   renderDashboard();
   showToast('Note signed and saved to patient record', 'success');
+
+  // Learning loop: ask for outcome feedback after a brief delay
+  setTimeout(() => {
+    const fb = document.createElement('div');
+    fb.className = 'toast info';
+    fb.style.maxWidth = '340px';
+    fb.innerHTML = `
+      <div>
+        <div class="font-semibold text-sm mb-1">AI Learning Feedback</div>
+        <div class="text-xs text-slate-300 mb-2">Was the AI diagnosis on track for ${s?.patient || 'this patient'}?</div>
+        <div class="flex gap-2">
+          <button onclick="recordFeedback('accurate',this)" class="text-xs bg-green-700 hover:bg-green-600 text-white px-3 py-1 rounded font-semibold transition-colors">Yes, accurate</button>
+          <button onclick="recordFeedback('partial',this)" class="text-xs bg-amber-600 hover:bg-amber-500 text-white px-3 py-1 rounded font-semibold transition-colors">Partially</button>
+          <button onclick="recordFeedback('off',this)" class="text-xs bg-slate-600 hover:bg-slate-500 text-white px-3 py-1 rounded font-semibold transition-colors">Missed it</button>
+        </div>
+      </div>`;
+    document.getElementById('toast-container').appendChild(fb);
+    setTimeout(() => { fb.style.opacity='0'; fb.style.transform='translateY(8px)'; fb.style.transition='all .3s'; setTimeout(()=>fb.remove(),300); }, 12000);
+  }, 1200);
+}
+
+function recordFeedback(rating, btn) {
+  const toast = btn.closest('.toast');
+  if (toast) { toast.style.opacity='0'; toast.style.transition='all .3s'; setTimeout(()=>toast.remove(),300); }
+  const msgs = {accurate:'Feedback recorded. Model updated.', partial:'Thanks, noted for refinement.', off:'Logged. This case will improve future diagnoses.'};
+  showToast(msgs[rating] || 'Feedback logged.', 'success');
 }
 
 function closeModal() {
@@ -1145,6 +1229,49 @@ function clearTranscript() {
   const manual = document.getElementById('manual-transcript');
   if (manual) manual.value = '';
 }
+
+function toggleShortcuts() {
+  const card = document.getElementById('shortcuts-card');
+  if (card) card.classList.toggle('hidden');
+}
+
+// Text shortcut expansion
+const SHORTCUTS = {
+  '.sob': 'shortness of breath',
+  '.htn': 'hypertension',
+  '.cp': 'chest pain',
+  '.nv': 'nausea and vomiting',
+  '.ams': 'altered mental status',
+  '.dm2': 'type 2 diabetes mellitus',
+  '.nad': 'no acute distress',
+  '.nkda': 'no known drug allergies',
+  '.wnl': 'within normal limits',
+  '.rrr': 'regular rate and rhythm',
+  '.lcab': 'lungs clear to auscultation bilaterally',
+  '.dc': 'discharged home in stable condition',
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Attach shortcut expansion to manual-transcript — also re-attach after dynamic renders
+  document.body.addEventListener('input', (e) => {
+    if (e.target.id !== 'manual-transcript') return;
+    const ta = e.target;
+    let val = ta.value;
+    let changed = false;
+    for (const [key, expansion] of Object.entries(SHORTCUTS)) {
+      const re = new RegExp(key.replace('.', '\\.') + '(?=\\s|$)', 'g');
+      if (re.test(val)) {
+        val = val.replace(re, expansion);
+        changed = true;
+      }
+    }
+    if (changed) {
+      const pos = ta.selectionStart + (val.length - ta.value.length);
+      ta.value = val;
+      ta.selectionStart = ta.selectionEnd = Math.max(0, pos);
+    }
+  });
+});
 
 function generateNoteFromRecording() {
   const manual = document.getElementById('manual-transcript')?.value?.trim();
