@@ -109,8 +109,45 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .chart-section-title::before{content:'';width:3px;height:14px;background:#1B5E3C;border-radius:2px}
 .chart-soap-card{background:#fff;border:1px solid #C8E6C9;border-radius:10px;overflow:hidden;margin-bottom:12px}
 .chart-soap-head{background:linear-gradient(90deg,#E8F5E9,#F1FAF3);padding:8px 14px;font-size:11px;font-weight:700;color:#1B5E3C;text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid #C8E6C9;display:flex;align-items:center;justify-content:space-between}
-.chart-soap-body{padding:14px;font-size:13px;line-height:1.7;color:#1B3A2A;min-height:80px}
+.chart-soap-body{padding:0;font-size:13px;line-height:1.65;color:#1B3A2A;min-height:80px}
 .chart-soap-body[contenteditable=true]:focus{outline:none;background:#FAFFFB}
+
+/* Chart field sub-structure inside each SOAP body */
+.cf-row{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:10px 14px;border-bottom:1px dashed #E0EDE3;align-items:start}
+.cf-row:last-child{border-bottom:none}
+.cf-row.full{grid-template-columns:1fr}
+.cf-label{font-size:9px;font-weight:700;color:#4CAF7A;text-transform:uppercase;letter-spacing:.08em;padding-top:2px}
+.cf-value{font-size:13px;color:#1B3A2A;line-height:1.6}
+.cf-value strong{color:#0D2B1A;font-weight:700}
+.cf-cc{background:linear-gradient(90deg,#FFFBEB,#FFFEF5);border-left:3px solid #F59E0B;padding:8px 10px;border-radius:4px;font-weight:600;color:#78350F}
+.cf-subhead{background:#F1FAF3;font-size:10px;font-weight:700;color:#1B5E3C;text-transform:uppercase;letter-spacing:.1em;padding:6px 14px;border-top:1px solid #C8E6C9;border-bottom:1px solid #C8E6C9}
+.cf-list{margin:0;padding:0;list-style:none}
+.cf-list li{padding:3px 0;display:flex;gap:8px;align-items:flex-start}
+.cf-list li::before{content:'•';color:#1B5E3C;font-weight:bold;flex-shrink:0}
+.cf-system-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid #E0EDE3}
+.cf-sys{padding:8px 14px;border-bottom:1px dashed #E0EDE3;border-right:1px dashed #E0EDE3;font-size:12px}
+.cf-sys:nth-child(2n){border-right:none}
+.cf-sys .nm{font-size:9px;font-weight:700;color:#4CAF7A;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:2px}
+.cf-vitals-mini{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:10px 14px;background:#FAFFFB;border-bottom:1px dashed #E0EDE3}
+.cf-vitals-mini .item{text-align:center}
+.cf-vitals-mini .lb{font-size:9px;font-weight:700;color:#4CAF7A;text-transform:uppercase;letter-spacing:.08em}
+.cf-vitals-mini .vl{font-size:13px;font-weight:800;color:#0F172A;font-family:'JetBrains Mono',monospace}
+.cf-problem{display:grid;grid-template-columns:32px 1fr auto;gap:10px;padding:10px 14px;border-bottom:1px dashed #E0EDE3;align-items:center}
+.cf-problem:last-child{border-bottom:none}
+.cf-problem .num{width:26px;height:26px;border-radius:50%;background:#1B5E3C;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cf-problem .nm{font-size:13px;font-weight:600;color:#0D2B1A}
+.cf-problem .nm small{display:block;font-weight:400;color:#4CAF7A;font-size:11px;margin-top:1px}
+.cf-status{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:999px}
+.cf-status.active{background:#FEE2E2;color:#991B1B}
+.cf-status.improving{background:#E8F5E9;color:#1B5E3C}
+.cf-status.resolved{background:#E0F2FE;color:#075985}
+.cf-plan-block{padding:10px 14px;border-bottom:1px dashed #E0EDE3}
+.cf-plan-block:last-child{border-bottom:none}
+.cf-plan-block .ph{font-size:11px;font-weight:700;color:#0D2B1A;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.cf-plan-block .ph .pn{width:20px;height:20px;border-radius:50%;background:#1B5E3C;color:#fff;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+.cf-plan-cat{display:grid;grid-template-columns:90px 1fr;gap:8px;padding:3px 0 3px 26px;font-size:12px}
+.cf-plan-cat .pl{font-size:9px;font-weight:700;color:#4CAF7A;text-transform:uppercase;letter-spacing:.08em;padding-top:2px}
+.cf-plan-cat .pv{color:#1B3A2A;line-height:1.55}
 .chart-aside{background:linear-gradient(160deg,#0D2B1A,#1B5E3C);color:#fff;border-radius:12px;padding:16px;font-size:12px}
 .chart-aside .ttl{font-size:10px;font-weight:700;color:#A7D7BC;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
 .chart-sigblock{background:#F1FAF3;border:1px solid #C8E6C9;border-radius:10px;padding:14px;margin-top:14px}
@@ -1707,57 +1744,142 @@ function buildSOAPFromTranscript(text, patientName) {
   const meds = text.match(/(?:taking|prescribed|on|takes)\s+([A-Za-z]+(?:\s+\d+\s*mg)?)/gi) || [];
   const allergies = text.match(/(?:allerg(?:ic)? to|allergy)[:\s]+([^.!?\n]{3,50})/i);
 
-  // Physical exam findings
-  const examFindings = [];
-  if (t.match(/alert|oriented|awake/)) examFindings.push('Alert and oriented');
-  if (t.match(/no (?:acute )?distress|comfortable|nad/)) examFindings.push('No acute distress');
-  if (t.match(/lungs? clear|clear to auscult/)) examFindings.push('Lungs clear to auscultation bilaterally');
-  if (t.match(/regular (?:rate|rhythm)|normal sinus|rrr/)) examFindings.push('Regular rate and rhythm');
-  if (t.match(/soft|non.?tender|non.?distended/)) examFindings.push('Abdomen soft, non-tender, non-distended');
-  if (!examFindings.length) examFindings.push('[Physician: complete physical exam findings] <span class="verify-tag">VERIFY</span>');
+  // Physical exam findings — by system
+  const examBySystem = {
+    'General': t.match(/no (?:acute )?distress|comfortable|nad|alert|oriented|awake/) ? 'Alert and oriented · No acute distress' : '<span class="verify-tag">VERIFY</span>',
+    'HEENT': t.match(/heent|pupils|perrla|throat|neck/) ? 'PERRLA, oropharynx clear, no lymphadenopathy' : 'Within normal limits',
+    'Cardiovascular': t.match(/regular (?:rate|rhythm)|normal sinus|rrr/) ? 'Regular rate and rhythm, no murmurs/rubs/gallops' : (t.match(/tachycardia|tachy|murmur|irregular/) ? 'Abnormal — see HPI' : '<span class="verify-tag">VERIFY</span>'),
+    'Pulmonary': t.match(/lungs? clear|clear to auscult|cta/) ? 'Clear to auscultation bilaterally, no wheezes/rales' : (t.match(/wheez|crackle|rhonchi|rales|rhon/) ? 'Adventitious sounds present — see HPI' : '<span class="verify-tag">VERIFY</span>'),
+    'Abdomen': t.match(/soft|non.?tender|non.?distended|bowel sounds/) ? 'Soft, non-tender, non-distended, normoactive bowel sounds' : (t.match(/tender|guarding|rebound|distended/) ? 'Abnormal — see HPI' : 'Within normal limits'),
+    'Neurological': t.match(/cn |cranial nerves|motor|sensation|reflex/) ? 'CN II–XII intact, strength 5/5, sensation intact' : 'Grossly intact',
+    'Skin': t.match(/laceration|wound|rash|bruis|pallor|cyanos/) ? 'Abnormal finding present — see HPI' : 'Warm, dry, intact',
+    'Extremities': t.match(/edema|swelling|fracture|sprain/) ? 'Abnormal finding present — see HPI' : 'No edema, full ROM',
+  };
 
-  // Assessment
-  const conditions = [];
-  if (t.match(/hypertension|htn/)) conditions.push('Hypertension');
-  if (t.match(/diabetes|diabetic/)) conditions.push('Diabetes mellitus');
-  if (t.match(/chest pain|angina/)) conditions.push('Chest pain, etiology to be determined');
-  if (t.match(/sepsis|septic/)) conditions.push('Sepsis / SIRS criteria met, workup in progress');
-  if (t.match(/pneumonia|consolidation/)) conditions.push('Pneumonia');
-  if (t.match(/laceration|wound/)) conditions.push('Laceration requiring repair');
-  if (t.match(/migraine/)) conditions.push('Migraine with associated symptoms');
-  if (t.match(/fracture|break|broken/)) conditions.push('Suspected fracture, imaging ordered');
-  if (symptoms.length && !conditions.length) conditions.push(`Presenting symptoms: ${symptoms.slice(0,3).join(', ')}`);
-  if (!conditions.length) conditions.push('[Physician: complete assessment] <span class="verify-tag">VERIFY</span>');
+  // Assessment — problem list with status
+  const problems = [];
+  if (t.match(/chest pain|angina/)) problems.push({name:'Chest pain, undifferentiated', impression:'Rule out ACS — workup in progress', status:'active'});
+  if (t.match(/sepsis|septic/)) problems.push({name:'Sepsis / SIRS', impression:'Sepsis bundle initiated; source identification in progress', status:'active'});
+  if (t.match(/pneumonia|consolidation/)) problems.push({name:'Community-acquired pneumonia', impression:'Imaging consistent with infiltrate; antibiotics started', status:'active'});
+  if (t.match(/laceration|wound/)) problems.push({name:'Laceration', impression:'Wound exploration and primary closure indicated', status:'active'});
+  if (t.match(/migraine/)) problems.push({name:'Migraine with associated symptoms', impression:'Abortive therapy initiated', status:'active'});
+  if (t.match(/fracture|break|broken/)) problems.push({name:'Suspected fracture', impression:'Imaging pending — orthopedic consult possible', status:'active'});
+  if (t.match(/dyspnea|shortness/)) problems.push({name:'Dyspnea', impression:'Cardiac vs. pulmonary etiology under evaluation', status:'active'});
+  if (t.match(/hypertension|htn/)) problems.push({name:'Hypertension', impression:'Chronic, on home regimen — review for adjustment', status:'improving'});
+  if (t.match(/diabetes|diabetic/)) problems.push({name:'Type 2 diabetes mellitus', impression:'Chronic, monitor glycemic control', status:'improving'});
+  if (symptoms.length && !problems.length) problems.push({name:`Presenting symptoms: ${symptoms.slice(0,2).join(', ')}`, impression:'Workup in progress', status:'active'});
+  if (!problems.length) problems.push({name:'[Physician: complete assessment] <span class="verify-tag">VERIFY</span>', impression:'', status:'active'});
 
-  // Plan
-  const planItems = [];
-  if (t.match(/lab|blood work|cbc|bmp|cmp/)) planItems.push('Labs ordered (see order set)');
-  if (t.match(/ekg|ecg|electrocardiogram/)) planItems.push('12-lead EKG obtained/ordered');
-  if (t.match(/x.?ray|xray|ct|mri|imaging|ultrasound/)) planItems.push('Imaging ordered (see radiology orders)');
-  if (t.match(/iv|intravenous|fluids|ns |normal saline|lr /)) planItems.push('IV access established, fluid resuscitation initiated');
-  if (t.match(/antibiotic|amox|cipro|augment|azithromycin|bactrim/)) planItems.push('Antibiotic therapy initiated (see medication order)');
-  if (t.match(/pain|analgesic|tylenol|ibuprofen|morphine|toradol/)) planItems.push('Analgesia administered per order');
-  if (t.match(/follow.?up|return|come back/)) planItems.push('Follow-up instructions provided to patient');
-  if (t.match(/discharge|home|discharged/)) planItems.push('Patient discharged with written instructions');
-  if (!planItems.length) planItems.push('[Physician: complete plan of care] <span class="verify-tag">VERIFY</span>');
+  // Plan — group by category
+  const planCats = {
+    diagnostics: [],
+    therapeutics: [],
+    education: [],
+    disposition: [],
+  };
+  if (t.match(/lab|blood work|cbc|bmp|cmp/)) planCats.diagnostics.push('Labs ordered: CBC, BMP, CMP per order set');
+  if (t.match(/ekg|ecg|electrocardiogram/)) planCats.diagnostics.push('12-lead EKG obtained');
+  if (t.match(/x.?ray|xray|ct|mri|imaging|ultrasound/)) planCats.diagnostics.push('Radiologic imaging ordered (see radiology)');
+  if (t.match(/troponin/)) planCats.diagnostics.push('Serial troponin q3h');
+  if (t.match(/iv|intravenous|fluids|ns |normal saline|lr /)) planCats.therapeutics.push('IV access established; fluid resuscitation initiated');
+  if (t.match(/antibiotic|amox|cipro|augment|azithromycin|bactrim/)) planCats.therapeutics.push('Empiric antibiotic therapy initiated (see medication order)');
+  if (t.match(/pain|analgesic|tylenol|ibuprofen|morphine|toradol/)) planCats.therapeutics.push('Analgesia administered per protocol');
+  if (t.match(/oxygen|nasal cannula|nrb/)) planCats.therapeutics.push('Supplemental O₂ via nasal cannula');
+  if (t.match(/follow.?up|return|come back/)) planCats.education.push('Follow-up instructions reviewed with patient');
+  if (t.match(/return precautions|warning signs/)) planCats.education.push('Return precautions discussed');
+  if (t.match(/discharge|home|discharged/)) planCats.disposition.push('Discharge home in stable condition with written instructions');
+  if (t.match(/admit|admission|inpatient/)) planCats.disposition.push('Admit to inpatient service');
+  if (t.match(/observation/)) planCats.disposition.push('Place in observation status');
+  // Defaults
+  if (!planCats.diagnostics.length) planCats.diagnostics.push('<span class="verify-tag">VERIFY</span> diagnostic plan');
+  if (!planCats.therapeutics.length) planCats.therapeutics.push('<span class="verify-tag">VERIFY</span> therapeutic interventions');
+  if (!planCats.education.length) planCats.education.push('Patient counseled on diagnosis and next steps');
+  if (!planCats.disposition.length) planCats.disposition.push('<span class="verify-tag">VERIFY</span> disposition');
 
-  const cc = ccMatch ? ccMatch[1].trim() : (symptoms[0] ? `Patient reports ${symptoms[0]}` : '[Chief complaint not identified] <span class="verify-tag">VERIFY</span>');
+  const cc = ccMatch ? ccMatch[1].trim() : (symptoms[0] ? `Patient reports ${symptoms[0]}` : '<span class="verify-tag">VERIFY</span> chief complaint');
+  const pat = patientsData.find(p => p.name === patientName);
+  const patAge = pat?.age || '[age]';
+  const patSex = pat?.gender === 'M' ? 'male' : pat?.gender === 'F' ? 'female' : '[sex]';
 
-  let hpi = `Patient is a ${patientsData.find(p=>p.name===patientName)?.age||'[age]'}-year-old ${patientsData.find(p=>p.name===patientName)?.gender==='M'?'male':'female'} presenting with ${cc}. `;
+  let hpi = `Patient is a ${patAge}-year-old ${patSex} presenting with ${cc}. `;
   if (onset) hpi += `Symptoms began approximately ${onset[1]} ago. `;
   if (severity) hpi += `Pain severity rated ${severity[1]}/10. `;
   if (symptoms.length > 1) hpi += `Associated symptoms include ${symptoms.slice(1, 4).join(', ')}. `;
   if (!onset) hpi += '<span class="verify-tag">VERIFY</span> onset and duration. ';
+
+  const allergyText = allergies ? allergies[1].trim() : (pat?.allergies.join(', ') || 'NKDA');
+  const allergyHtml = allergyText === 'NKDA'
+    ? '<span class="bg-green-50 text-green-700 border border-green-100 text-xs font-medium px-2 py-0.5 rounded">NKDA</span>'
+    : allergyText.split(/[,;]/).map(a => `<span class="bg-red-50 text-red-700 border border-red-100 text-xs font-medium px-2 py-0.5 rounded mr-1">${a.trim()}</span>`).join('');
+
+  const medsList = meds.length
+    ? `<ul class="cf-list">${meds.slice(0,5).map(m => `<li>${m.trim()}</li>`).join('')}</ul>`
+    : (pat?.conditions?.length ? `<span class="text-slate-500 italic text-xs">Reconcile home medications · <span class="verify-tag">VERIFY</span></span>` : 'No active medications reported');
+
+  const pmhList = pat?.conditions?.length
+    ? `<div class="flex flex-wrap gap-1">${pat.conditions.map(c => `<span class="bg-[#E8F5E9] text-[#1B5E3C] text-xs font-medium px-2 py-0.5 rounded border border-[#A5D6A7]">${c}</span>`).join('')}</div>`
+    : '<span class="text-slate-500 italic text-xs">None on file</span>';
+
+  // Build structured HTML for each section
+  const subjectiveHtml = `
+    <div class="cf-row"><div class="cf-label">Chief Complaint</div><div class="cf-value"><div class="cf-cc">${cc}</div></div></div>
+    <div class="cf-row"><div class="cf-label">History &amp; Patient-Reported</div></div>
+    <div class="cf-row"><div class="cf-label">HPI</div><div class="cf-value">${hpi}</div></div>
+    <div class="cf-row"><div class="cf-label">Past Medical Hx</div><div class="cf-value">${pmhList}</div></div>
+    <div class="cf-row"><div class="cf-label">Allergies</div><div class="cf-value">${allergyHtml}</div></div>
+    <div class="cf-row"><div class="cf-label">Medications</div><div class="cf-value">${medsList}</div></div>
+    <div class="cf-row"><div class="cf-label">Social Hx</div><div class="cf-value text-slate-500 italic text-xs">Tobacco/alcohol use to be reviewed · <span class="verify-tag">VERIFY</span></div></div>
+  `;
+
+  const objectiveHtml = `
+    <div class="cf-subhead">Vital Signs</div>
+    <div class="cf-vitals-mini">
+      <div class="item"><div class="lb">BP</div><div class="vl">${bpMatch ? `${bpMatch[1]}/${bpMatch[2]}` : '—'}</div></div>
+      <div class="item"><div class="lb">HR</div><div class="vl">${hrMatch ? hrMatch[1] : '—'}</div></div>
+      <div class="item"><div class="lb">SpO₂</div><div class="vl">${o2Match ? o2Match[1]+'%' : '—'}</div></div>
+      <div class="item"><div class="lb">Temp</div><div class="vl">${tempMatch ? tempMatch[1]+'°F' : '—'}</div></div>
+      <div class="item"><div class="lb">RR</div><div class="vl">${rrMatch ? rrMatch[1] : '—'}</div></div>
+    </div>
+    <div class="cf-subhead">Physical Examination</div>
+    <div class="cf-system-grid">
+      ${Object.entries(examBySystem).map(([sys, finding]) => `
+        <div class="cf-sys"><span class="nm">${sys}</span>${finding}</div>
+      `).join('')}
+    </div>
+  `;
+
+  const assessmentHtml = problems.map((p, i) => `
+    <div class="cf-problem">
+      <div class="num">${i+1}</div>
+      <div class="nm">${p.name}${p.impression ? `<small>${p.impression}</small>` : ''}</div>
+      <span class="cf-status ${p.status}">${p.status}</span>
+    </div>
+  `).join('');
+
+  const planHtml = problems.map((p, i) => {
+    // Map plan categories per problem (simplified: same categories for all problems for v1)
+    return `
+      <div class="cf-plan-block">
+        <div class="ph"><span class="pn">${i+1}</span><span>${p.name.replace(/<[^>]+>/g,'')}</span></div>
+        <div class="cf-plan-cat"><div class="pl">Diagnostics</div><div class="pv">${planCats.diagnostics.join('; ')}</div></div>
+        <div class="cf-plan-cat"><div class="pl">Therapeutics</div><div class="pv">${planCats.therapeutics.join('; ')}</div></div>
+        ${i === problems.length - 1 ? `
+          <div class="cf-plan-cat"><div class="pl">Education</div><div class="pv">${planCats.education.join('; ')}</div></div>
+          <div class="cf-plan-cat"><div class="pl">Disposition</div><div class="pv">${planCats.disposition.join('; ')}</div></div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
 
   return {
     date: now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),
     time: now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
     patient: patientName || 'Unknown',
     provider: 'Dr. C. Katz',
-    subjective: `<strong>Chief Complaint:</strong> ${cc}<br/><br/><strong>History of Present Illness:</strong><br/>${hpi}<br/><br/><strong>Allergies:</strong> ${allergies ? allergies[1].trim() : (patientsData.find(p=>p.name===patientName)?.allergies.join(', ')||'NKDA')}<br/><br/><strong>Current Medications:</strong> ${meds.length ? meds.slice(0,4).map(m=>m.trim()).join('; ') : '[Review medication list] <span class="verify-tag">VERIFY</span>'}`,
-    objective: `<strong>Vital Signs:</strong><br/>BP: ${bpMatch?`${bpMatch[1]}/${bpMatch[2]} mmHg`:'<span class="verify-tag">VERIFY</span>'} | HR: ${hrMatch?`${hrMatch[1]} bpm`:'<span class="verify-tag">VERIFY</span>'} | Temp: ${tempMatch?`${tempMatch[1]}°F`:'<span class="verify-tag">VERIFY</span>'} | SpO2: ${o2Match?`${o2Match[1]}%`:'<span class="verify-tag">VERIFY</span>'} | RR: ${rrMatch?`${rrMatch[1]}/min`:'<span class="verify-tag">VERIFY</span>'}<br/><br/><strong>Physical Examination:</strong><br/>${examFindings.join('. ')}.`,
-    assessment: conditions.join('<br/>'),
-    plan: planItems.map((item,i) => `${i+1}. ${item}`).join('<br/>')
+    subjective: subjectiveHtml,
+    objective: objectiveHtml,
+    assessment: assessmentHtml,
+    plan: planHtml
   };
 }
 
