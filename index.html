@@ -142,7 +142,7 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
       <a href="#problem" class="nl hover:text-slate-900 transition-colors no-underline">Problem</a>
       <a href="#features" class="nl hover:text-slate-900 transition-colors no-underline">Features</a>
       <a href="#how-it-works" class="nl hover:text-slate-900 transition-colors no-underline">How It Works</a>
-      <a href="#roadmap" class="nl hover:text-slate-900 transition-colors no-underline">Roadmap</a>
+      <a href="#compare" class="nl hover:text-slate-900 transition-colors no-underline">Compare</a>
       <a href="#pricing" class="nl hover:text-slate-900 transition-colors no-underline">Pricing</a>
     </div>
     <div class="hidden md:flex items-center gap-3">
@@ -159,6 +159,7 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
     <a href="#problem" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Problem</a>
     <a href="#features" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Features</a>
     <a href="#how-it-works" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">How It Works</a>
+    <a href="#compare" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Compare</a>
     <a href="#pricing" onclick="toggleMobile()" class="text-sm font-medium text-slate-700 no-underline">Pricing</a>
     <a href="dashboard.html" class="bg-[#1B5E3C] text-white text-sm font-semibold px-4 py-2.5 rounded-lg text-center no-underline">Try Dashboard</a>
   </div>
@@ -204,7 +205,7 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
           <span class="text-[#6EC99A] font-black">40%</span> of shift = documentation
         </div>
         <div class="bg-white/8 border border-white/12 rounded-full px-4 py-1.5 text-sm font-semibold text-slate-300">
-          <span class="text-[#34D399] font-black">$55K</span> avg scribe salary
+          <span class="text-[#34D399] font-black">$110K+</span> saved per facility / yr
         </div>
         <div class="bg-white/8 border border-white/12 rounded-full px-4 py-1.5 text-sm font-semibold text-slate-300">
           <span class="text-[#F59E0B] font-black">86%</span> of claim denials avoidable
@@ -292,8 +293,8 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
     </div>
     <div class="w-px h-8 bg-white/20 hidden md:block"></div>
     <div class="text-center">
-      <div class="text-2xl font-black text-white">$55K</div>
-      <div class="text-blue-100 text-xs">average medical scribe salary/yr</div>
+      <div class="text-2xl font-black text-white">$110K+</div>
+      <div class="text-blue-100 text-xs">saved annually per facility</div>
     </div>
     <div class="w-px h-8 bg-white/20 hidden md:block"></div>
     <div class="text-center">
@@ -386,6 +387,38 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
             <div class="cite mt-1 text-red-500">Source: SecondStreet.org, 2023</div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VALUE PROPS (3 audiences) ═══════════════════ -->
+<section class="py-20 bg-white border-t border-slate-100">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-12 reveal">
+      <div class="pill">Value Proposition</div>
+      <h2 class="text-4xl font-black text-slate-900 mt-2 mb-3">One platform. Three different wins.</h2>
+      <p class="text-slate-500 max-w-2xl mx-auto">Scrivia delivers a clear, audience-specific outcome to the three people who decide whether it stays in your facility.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Nurses -->
+      <div class="bg-gradient-to-br from-[#F0F9F4] to-white rounded-2xl p-7 border border-[#A7D7BC] lift reveal">
+        <div class="text-xs font-bold text-[#1B5E3C] uppercase tracking-widest mb-3">For Nurses</div>
+        <p class="text-2xl font-black text-slate-900 leading-snug mb-4">"We handle the clipboard so you can handle your patients."</p>
+        <p class="text-sm text-slate-600 leading-relaxed">Real-time AI charting eliminates manual documentation. Nurses get back the ~40% of every shift currently lost to keyboards.</p>
+      </div>
+      <!-- CFOs -->
+      <div class="bg-gradient-to-br from-[#F0F9F4] to-white rounded-2xl p-7 border-2 border-[#1B5E3C] lift reveal relative shadow-lg">
+        <div class="absolute -top-3 left-7 bg-[#1B5E3C] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Bottom-line story</div>
+        <div class="text-xs font-bold text-[#1B5E3C] uppercase tracking-widest mb-3">For CFOs</div>
+        <p class="text-2xl font-black text-slate-900 leading-snug mb-4">"We cost less than one scribe and replace more than two."</p>
+        <p class="text-sm text-slate-600 leading-relaxed">At ~$55K/scribe/year, a single facility saves <strong class="text-[#1B5E3C]">$110K+ annually</strong> in staffing costs alone — before counting the 86% of claim denials avoidable through complete documentation.</p>
+      </div>
+      <!-- Patients -->
+      <div class="bg-gradient-to-br from-[#F0F9F4] to-white rounded-2xl p-7 border border-[#A7D7BC] lift reveal">
+        <div class="text-xs font-bold text-[#1B5E3C] uppercase tracking-widest mb-3">For Patients</div>
+        <p class="text-2xl font-black text-slate-900 leading-snug mb-4">"The sickest person in the room gets seen first — every time."</p>
+        <p class="text-sm text-slate-600 leading-relaxed">AI triage replaces first-in / first-out queues with severity-ranked acuity scoring. Critical cases stop waiting behind low-acuity ones.</p>
       </div>
     </div>
   </div>
@@ -705,6 +738,111 @@ code,pre,.mono{font-family:'JetBrains Mono',monospace}
         <p class="text-slate-600 text-sm leading-relaxed">Expand to large hospital networks. Add full feature suite: AI triage queue, complete patient database, EHR integrations (Epic, Cerner). Pursue HIPAA certification and insurance billing partnerships.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ═══ COMPETITIVE LANDSCAPE ════════════════════════ -->
+<section id="compare" class="py-24 bg-[#F4F8FE]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="pill">Competitive Landscape</div>
+      <h2 class="text-4xl font-black text-slate-900 mt-2 mb-3">Why hospitals pick Scrivia over the giants.</h2>
+      <p class="text-slate-500 max-w-3xl mx-auto">AWS, Amazon, and Microsoft each ship a single piece — transcription, or workflow, or note generation. Scrivia is the all-in-one workflow layer that combines triage, ambient charting, vitals, patient flow, and EHR sync in a single platform.</p>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm reveal mb-10">
+      <div class="grid grid-cols-1 md:grid-cols-5 text-sm">
+        <!-- Header row -->
+        <div class="hidden md:block bg-slate-50 px-5 py-4 font-bold text-slate-500 text-xs uppercase tracking-widest border-b border-slate-200"></div>
+        <div class="hidden md:block bg-[#1B5E3C] text-white px-5 py-4 font-black text-sm border-b border-[#1B5E3C]">Scrivia</div>
+        <div class="hidden md:block bg-slate-50 px-5 py-4 font-bold text-slate-700 text-sm border-b border-slate-200">AWS HealthScribe</div>
+        <div class="hidden md:block bg-slate-50 px-5 py-4 font-bold text-slate-700 text-sm border-b border-slate-200">Amazon Connect Health</div>
+        <div class="hidden md:block bg-slate-50 px-5 py-4 font-bold text-slate-700 text-sm border-b border-slate-200">Nuance DAX Copilot</div>
+
+        <!-- Pricing row -->
+        <div class="bg-slate-50 px-5 py-4 font-semibold text-slate-600 border-b border-slate-200 md:border-r">Pricing</div>
+        <div class="bg-[#E8F5EC] px-5 py-4 border-b border-slate-200">
+          <div class="font-black text-[#1B5E3C] text-lg">$2K–$5K</div>
+          <div class="text-xs text-slate-500">flat /facility /mo</div>
+        </div>
+        <div class="px-5 py-4 border-b border-slate-200">
+          <div class="font-bold text-slate-900">$0.10</div>
+          <div class="text-xs text-slate-500">per minute of audio</div>
+        </div>
+        <div class="px-5 py-4 border-b border-slate-200">
+          <div class="font-bold text-slate-900">$99</div>
+          <div class="text-xs text-slate-500">/user/mo (capped at 600 encounters)</div>
+        </div>
+        <div class="px-5 py-4 border-b border-slate-200">
+          <div class="font-bold text-slate-900">~$600</div>
+          <div class="text-xs text-slate-500">/user/mo + setup fees</div>
+        </div>
+
+        <!-- Note generation -->
+        <div class="bg-slate-50 px-5 py-4 font-semibold text-slate-600 border-b border-slate-200 md:border-r">AI clinical note-taking</div>
+        <div class="bg-[#E8F5EC] px-5 py-4 border-b border-slate-200 text-[#1B5E3C] font-bold">✓ SOAP-formatted, signature-ready</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-600">Preliminary draft only</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-600">Ambient capture</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-[#1B5E3C] font-medium">✓</div>
+
+        <!-- Triage -->
+        <div class="bg-slate-50 px-5 py-4 font-semibold text-slate-600 border-b border-slate-200 md:border-r">AI triage queue</div>
+        <div class="bg-[#E8F5EC] px-5 py-4 border-b border-slate-200 text-[#1B5E3C] font-bold">✓ Severity-ranked ESI scoring</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-400">—</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-400">—</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-400">—</div>
+
+        <!-- Patient intake -->
+        <div class="bg-slate-50 px-5 py-4 font-semibold text-slate-600 border-b border-slate-200 md:border-r">Patient self check-in</div>
+        <div class="bg-[#E8F5EC] px-5 py-4 border-b border-slate-200 text-[#1B5E3C] font-bold">✓ Symptom intake on tablet</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-400">—</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-600">Engagement only</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-400">—</div>
+
+        <!-- Cross-dept -->
+        <div class="bg-slate-50 px-5 py-4 font-semibold text-slate-600 border-b border-slate-200 md:border-r">Cross-department platform</div>
+        <div class="bg-[#E8F5EC] px-5 py-4 border-b border-slate-200 text-[#1B5E3C] font-bold">✓ Nurses, MDs, admin, billing</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-600">SDK for vendors</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-600">Per-user license</div>
+        <div class="px-5 py-4 border-b border-slate-200 text-slate-600">Per-user license</div>
+
+        <!-- EHR -->
+        <div class="bg-slate-50 px-5 py-4 font-semibold text-slate-600 md:border-r">EHR sync (Epic, Cerner)</div>
+        <div class="bg-[#E8F5EC] px-5 py-4 text-[#1B5E3C] font-bold">✓ Native integration</div>
+        <div class="px-5 py-4 text-slate-600">Build-it-yourself</div>
+        <div class="px-5 py-4 text-slate-600">Limited</div>
+        <div class="px-5 py-4 text-[#1B5E3C] font-medium">✓</div>
+      </div>
+    </div>
+
+    <!-- 5 standout pillars (from PDF) -->
+    <div class="grid md:grid-cols-5 gap-3 reveal">
+      <div class="bg-white rounded-xl p-4 border border-slate-200 text-center">
+        <div class="text-2xl mb-1">🧠</div>
+        <div class="text-xs font-bold text-slate-900 leading-tight">AI Clinical Note-Taking</div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-200 text-center">
+        <div class="text-2xl mb-1">🏥</div>
+        <div class="text-xs font-bold text-slate-900 leading-tight">Triage Queue System</div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-200 text-center">
+        <div class="text-2xl mb-1">🌐</div>
+        <div class="text-xs font-bold text-slate-900 leading-tight">Unified All-in-One Platform</div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-200 text-center">
+        <div class="text-2xl mb-1">👥</div>
+        <div class="text-xs font-bold text-slate-900 leading-tight">Cross-Department Usage</div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-200 text-center">
+        <div class="text-2xl mb-1">🔄</div>
+        <div class="text-xs font-bold text-slate-900 leading-tight">Workflow Automation</div>
+      </div>
+    </div>
+
+    <p class="text-center text-sm text-slate-500 italic mt-8">
+      Estimated <strong class="text-[#1B5E3C]">60–80% gross margin</strong> at scale · 10 clinics × $3K/mo = $30K MRR · 100 clinics = $300K MRR
+    </p>
   </div>
 </section>
 
