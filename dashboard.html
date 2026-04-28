@@ -88,6 +88,41 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 #modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
 #modal-overlay.open{display:flex}
 .modal-box{background:linear-gradient(160deg,#F7FCF8 0%,#fff 40%);border-radius:18px;max-width:720px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3),0 0 0 1px rgba(200,230,201,.5)}
+.modal-box.wide{max-width:1080px}
+
+/* Hospital chart styling */
+.chart-banner{background:linear-gradient(135deg,#0D2B1A 0%,#1B5E3C 70%,#2E7D32 100%);color:#fff;padding:20px 24px;position:relative;overflow:hidden}
+.chart-banner::before{content:'';position:absolute;top:0;right:0;width:200px;height:100%;background:radial-gradient(ellipse at right,rgba(110,201,154,.18),transparent 70%);pointer-events:none}
+.chart-pat-name{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.chart-meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}
+.chart-meta-cell .lbl{font-size:10px;font-weight:600;color:#A7D7BC;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.chart-meta-cell .val{font-size:13px;font-weight:600;color:#fff}
+.chart-vital-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:14px 24px;background:linear-gradient(180deg,#F1FAF3,#E8F5E9);border-bottom:1px solid #C8E6C9}
+.chart-vital{background:#fff;border:1px solid #C8E6C9;border-radius:10px;padding:8px 10px;text-align:center;box-shadow:0 1px 3px rgba(27,94,60,.06)}
+.chart-vital .lbl{font-size:9px;font-weight:700;color:#4CAF7A;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.chart-vital .val{font-size:14px;font-weight:800;color:#0F172A}
+.chart-vital.warn{background:#FFFBEB;border-color:#FDE68A}
+.chart-vital.warn .val{color:#92400E}
+.chart-vital.danger{background:#FEF2F2;border-color:#FECACA}
+.chart-vital.danger .val{color:#991B1B}
+.chart-section-title{font-size:11px;font-weight:700;color:#1B5E3C;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.chart-section-title::before{content:'';width:3px;height:14px;background:#1B5E3C;border-radius:2px}
+.chart-soap-card{background:#fff;border:1px solid #C8E6C9;border-radius:10px;overflow:hidden;margin-bottom:12px}
+.chart-soap-head{background:linear-gradient(90deg,#E8F5E9,#F1FAF3);padding:8px 14px;font-size:11px;font-weight:700;color:#1B5E3C;text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid #C8E6C9;display:flex;align-items:center;justify-content:space-between}
+.chart-soap-body{padding:14px;font-size:13px;line-height:1.7;color:#1B3A2A;min-height:80px}
+.chart-soap-body[contenteditable=true]:focus{outline:none;background:#FAFFFB}
+.chart-aside{background:linear-gradient(160deg,#0D2B1A,#1B5E3C);color:#fff;border-radius:12px;padding:16px;font-size:12px}
+.chart-aside .ttl{font-size:10px;font-weight:700;color:#A7D7BC;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.chart-sigblock{background:#F1FAF3;border:1px solid #C8E6C9;border-radius:10px;padding:14px;margin-top:14px}
+
+/* Audio meter + signal indicator */
+.vu-meter{display:flex;gap:2px;align-items:flex-end;height:18px}
+.vu-bar{width:3px;background:#C8E6C9;border-radius:1px;transition:height .08s ease,background .08s ease}
+.audio-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px}
+.audio-status.good{background:#E8F5E9;color:#1B5E3C;border:1px solid #A5D6A7}
+.audio-status.fair{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}
+.audio-status.poor{background:#FEE2E2;color:#991B1B;border:1px solid #FECACA}
+.lowconf-word{background:#FEF3C7;border-bottom:2px dotted #D97706;padding:0 1px;border-radius:2px;cursor:help}
 
 /* Slide panel */
 #slide-panel{position:fixed;right:0;top:0;bottom:0;width:420px;background:linear-gradient(160deg,#F7FCF8 0%,#fff 30%);border-left:1px solid #C8E6C9;z-index:90;transform:translateX(100%);transition:transform .25s ease;box-shadow:-8px 0 40px rgba(0,0,0,.12);overflow-y:auto}
@@ -388,7 +423,18 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
             <div class="rec-dot"></div>
             Now recording for <span id="scribe-patient-label">Patient</span>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-3">
+            <span id="audio-status" class="audio-status fair">⊙ Calibrating</span>
+            <div class="vu-meter" id="vu-meter" title="Microphone level">
+              <div class="vu-bar" style="height:3px"></div>
+              <div class="vu-bar" style="height:3px"></div>
+              <div class="vu-bar" style="height:3px"></div>
+              <div class="vu-bar" style="height:3px"></div>
+              <div class="vu-bar" style="height:3px"></div>
+              <div class="vu-bar" style="height:3px"></div>
+              <div class="vu-bar" style="height:3px"></div>
+              <div class="vu-bar" style="height:3px"></div>
+            </div>
             <div class="mono text-xs text-slate-500" id="scribe-timer">00:00</div>
             <button onclick="stopScribeRecording()" class="btn btn-danger btn-sm gap-1">
               <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
@@ -397,7 +443,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
           </div>
         </div>
         <div class="p-4">
-          <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Live Transcript</div>
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Live Transcript</div>
+            <div class="text-[10px] text-slate-400 italic">Words with low confidence are <span class="lowconf-word">underlined</span> for review</div>
+          </div>
           <div id="live-transcript">
             <span class="text-slate-400 italic text-sm">Listening... speak clearly near your microphone.</span>
           </div>
@@ -983,58 +1032,176 @@ function openScribeModal(id) {
 
 function openNoteModal(note, session) {
   const isReadonly = session && session.status === 'signed';
-  document.getElementById('modal-box').innerHTML = `
-    <div class="p-6">
-      <div class="flex items-center justify-between mb-5">
+  const patient = patientsData.find(p => p.name === note.patient);
+  const queue = queueData.find(q => q.name === note.patient);
+  const encounterId = session?.id ? session.id.replace('SS-', 'ENC-') : 'ENC-' + Date.now().toString().slice(-6);
+
+  // Pull vitals - prefer patient record, fallback to parsed from note
+  const v = patient?.vitals || {};
+  const vitalCell = (label, val, key) => {
+    const cls = (() => {
+      if (!val) return '';
+      if (key === 'spo2' && parseInt(val) < 95) return 'danger';
+      if (key === 'hr' && (parseInt(val) > 100 || parseInt(val) < 60)) return 'warn';
+      if (key === 'temp' && parseFloat(val) > 100.4) return 'warn';
+      if (key === 'bp' && parseInt(val) > 150) return 'warn';
+      return '';
+    })();
+    return `<div class="chart-vital ${cls}"><div class="lbl">${label}</div><div class="val">${val || '—'}</div></div>`;
+  };
+
+  const box = document.getElementById('modal-box');
+  box.classList.add('wide');
+  box.innerHTML = `
+    <!-- Hospital chart banner -->
+    <div class="chart-banner">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-[10px] font-bold text-[#A7D7BC] uppercase tracking-widest mb-1">Encounter Documentation · Clinical Note</div>
+          <div class="chart-pat-name">${note.patient}</div>
+          <div class="text-xs text-[#C8E6C9] mt-0.5">${patient ? `${patient.gender === 'M' ? 'Male' : 'Female'} · ${patient.age} yrs · DOB ${patient.dob}` : 'Patient demographics on file'}</div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          ${session && session.status === 'signed' ? '<span class="bg-[#A7D7BC] text-[#0D2B1A] text-[10px] font-bold px-3 py-1 rounded-full">✓ SIGNED</span>' : '<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-3 py-1 rounded-full">PENDING SIGN-OFF</span>'}
+          <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition-colors">✕</button>
+        </div>
+      </div>
+      <div class="chart-meta-grid">
+        <div class="chart-meta-cell"><div class="lbl">MRN</div><div class="val mono">${patient?.mrn || 'MRN-NEW'}</div></div>
+        <div class="chart-meta-cell"><div class="lbl">Encounter</div><div class="val mono">${encounterId}</div></div>
+        <div class="chart-meta-cell"><div class="lbl">Date / Time</div><div class="val">${note.date.split(',')[1]?.trim() || note.date} · ${note.time}</div></div>
+        <div class="chart-meta-cell"><div class="lbl">Provider</div><div class="val">${note.provider}</div></div>
+      </div>
+    </div>
+
+    <!-- Vitals strip -->
+    <div class="chart-vital-strip">
+      ${vitalCell('BP', v.bp, 'bp')}
+      ${vitalCell('HR', v.hr, 'hr')}
+      ${vitalCell('SpO₂', v.spo2, 'spo2')}
+      ${vitalCell('Temp', v.temp, 'temp')}
+      ${vitalCell('RR', v.rr, 'rr')}
+      <div class="chart-vital">
+        <div class="lbl">ESI</div>
+        <div class="val">${queue ? `<span class="esi esi-${queue.esi}">${queue.esi}</span>` : '—'}</div>
+      </div>
+    </div>
+
+    <!-- Body: SOAP + sidebar -->
+    <div class="grid grid-cols-12 gap-5 p-6">
+      <!-- SOAP column -->
+      <div class="col-span-12 lg:col-span-8">
+        ${!isReadonly ? `<div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 flex items-start gap-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" class="mt-0.5 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+          <div class="text-xs text-amber-800">Review all <span class="verify-tag">VERIFY</span> markers before signing. Click any section to edit. Physician sign-off required.</div>
+        </div>` : ''}
+
+        <div class="chart-soap-card">
+          <div class="chart-soap-head"><span>S — Subjective</span><span class="text-[9px] text-slate-500 font-normal">History &amp; Patient-Reported</span></div>
+          <div class="chart-soap-body" id="soap-s" ${!isReadonly?'contenteditable="true"':''}>${note.subjective}</div>
+        </div>
+        <div class="chart-soap-card">
+          <div class="chart-soap-head"><span>O — Objective</span><span class="text-[9px] text-slate-500 font-normal">Vitals &amp; Exam Findings</span></div>
+          <div class="chart-soap-body" id="soap-o" ${!isReadonly?'contenteditable="true"':''}>${note.objective}</div>
+        </div>
+        <div class="chart-soap-card">
+          <div class="chart-soap-head"><span>A — Assessment</span><span class="text-[9px] text-slate-500 font-normal">Clinical Impression</span></div>
+          <div class="chart-soap-body" id="soap-a" ${!isReadonly?'contenteditable="true"':''}>${note.assessment}</div>
+        </div>
+        <div class="chart-soap-card">
+          <div class="chart-soap-head"><span>P — Plan</span><span class="text-[9px] text-slate-500 font-normal">Treatment &amp; Follow-up</span></div>
+          <div class="chart-soap-body" id="soap-p" ${!isReadonly?'contenteditable="true"':''}>${note.plan}</div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-span-12 lg:col-span-4 space-y-4">
+        ${patient ? `
         <div>
-          <h2 class="text-lg font-bold text-slate-900">Clinical Note: ${note.patient}</h2>
-          <div class="text-sm text-slate-500">${note.date} at ${note.time} · ${note.provider}</div>
+          <div class="chart-section-title">Active Conditions</div>
+          <div class="flex flex-wrap gap-1.5">
+            ${patient.conditions.map(c => `<span class="bg-[#E8F5E9] text-[#1B5E3C] text-xs font-medium px-2 py-1 rounded border border-[#A5D6A7]">${c}</span>`).join('') || '<span class="text-xs text-slate-400">None on file</span>'}
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          ${session && session.status === 'signed' ? '<span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full border border-green-200">SIGNED</span>' : ''}
-          <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">✕</button>
+        <div>
+          <div class="chart-section-title">Allergies</div>
+          <div class="flex flex-wrap gap-1.5">
+            ${patient.allergies.map(a => `<span class="${a==='NKDA'?'bg-green-50 text-green-700 border-green-100':'bg-red-50 text-red-700 border-red-100'} text-xs font-medium px-2 py-1 rounded border">${a}</span>`).join('')}
+          </div>
+        </div>` : ''}
+
+        ${queue && queue.esi <= 3 ? `
+        <div class="chart-aside">
+          <div class="ttl">AI Differential (Decision Support)</div>
+          <div class="space-y-2.5" id="note-ai-diff"></div>
+          <div class="mt-3 pt-3 border-t border-white/15">
+            <div class="text-[10px] text-[#A7D7BC] uppercase tracking-widest mb-1.5">Suggested Tests</div>
+            <div class="flex flex-wrap gap-1.5" id="note-ai-tests"></div>
+          </div>
+          <div class="mt-2 text-[9px] text-[#7EC8A0] italic">Decision support only. Physician judgment required.</div>
+        </div>` : ''}
+
+        <div>
+          <div class="chart-section-title">Recent Visits</div>
+          <div class="text-xs space-y-2">
+            ${(patient?.timeline || []).slice(0,3).map(t => `
+              <div class="border-l-2 border-[#A5D6A7] pl-2 py-0.5">
+                <div class="text-[#1B5E3C] font-semibold text-[11px]">${t.date}</div>
+                <div class="text-slate-600">${t.event.replace(':', ' — ')}</div>
+              </div>`).join('') || '<div class="text-slate-400">No prior visits</div>'}
+          </div>
         </div>
       </div>
+    </div>
 
-      ${!isReadonly ? `<div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 flex items-start gap-2">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" class="mt-0.5 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
-        <div class="text-xs text-amber-800">Review all <span class="verify-tag">VERIFY</span> markers before signing. Click any section to edit. This note requires physician sign-off.</div>
-      </div>` : ''}
-
-      <!-- SOAP Sections -->
-      <div class="soap-section soap-s">
-        <div class="soap-label">S: Subjective</div>
-        <div class="soap-body ${!isReadonly?'contenteditable=\"true\"':''}" id="soap-s" ${!isReadonly?'contenteditable="true"':''}>${note.subjective}</div>
-      </div>
-      <div class="soap-section soap-o">
-        <div class="soap-label">O: Objective</div>
-        <div class="soap-body ${!isReadonly?'contenteditable=\"true\"':''}" id="soap-o" ${!isReadonly?'contenteditable="true"':''}>${note.objective}</div>
-      </div>
-      <div class="soap-section soap-a">
-        <div class="soap-label">A: Assessment</div>
-        <div class="soap-body ${!isReadonly?'contenteditable=\"true\"':''}" id="soap-a" ${!isReadonly?'contenteditable="true"':''}>${note.assessment}</div>
-      </div>
-      <div class="soap-section soap-p">
-        <div class="soap-label">P: Plan</div>
-        <div class="soap-body ${!isReadonly?'contenteditable=\"true\"':''}" id="soap-p" ${!isReadonly?'contenteditable="true"':''}>${note.plan}</div>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex gap-3 mt-5 pt-4 border-t border-slate-100">
+    <!-- Signature block -->
+    <div class="px-6 pb-6">
+      <div class="chart-sigblock">
         ${!isReadonly ? `
-          <button onclick="signNote('${session?.id||''}')" class="btn btn-success gap-2">
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Sign & Save Note
-          </button>
-          <button onclick="closeModal()" class="btn btn-ghost">Save Draft</button>
-        ` : `<button onclick="closeModal()" class="btn btn-ghost">Close</button>`}
+          <div class="flex items-center justify-between flex-wrap gap-3 mb-3">
+            <div class="text-xs text-[#1B5E3C]">
+              <strong>Attestation:</strong> By signing, I attest that I have personally reviewed all content above and the documentation reflects the encounter accurately.
+            </div>
+          </div>
+          <div class="flex gap-3 flex-wrap">
+            <button onclick="signNote('${session?.id||''}')" class="btn btn-success gap-2">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Sign &amp; Finalize Note
+            </button>
+            <button onclick="closeModal()" class="btn btn-ghost">Save Draft</button>
+            <button onclick="window.print()" class="btn btn-ghost">Print</button>
+            <div class="ml-auto text-[10px] text-slate-500 self-center">Signing as <strong>${note.provider}</strong> · ${note.date.split(',')[1]?.trim() || note.date} ${note.time}</div>
+          </div>
+        ` : `
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="text-xs text-[#1B5E3C]">
+              <strong>Signed &amp; Filed:</strong> ${note.provider} · ${note.date.split(',')[1]?.trim() || note.date} ${note.time}
+            </div>
+            <div class="flex gap-2">
+              <button onclick="window.print()" class="btn btn-ghost btn-sm">Print</button>
+              <button onclick="closeModal()" class="btn btn-ghost btn-sm">Close</button>
+            </div>
+          </div>
+        `}
       </div>
-
-      <!-- Disclaimer -->
-      <div class="mt-3 text-xs text-slate-400 italic">AI-generated note. All clinical content must be verified by a licensed provider before signing. This note does not constitute a medical diagnosis.</div>
+      <div class="mt-2 text-[10px] text-slate-400 italic text-center">AI-assisted documentation. All clinical content verified by licensed provider. Not a substitute for clinical judgment.</div>
     </div>`;
+
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // Render AI differential into sidebar if queue context exists
+  if (queue && queue.esi <= 3) {
+    const diffs = generateAIDifferential(patient || {mrn:'NEW'}, queue);
+    const dEl = document.getElementById('note-ai-diff');
+    const tEl = document.getElementById('note-ai-tests');
+    if (dEl) dEl.innerHTML = diffs.diagnoses.map(d => `
+      <div>
+        <div class="flex justify-between text-xs text-white mb-1"><span>${d.name}</span><span class="font-bold text-[#6EC99A]">${d.conf}%</span></div>
+        <div class="conf-bar"><div class="conf-fill bg-[#6EC99A]" style="width:${d.conf}%"></div></div>
+      </div>`).join('');
+    if (tEl) tEl.innerHTML = diffs.tests.map(t => `<span class="bg-white/10 text-slate-200 text-[11px] px-2 py-0.5 rounded flex items-center gap-1">${t.name}<span class="text-[#6EC99A] font-bold">${t.conf}%</span></span>`).join('');
+  }
 }
 
 function signNote(sessionId) {
@@ -1074,6 +1241,7 @@ function recordFeedback(rating, btn) {
 
 function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
+  document.getElementById('modal-box').classList.remove('wide');
   document.body.style.overflow = '';
 }
 
@@ -1082,7 +1250,7 @@ document.getElementById('modal-overlay').addEventListener('click', (e) => {
 });
 
 // ══════════════════════════════════════════
-// AI SCRIBE ENGINE
+// AI SCRIBE ENGINE — Noise-resilient
 // ══════════════════════════════════════════
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
@@ -1091,6 +1259,58 @@ let finalTranscript = '';
 let scribePatientName = '';
 let scribeTimerInterval = null;
 let scribeSeconds = 0;
+let audioStream = null;
+let audioContext = null;
+let audioAnalyser = null;
+let audioMeterRAF = null;
+let recentVoiceLevel = 0;     // EMA of voice-band energy
+let recentNoiseLevel = 0;     // EMA of background floor
+let lastSpeechAt = 0;
+
+// Common medical mishearings that the Web Speech API produces.
+// Applied as post-processing to the transcript before SOAP generation.
+const MEDICAL_FIXUPS = [
+  [/\bhi(?:gh)? per ?tension\b/gi, 'hypertension'],
+  [/\bhigh per tension\b/gi, 'hypertension'],
+  [/\bhi protensive\b/gi, 'hypertensive'],
+  [/\bhypertention\b/gi, 'hypertension'],
+  [/\btake a cardia\b/gi, 'tachycardia'],
+  [/\bbrady ?cardio\b/gi, 'bradycardia'],
+  [/\bdis ?p ?nia\b/gi, 'dyspnea'],
+  [/\bdis ?p ?nea\b/gi, 'dyspnea'],
+  [/\bdiet ?abetes\b/gi, 'diabetes'],
+  [/\bsep ?siss\b/gi, 'sepsis'],
+  [/\bbeen tit is\b/gi, 'bronchitis'],
+  [/\bchol\.? icy\b/gi, 'cholecystitis'],
+  [/\bappendix itis\b/gi, 'appendicitis'],
+  [/\bp ?neumonia\b/gi, 'pneumonia'],
+  [/\bnumonia\b/gi, 'pneumonia'],
+  [/\bee ?kg\b/gi, 'EKG'],
+  [/\bee ?cg\b/gi, 'ECG'],
+  [/\bbee ?pee\b/gi, 'BP'],
+  [/\bsee bee see\b/gi, 'CBC'],
+  [/\bbee ?em ?pee\b/gi, 'BMP'],
+  [/\bess pee oh too\b/gi, 'SpO2'],
+  [/\bspot two\b/gi, 'SpO2'],
+  [/\bohh ?two\b/gi, 'O2'],
+  [/\bone hundred over\b/gi, '100 over'],
+  [/\b(\d+) over (\d+)\b/g, '$1/$2'],
+  [/\btill an all\b/gi, 'tylenol'],
+  [/\bI buprofen\b/gi, 'ibuprofen'],
+  [/\bmeta program\b/gi, 'metoprolol'],
+  [/\blip pretty\b/gi, 'lisinopril'],
+  [/\bI'm ox icillin\b/gi, 'amoxicillin'],
+  [/\bazith ?row ?my ?cin\b/gi, 'azithromycin'],
+  [/\bs\.? o\.? a\.? p\.?\b/gi, 'SOAP'],
+  [/\bH P I\b/gi, 'HPI'],
+  [/\bN K D A\b/gi, 'NKDA'],
+];
+
+function applyMedicalFixups(text) {
+  let out = text;
+  for (const [re, replacement] of MEDICAL_FIXUPS) out = out.replace(re, replacement);
+  return out;
+}
 
 function openNewScribe() {
   // Show patient picker modal
@@ -1144,86 +1364,192 @@ function beginScribeSession() {
     if (!name) { showToast('Please enter patient name', 'warning'); return; }
   }
   if (!name) { showToast('Please select a patient', 'warning'); return; }
-
-  scribePatientName = name;
-  finalTranscript = '';
-  scribeSeconds = 0;
   closeModal();
+  startScribeForPatient(name);
+}
 
-  // Switch to scribe view
-  switchView('scribe', document.getElementById('nav-scribe'));
+// Build a confidence-aware transcript HTML with low-confidence words flagged.
+function renderRichTranscript(parts, interim) {
+  // parts: array of {text, conf}
+  const html = parts.map(p => {
+    if (p.conf >= 0.78) return `<span class="text-slate-800">${escapeHtml(p.text)}</span>`;
+    if (p.conf >= 0.55) return `<span class="text-slate-700">${escapeHtml(p.text)}</span>`;
+    return `<span class="lowconf-word" title="Low confidence (${Math.round(p.conf*100)}%) — please verify">${escapeHtml(p.text)}</span>`;
+  }).join(' ');
+  return `<span>${html}</span> <span class="text-slate-400 italic">${escapeHtml(interim)}</span>`;
+}
 
-  // Show active panel
-  const panel = document.getElementById('active-scribe-panel');
-  panel.classList.remove('hidden');
-  document.getElementById('scribe-patient-label').textContent = name;
-  document.getElementById('live-transcript').innerHTML = '<span class="text-slate-400 italic text-sm">Listening... speak clearly near your microphone.</span>';
+let transcriptParts = [];
 
-  // Timer
-  scribeTimerInterval = setInterval(() => {
-    scribeSeconds++;
-    const m = String(Math.floor(scribeSeconds/60)).padStart(2,'0');
-    const s = String(scribeSeconds%60).padStart(2,'0');
-    document.getElementById('scribe-timer').textContent = `${m}:${s}`;
-  }, 1000);
+function escapeHtml(s) {
+  return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 
-  // Start speech recognition
-  if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
+// Audio capture + level meter using Web Audio API, with active noise suppression
+async function startAudioMonitoring() {
+  try {
+    audioStream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+        channelCount: 1,
+        sampleRate: 48000,
+      }
+    });
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaStreamSource(audioStream);
+    audioAnalyser = audioContext.createAnalyser();
+    audioAnalyser.fftSize = 1024;
+    audioAnalyser.smoothingTimeConstant = 0.6;
+    source.connect(audioAnalyser);
 
-    recognition.onresult = (event) => {
-      let interim = '';
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript + ' ';
+    const buf = new Uint8Array(audioAnalyser.frequencyBinCount);
+    const tickMeter = () => {
+      if (!audioAnalyser || !isRecording) return;
+      audioAnalyser.getByteFrequencyData(buf);
+
+      // Voice band ≈ 200Hz to 3500Hz (FFT bin index for 48kHz / 1024)
+      const binHz = audioContext.sampleRate / audioAnalyser.fftSize;
+      const lo = Math.floor(200 / binHz);
+      const hi = Math.floor(3500 / binHz);
+      let voiceSum = 0, voiceCount = 0;
+      let noiseSum = 0, noiseCount = 0;
+      for (let i = 0; i < buf.length; i++) {
+        if (i >= lo && i <= hi) { voiceSum += buf[i]; voiceCount++; }
+        else { noiseSum += buf[i]; noiseCount++; }
+      }
+      const voice = voiceCount ? voiceSum / voiceCount : 0;
+      const noise = noiseCount ? noiseSum / noiseCount : 0;
+
+      // EMA smoothing
+      recentVoiceLevel = recentVoiceLevel * 0.7 + voice * 0.3;
+      recentNoiseLevel = recentNoiseLevel * 0.85 + noise * 0.15;
+      if (voice > 30) lastSpeechAt = Date.now();
+
+      // Drive VU meter
+      const meter = document.getElementById('vu-meter');
+      if (meter) {
+        const bars = meter.querySelectorAll('.vu-bar');
+        const norm = Math.min(1, voice / 120);
+        const litCount = Math.round(norm * bars.length);
+        bars.forEach((b, idx) => {
+          const isLit = idx < litCount;
+          const h = isLit ? 4 + (idx + 1) * 1.6 : 3;
+          b.style.height = h + 'px';
+          b.style.background = isLit
+            ? (idx >= bars.length - 2 ? '#DC2626' : idx >= bars.length - 4 ? '#F59E0B' : '#1B5E3C')
+            : '#C8E6C9';
+        });
+      }
+
+      // Audio status indicator
+      const status = document.getElementById('audio-status');
+      if (status) {
+        const snr = recentVoiceLevel - recentNoiseLevel;
+        const silentTooLong = Date.now() - lastSpeechAt > 6000;
+        if (silentTooLong) {
+          status.className = 'audio-status fair';
+          status.textContent = '◌ No speech detected';
+        } else if (snr > 25 && recentNoiseLevel < 60) {
+          status.className = 'audio-status good';
+          status.textContent = '● Audio clear';
+        } else if (snr > 10) {
+          status.className = 'audio-status fair';
+          status.textContent = '◐ Background noise';
         } else {
-          interim += event.results[i][0].transcript;
+          status.className = 'audio-status poor';
+          status.textContent = '◑ Very noisy — move closer';
         }
       }
-      const el = document.getElementById('live-transcript');
-      if (el) el.innerHTML =
-        `<span class="text-slate-800">${finalTranscript}</span>` +
-        `<span class="text-slate-400 italic">${interim}</span>`;
-    };
 
-    recognition.onerror = (e) => {
-      if (e.error === 'not-allowed') {
-        showToast('Microphone access denied. Use manual input below.', 'warning');
-      } else if (e.error !== 'aborted') {
-        showToast('Speech recognition error: ' + e.error, 'warning');
-      }
+      audioMeterRAF = requestAnimationFrame(tickMeter);
     };
-
-    recognition.onend = () => {
-      if (isRecording) {
-        try { recognition.start(); } catch(e) {}
-      }
-    };
-
-    try {
-      recognition.start();
-      isRecording = true;
-      showToast(`Recording started for ${name}. Speak clearly.`, 'info');
-    } catch(e) {
-      showToast('Could not start microphone. Use manual input below.', 'warning');
-    }
-  } else {
-    showToast('Speech recognition not available in this browser. Use manual input below.', 'warning');
+    audioMeterRAF = requestAnimationFrame(tickMeter);
+    return true;
+  } catch (e) {
+    showToast('Mic access denied. Use manual input below.', 'warning');
+    return false;
   }
+}
+
+function stopAudioMonitoring() {
+  if (audioMeterRAF) cancelAnimationFrame(audioMeterRAF);
+  audioMeterRAF = null;
+  if (audioStream) { audioStream.getTracks().forEach(t => t.stop()); audioStream = null; }
+  if (audioContext) { try { audioContext.close(); } catch(e) {} audioContext = null; }
+  audioAnalyser = null;
+  recentVoiceLevel = 0;
+  recentNoiseLevel = 0;
+}
+
+function setupRecognition() {
+  if (!SpeechRecognition) return null;
+  const r = new SpeechRecognition();
+  r.continuous = true;
+  r.interimResults = true;
+  r.maxAlternatives = 3;
+  r.lang = 'en-US';
+
+  r.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const result = event.results[i];
+      if (result.isFinal) {
+        // Pick the highest-confidence alternative; fall back to alt[0]
+        let best = result[0];
+        for (let a = 1; a < result.length; a++) {
+          if ((result[a].confidence || 0) > (best.confidence || 0)) best = result[a];
+        }
+        const conf = best.confidence || 0.5;
+        // Drop anything below the noise floor — almost certainly background
+        if (conf < 0.25 || !best.transcript.trim()) continue;
+        const cleaned = applyMedicalFixups(best.transcript.trim());
+        finalTranscript += cleaned + ' ';
+        transcriptParts.push({ text: cleaned, conf });
+      } else {
+        interim += result[0].transcript;
+      }
+    }
+    const el = document.getElementById('live-transcript');
+    if (el) el.innerHTML = renderRichTranscript(transcriptParts, applyMedicalFixups(interim));
+  };
+
+  r.onerror = (e) => {
+    if (e.error === 'not-allowed') {
+      showToast('Microphone blocked. Allow access in browser settings.', 'warning');
+    } else if (e.error === 'no-speech') {
+      // Auto-resume on silence — don't toast every time
+    } else if (e.error === 'audio-capture') {
+      showToast('No microphone found. Plug one in and try again.', 'warning');
+    } else if (e.error !== 'aborted') {
+      console.warn('Speech error:', e.error);
+    }
+  };
+
+  r.onend = () => {
+    // Auto-restart if recording is still active (Chrome auto-stops after silence)
+    if (isRecording) {
+      try { r.start(); } catch(e) { /* already started */ }
+    }
+  };
+
+  return r;
 }
 
 function stopScribeRecording() {
   isRecording = false;
   if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
+  stopAudioMonitoring();
   clearInterval(scribeTimerInterval);
+  const status = document.getElementById('audio-status');
+  if (status) { status.className = 'audio-status fair'; status.textContent = '⏸ Stopped'; }
   showToast('Recording stopped. Click "Generate SOAP Note" to process.', 'info');
 }
 
 function clearTranscript() {
   finalTranscript = '';
+  transcriptParts = [];
   const el = document.getElementById('live-transcript');
   if (el) el.innerHTML = '<span class="text-slate-400 italic text-sm">Transcript cleared. Start recording or type below.</span>';
   const manual = document.getElementById('manual-transcript');
@@ -1275,7 +1601,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function generateNoteFromRecording() {
   const manual = document.getElementById('manual-transcript')?.value?.trim();
-  const text = finalTranscript.trim() || manual || '';
+  const raw = finalTranscript.trim() || manual || '';
+  const text = applyMedicalFixups(raw);
   if (!text) { showToast('No transcript available. Record audio or type notes.', 'warning'); return; }
 
   const note = buildSOAPFromTranscript(text, scribePatientName);
@@ -1303,10 +1630,12 @@ function generateNoteFromRecording() {
   showToast('Note generated. Give it a quick review before signing.', 'success');
 }
 
-function startScribeForPatient(name) {
+async function startScribeForPatient(name) {
   scribePatientName = name;
   finalTranscript = '';
+  transcriptParts = [];
   scribeSeconds = 0;
+  lastSpeechAt = Date.now();
   closeModal();
   closeSlidePanel();
 
@@ -1315,7 +1644,7 @@ function startScribeForPatient(name) {
   const panel = document.getElementById('active-scribe-panel');
   panel.classList.remove('hidden');
   document.getElementById('scribe-patient-label').textContent = name;
-  document.getElementById('live-transcript').innerHTML = '<span class="text-slate-400 italic text-sm">Listening... speak clearly near your microphone.</span>';
+  document.getElementById('live-transcript').innerHTML = '<span class="text-slate-400 italic text-sm">Calibrating microphone…</span>';
 
   scribeTimerInterval = setInterval(() => {
     scribeSeconds++;
@@ -1324,26 +1653,26 @@ function startScribeForPatient(name) {
     document.getElementById('scribe-timer').textContent = `${m}:${s}`;
   }, 1000);
 
-  if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
-    recognition.onresult = (ev) => {
-      let interim = '';
-      for (let i = ev.resultIndex; i < ev.results.length; i++) {
-        if (ev.results[i].isFinal) finalTranscript += ev.results[i][0].transcript + ' ';
-        else interim += ev.results[i][0].transcript;
-      }
-      const el = document.getElementById('live-transcript');
-      if (el) el.innerHTML = `<span class="text-slate-800">${finalTranscript}</span><span class="text-slate-400 italic">${interim}</span>`;
-    };
-    recognition.onerror = (e) => { if (e.error !== 'aborted') showToast('Mic: ' + e.error, 'warning'); };
-    recognition.onend = () => { if (isRecording) { try { recognition.start(); } catch(e) {} } };
-    try { recognition.start(); isRecording = true; showToast(`Recording for ${name}`, 'info'); }
-    catch(e) { showToast('Could not access microphone. Use text input.', 'warning'); }
-  } else {
+  if (!SpeechRecognition) {
     showToast('Voice not available in this browser. Type notes manually.', 'warning');
+    return;
+  }
+
+  // Start audio monitoring first so noise suppression is active when recognition begins
+  isRecording = true;
+  const ok = await startAudioMonitoring();
+  if (!ok) { isRecording = false; return; }
+
+  recognition = setupRecognition();
+  if (!recognition) { isRecording = false; return; }
+
+  try {
+    recognition.start();
+    document.getElementById('live-transcript').innerHTML = '<span class="text-slate-400 italic text-sm">Listening… noise suppression active.</span>';
+    showToast(`Recording for ${name} · noise suppression on`, 'info');
+  } catch(e) {
+    isRecording = false;
+    showToast('Could not start recognition. Use text input.', 'warning');
   }
 }
 
